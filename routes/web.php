@@ -1,11 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\ProfileController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Middleware\CekRole;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\ProfilSekolahController;
 
 // ==========================================
 // 0. ROUTE PUBLIC
@@ -14,19 +15,24 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+
 // ==========================================
 // 1. ROUTE GUEST
 // ==========================================
 Route::middleware('guest')->group(function () {
+
+    // Halaman Login
     Route::get('/login', [AuthController::class, 'index'])
         ->name('login');
 
+    // Proses Login
     Route::post('/login', [AuthController::class, 'login'])
         ->name('login.proses');
 });
 
+
 // ==========================================
-// 2. ROUTE AUTH
+// 2. ROUTE AUTHENTICATED
 // ==========================================
 Route::middleware('auth')->group(function () {
 
@@ -35,6 +41,7 @@ Route::middleware('auth')->group(function () {
     // ==========================================
     Route::post('/logout', [AuthController::class, 'logout'])
         ->name('logout');
+
 
     // ==========================================
     // ADMIN
@@ -46,7 +53,7 @@ Route::middleware('auth')->group(function () {
         // Admin & Operator
         // ==========================================
         Route::get('/dashboard', [DashboardController::class, 'index'])
-            ->middleware(CekRole::class . ':Admin,Operator')
+            ->middleware('role:Admin,Operator')
             ->name('dashboard');
 
 
@@ -54,38 +61,62 @@ Route::middleware('auth')->group(function () {
         // PROFIL SEKOLAH
         // Hanya Admin
         // ==========================================
-        Route::get('/profil', [ProfileController::class, 'index'])
-            ->middleware(CekRole::class . ':Admin')
+        Route::get('/profile', [ProfilSekolahController::class, 'index'])
+            ->middleware('role:Admin')
             ->name('admin.school_profile');
 
-        Route::get('/profil/edit', [ProfileController::class, 'edit'])
-            ->middleware(CekRole::class . ':Admin')
+        Route::get('/profile/edit', [ProfilSekolahController::class, 'edit'])
+            ->middleware('role:Admin')
             ->name('admin.school_profile.edit');
 
-        Route::put('/profil/update', [ProfileController::class, 'update'])
-            ->middleware(CekRole::class . ':Admin')
+        Route::put('/profile/update', [ProfilSekolahController::class, 'update'])
+            ->middleware('role:Admin')
             ->name('admin.school_profile.update');
 
-        Route::delete('/profil/delete', [ProfileController::class, 'destroy'])
-            ->middleware(CekRole::class . ':Admin')
+        Route::delete('/profile/delete', [ProfilSekolahController::class, 'destroy'])
+            ->middleware('role:Admin')
             ->name('admin.school_profile.destroy');
 
 
         // ==========================================
-        // DATA USER
+        // DATA PENGELOLA
         // Hanya Admin
         // ==========================================
-        Route::resource('/users', UserController::class)
-            ->middleware(CekRole::class . ':Admin')
-            ->names([
-                'index'   => 'admin.users.index',
-                'create'  => 'admin.users.create',
-                'store'   => 'admin.users.store',
-                'show'    => 'admin.users.show',
-                'edit'    => 'admin.users.edit',
-                'update'  => 'admin.users.update',
-                'destroy' => 'admin.users.destroy',
-            ]);
+
+        // Daftar Data Pengelola
+        Route::get('/users', [UserController::class, 'index'])
+            ->middleware('role:Admin')
+            ->name('admin.users.index');
+
+        // Form Tambah Data Pengelola
+        Route::get('/users/create', [UserController::class, 'addEdit'])
+            ->middleware('role:Admin')
+            ->name('admin.users.create');
+
+        // Simpan Data Pengelola Baru
+        Route::post('/users', [UserController::class, 'save'])
+            ->middleware('role:Admin')
+            ->name('admin.users.store');
+
+        // Detail Data Pengelola
+        Route::get('/users/{id}', [UserController::class, 'show'])
+            ->middleware('role:Admin')
+            ->name('admin.users.show');
+
+        // Form Edit Data Pengelola
+        Route::get('/users/{id}/edit', [UserController::class, 'addEdit'])
+            ->middleware('role:Admin')
+            ->name('admin.users.edit');
+
+        // Update Data Pengelola
+        Route::put('/users/{id}', [UserController::class, 'save'])
+            ->middleware('role:Admin')
+            ->name('admin.users.update');
+
+        // Hapus Data Pengelola
+        Route::delete('/users/{id}', [UserController::class, 'destroy'])
+            ->middleware('role:Admin')
+            ->name('admin.users.destroy');
 
 
         // ==========================================
@@ -95,7 +126,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/berita', function () {
             return view('admin.news.news');
         })
-        ->middleware(CekRole::class . ':Admin,Operator')
+        ->middleware('role:Admin,Operator')
         ->name('admin.berita');
 
 
@@ -106,31 +137,52 @@ Route::middleware('auth')->group(function () {
         Route::get('/ekstrakulikuler', function () {
             return view('admin.Extracurricular.extracurricular');
         })
-        ->middleware(CekRole::class . ':Admin,Operator')
+        ->middleware('role:Admin,Operator')
         ->name('admin.ekstrakulikuler');
 
 
         // ==========================================
         // GURU
         // Admin & Operator
-        // Operator hanya bisa melihat
         // ==========================================
-        Route::get('/guru', function () {
-            return view('admin.teachers.teachers');
-        })
-        ->middleware(CekRole::class . ':Admin,Operator')
-        ->name('admin.guru');
+
+        Route::get('/guru', [TeacherController::class, 'index'])
+            ->middleware('role:Admin,Operator')
+            ->name('admin.guru');
+
+        Route::get('/guru/create', [TeacherController::class, 'create'])
+            ->middleware('role:Admin,Operator')
+            ->name('admin.guru.create');
+
+        Route::post('/guru', [TeacherController::class, 'store'])
+            ->middleware('role:Admin,Operator')
+            ->name('admin.guru.store');
+
+        Route::get('/guru/{id}', [TeacherController::class, 'show'])
+            ->middleware('role:Admin,Operator')
+            ->name('admin.guru.show');
+
+        Route::get('/guru/{id}/edit', [TeacherController::class, 'edit'])
+            ->middleware('role:Admin,Operator')
+            ->name('admin.guru.edit');
+
+        Route::put('/guru/{id}', [TeacherController::class, 'update'])
+            ->middleware('role:Admin,Operator')
+            ->name('admin.guru.update');
+
+        Route::delete('/guru/{id}', [TeacherController::class, 'destroy'])
+            ->middleware('role:Admin,Operator')
+            ->name('admin.guru.destroy');
 
 
         // ==========================================
         // SISWA
         // Admin & Operator
-        // Operator hanya bisa melihat
         // ==========================================
         Route::get('/siswa', function () {
             return view('admin.students.students');
         })
-        ->middleware(CekRole::class . ':Admin,Operator')
+        ->middleware('role:Admin,Operator')
         ->name('admin.siswa');
 
 
@@ -141,7 +193,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/galeri', function () {
             return view('admin.galeries.galeries');
         })
-        ->middleware(CekRole::class . ':Admin,Operator')
+        ->middleware('role:Admin,Operator')
         ->name('admin.galeri');
 
     });

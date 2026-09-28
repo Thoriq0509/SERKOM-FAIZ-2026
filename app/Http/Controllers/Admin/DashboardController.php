@@ -3,38 +3,59 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-// Panggil semua model yang dibutuhkan
+use App\Models\SchoolProfile;
+use App\Models\User;
 use App\Models\Teacher;
 use App\Models\Student;
 use App\Models\Extracurricular;
 use App\Models\News;
 use App\Models\Gallery;
-use App\Models\SchoolProfile;
 
 class DashboardController extends Controller
 {
+    /**
+     * Menampilkan dashboard admin.
+     */
     public function index()
     {
-        // 1. Mengambil data statistik (jumlah)
-        $jumlahGuru = Teacher::count();
-        $jumlahSiswa = Student::count();
-        $jumlahEkskul = Extracurricular::count();
+        // ================================
+        // DATA PROFIL SEKOLAH
+        // ================================
+        $profilSekolah = SchoolProfile::first();
 
-        // 2. Mengambil profil sekolah (ambil baris pertama saja)
-        $profil = SchoolProfile::first();
+        // ================================
+        // TOTAL DATA
+        // ================================
+        $totalPengelola = User::count();
+        $totalGuru = Teacher::count();
+        $totalSiswa = Student::count();
+        $totalEkstrakurikuler = Extracurricular::count();
+        $totalBerita = News::count();
+        $totalGaleri = Gallery::count();
 
-        // 3. Mengambil data terbaru untuk tabel di dashboard (limit 3-5 data)
-        $beritaTerbaru = News::latest('tanggal')->limit(3)->get();
-        $galeriTerbaru = Gallery::latest('tanggal')->limit(3)->get();
+        // ================================
+        // BERITA TERBARU
+        // ================================
+        $beritaTerbaru = News::latest()
+            ->take(5)
+            ->get();
 
-        // 4. Mengirim data ke view dashboard
+        // ================================
+        // GALERI TERBARU
+        // ================================
+        $galeriTerbaru = Gallery::latest()
+            ->take(5)
+            ->get();
+
         return view('admin.dashboard', compact(
-            'jumlahGuru', 
-            'jumlahSiswa', 
-            'jumlahEkskul', 
-            'profil', 
-            'beritaTerbaru', 
+            'profilSekolah',
+            'totalPengelola',
+            'totalGuru',
+            'totalSiswa',
+            'totalEkstrakurikuler',
+            'totalBerita',
+            'totalGaleri',
+            'beritaTerbaru',
             'galeriTerbaru'
         ));
     }

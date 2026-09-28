@@ -3,107 +3,75 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // Wajib ditambahkan untuk fitur Login/Logout
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     * (Kita gunakan untuk menampilkan halaman Login)
+     * Menampilkan halaman login.
      */
     public function index()
     {
-        // Jika user sudah login, langsung arahkan ke dashboard
-        if (Auth::check()) {
-            return redirect()->route('dashboard');
-        }
-        
         return view('auth.login');
     }
 
     /**
-     * Proses validasi login (Fungsi tambahan)
+     * Memproses login user.
      */
     public function login(Request $request)
     {
-        $request->validate([
-            'username' => 'required',
-            'password' => 'required'
+        // Validasi input
+        $credentials = $request->validate([
+            'username' => ['required', 'string'],
+            'password' => ['required', 'string'],
         ]);
 
-        $credentials = [
-            'username' => $request->username,
-            'password' => $request->password
-        ];
+        // Coba login
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
 
-        // Cek kecocokan data dengan database
-        if (Auth::attempt($credentials)) {
+            // Regenerate session untuk keamanan
             $request->session()->regenerate();
-            return redirect()->route('dashboard');
+
+            // Ambil user yang berhasil login
+            $user = Auth::user();
+
+            // Redirect berdasarkan role
+            if (strcasecmp((string) $user->role, 'Admin') === 0) {
+                return redirect()->route('dashboard');
+            }
+
+            if (strcasecmp((string) $user->role, 'Operator') === 0) {
+                return redirect()->route('dashboard');
+            }
+
+            // Jika role tidak dikenali
+            Auth::logout();
+
+            return redirect()
+                ->route('login')
+                ->withErrors([
+                    'username' => 'Role akun tidak memiliki akses.',
+                ]);
         }
 
-        // Jika salah password / username
-        return back()->with('error', 'Username atau Password salah!');
+        // Login gagal
+        return back()
+            ->withErrors([
+                'username' => 'Username atau password salah.',
+            ])
+            ->withInput($request->only('username'));
     }
 
     /**
-     * Proses Logout (Fungsi tambahan)
+     * Logout user.
      */
     public function logout(Request $request)
     {
         Auth::logout();
-        
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return redirect()->route('login');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

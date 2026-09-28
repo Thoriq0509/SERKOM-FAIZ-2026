@@ -1,223 +1,819 @@
 @extends('layouts.template')
 
 @section('content')
+
 <style>
-    /* Styling khusus untuk Dashboard agar sesuai gambar referensi */
-    .box-profile {
-        background-color: #273b69; /* Biru Gelap */
+    /* ================================
+       DASHBOARD
+    ================================ */
+
+    .dashboard-profile {
+        background-color: #273b69;
         border-radius: 20px;
         color: #ffffff;
-        padding: 40px 30px;
-        box-shadow: 0 10px 20px rgba(39, 59, 105, 0.15);
+        padding: 35px 30px;
+        box-shadow: 0 10px 25px rgba(39, 59, 105, 0.15);
         position: relative;
         overflow: hidden;
     }
 
+    .dashboard-profile::before {
+        content: "";
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.04);
+        right: -60px;
+        top: -70px;
+    }
+
+    .dashboard-profile::after {
+        content: "";
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.03);
+        right: 80px;
+        bottom: -60px;
+    }
+
+    .dashboard-profile-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .dashboard-profile h2 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .dashboard-profile p {
+        margin-bottom: 0;
+        line-height: 1.7;
+    }
+
+    .dashboard-profile-button {
+        background-color: #ffffff;
+        color: #273b69;
+        border: none;
+        border-radius: 50px;
+        padding: 11px 20px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.2s ease;
+    }
+
+    .dashboard-profile-button:hover {
+        background-color: #f1f5f9;
+        color: #273b69;
+        transform: translateY(-2px);
+    }
+
+    /* ================================
+       STAT CARD
+    ================================ */
+
     .stat-box {
-        border-radius: 20px;
-        padding: 30px 20px;
+        border-radius: 18px;
+        padding: 25px 20px;
         color: #ffffff;
         text-align: center;
+        min-height: 185px;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-        transition: transform 0.3s ease;
-        height: 100%;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+        transition: all 0.25s ease;
     }
 
     .stat-box:hover {
         transform: translateY(-5px);
     }
 
+    .stat-icon {
+        width: 55px;
+        height: 55px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.15);
+        margin-bottom: 12px;
+        font-size: 1.4rem;
+    }
+
     .stat-box h3 {
-        font-size: 3rem;
+        font-size: 2.5rem;
         font-weight: 700;
-        margin-bottom: 5px;
+        margin-bottom: 4px;
         font-family: 'Poppins', sans-serif;
     }
 
     .stat-box p {
-        font-size: 1.1rem;
-        font-weight: 500;
+        font-size: 0.9rem;
+        font-weight: 600;
         margin: 0;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 0.7px;
     }
 
-    .box-red { background-color: #dc2626; } /* Merah */
-    .box-yellow { background-color: #eab308; color: #1e293b; } /* Kuning */
-    .box-green { background-color: #16a34a; } /* Hijau */
+    .box-blue {
+        background-color: #2563eb;
+    }
 
-    /* Card untuk Tabel */
+    .box-red {
+        background-color: #dc2626;
+    }
+
+    .box-yellow {
+        background-color: #eab308;
+        color: #1e293b;
+    }
+
+    .box-green {
+        background-color: #16a34a;
+    }
+
+    .box-purple {
+        background-color: #7c3aed;
+    }
+
+    .box-orange {
+        background-color: #ea580c;
+    }
+
+    /* ================================
+       TABLE CARD
+    ================================ */
+
     .table-card {
         background-color: #ffffff;
         border-radius: 20px;
         border: none;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         overflow: hidden;
     }
 
     .table-card .card-header {
-        background-color: #273b69; /* Header Tabel Biru */
+        background-color: #273b69;
         color: #ffffff;
-        font-weight: 600;
+        padding: 18px 22px;
+        border: none;
         font-family: 'Poppins', sans-serif;
-        padding: 18px 25px;
-        border-bottom: none;
+    }
+
+    .table-custom {
+        margin: 0;
     }
 
     .table-custom th {
         background-color: #f8fafc;
         color: #475569;
         font-weight: 600;
-        padding: 15px 25px;
+        padding: 14px 20px;
         border-bottom: 2px solid #e2e8f0;
+        white-space: nowrap;
     }
 
     .table-custom td {
-        padding: 15px 25px;
+        padding: 14px 20px;
         vertical-align: middle;
         color: #334155;
         border-bottom: 1px solid #e2e8f0;
     }
+
+    .table-custom tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .table-custom tbody tr:hover {
+        background-color: #f8fafc;
+    }
+
+    .empty-state {
+        padding: 40px 20px;
+        text-align: center;
+        color: #94a3b8;
+    }
+
+    .empty-state i {
+        font-size: 2.2rem;
+        margin-bottom: 10px;
+    }
+
+    .gallery-preview {
+        width: 75px;
+        height: 55px;
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .gallery-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* ================================
+       RESPONSIVE
+    ================================ */
+
+    @media (max-width: 767.98px) {
+
+        .dashboard-profile {
+            padding: 25px 20px;
+        }
+
+        .dashboard-profile h2 {
+            font-size: 1.5rem;
+        }
+
+        .stat-box {
+            min-height: 160px;
+        }
+
+        .stat-box h3 {
+            font-size: 2.2rem;
+        }
+
+        .table-card .card-header {
+            padding: 15px;
+        }
+
+        .table-custom th,
+        .table-custom td {
+            padding: 12px 15px;
+        }
+    }
 </style>
 
+
 <div class="container-fluid p-0">
-    
-    <!-- 1. BLOK BIRU ATAS: Profil Sekolah -->
-    <div class="box-profile mb-4">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h2 class="fw-bold mb-2">Profil SMK Teknologi Nusantara</h2>
-                <p class="mb-0 text-light opacity-75">
-                    Selamat datang di halaman dashboard admin. Di sini Anda dapat memantau seluruh aktivitas pendataan sekolah, mulai dari data pengajar, kesiswaan, hingga publikasi berita.
-                </p>
+
+    <!-- ================================
+         HEADER / PROFIL SEKOLAH
+    ================================ -->
+    <div class="dashboard-profile mb-4">
+
+        <div class="dashboard-profile-content">
+
+            <div class="row align-items-center">
+
+                <div class="col-lg-8">
+
+                    <h2>
+                        {{ $profilSekolah->nama_sekolah ?? 'Nama Sekolah' }}
+                    </h2>
+
+                    <p class="text-white opacity-75">
+                        Selamat datang di halaman dashboard admin.
+                        Pantau data sekolah, pengelola, guru, siswa,
+                        ekstrakurikuler, berita, dan galeri dari satu tempat.
+                    </p>
+
+                    @if($profilSekolah && $profilSekolah->npsn)
+
+                        <div class="mt-3">
+
+                            <span class="badge bg-light text-dark rounded-pill px-3 py-2">
+                                <i class="fas fa-id-card me-1"></i>
+                                NPSN: {{ $profilSekolah->npsn }}
+                            </span>
+
+                        </div>
+
+                    @endif
+
+                </div>
+
+
+                <div class="col-lg-4 text-lg-end text-start mt-4 mt-lg-0">
+
+                    <a
+                        href="{{ route('admin.school_profile.edit') }}"
+                        class="dashboard-profile-button">
+
+                        <i class="fas fa-edit me-2"></i>
+                        Edit Profil
+
+                    </a>
+
+                </div>
+
             </div>
-            <div class="col-md-4 text-md-end text-start mt-3 mt-md-0">
-                <button class="btn btn-light rounded-pill px-4 py-2 fw-bold text-primary">
-                    <i class="fas fa-edit me-2"></i> Edit Profil
-                </button>
-            </div>
+
         </div>
+
     </div>
 
-    <!-- 2. BLOK 3 WARNA: Data Statistik (Responsive Grid) -->
+
+    <!-- ================================
+         STATISTIK DATA
+    ================================ -->
     <div class="row g-4 mb-4">
-        <!-- Merah: Guru -->
-        <div class="col-12 col-md-4">
+
+        <!-- Pengelola -->
+        <div class="col-12 col-sm-6 col-xl-2">
+
+            <div class="stat-box box-blue">
+
+                <div class="stat-icon">
+                    <i class="fas fa-users-cog"></i>
+                </div>
+
+                <h3>
+                    {{ $totalPengelola }}
+                </h3>
+
+                <p>
+                    Pengelola
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Guru -->
+        <div class="col-12 col-sm-6 col-xl-2">
+
             <div class="stat-box box-red">
-                <i class="fas fa-chalkboard-teacher mb-2" style="font-size: 2rem; opacity: 0.8;"></i>
-                <h3>45</h3>
-                <p>Data Guru</p>
+
+                <div class="stat-icon">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+
+                <h3>
+                    {{ $totalGuru }}
+                </h3>
+
+                <p>
+                    Guru
+                </p>
+
             </div>
+
         </div>
-        <!-- Kuning: Siswa -->
-        <div class="col-12 col-md-4">
+
+
+        <!-- Siswa -->
+        <div class="col-12 col-sm-6 col-xl-2">
+
             <div class="stat-box box-yellow">
-                <i class="fas fa-user-graduate mb-2" style="font-size: 2rem; opacity: 0.8;"></i>
-                <h3>850</h3>
-                <p>Data Siswa</p>
+
+                <div class="stat-icon">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+
+                <h3>
+                    {{ $totalSiswa }}
+                </h3>
+
+                <p>
+                    Siswa
+                </p>
+
             </div>
+
         </div>
-        <!-- Hijau: Ekstrakurikuler -->
-        <div class="col-12 col-md-4">
+
+
+        <!-- Ekstrakurikuler -->
+        <div class="col-12 col-sm-6 col-xl-2">
+
             <div class="stat-box box-green">
-                <i class="fas fa-basketball-ball mb-2" style="font-size: 2rem; opacity: 0.8;"></i>
-                <h3>12</h3>
-                <p>Ekstrakurikuler</p>
+
+                <div class="stat-icon">
+                    <i class="fas fa-basketball-ball"></i>
+                </div>
+
+                <h3>
+                    {{ $totalEkstrakurikuler }}
+                </h3>
+
+                <p>
+                    Ekskul
+                </p>
+
             </div>
+
         </div>
+
+
+        <!-- Berita -->
+        <div class="col-12 col-sm-6 col-xl-2">
+
+            <div class="stat-box box-purple">
+
+                <div class="stat-icon">
+                    <i class="fas fa-newspaper"></i>
+                </div>
+
+                <h3>
+                    {{ $totalBerita }}
+                </h3>
+
+                <p>
+                    Berita
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Galeri -->
+        <div class="col-12 col-sm-6 col-xl-2">
+
+            <div class="stat-box box-orange">
+
+                <div class="stat-icon">
+                    <i class="fas fa-images"></i>
+                </div>
+
+                <h3>
+                    {{ $totalGaleri }}
+                </h3>
+
+                <p>
+                    Galeri
+                </p>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <!-- 3. BLOK BIRU TENGAH: Tabel Informasi Berita -->
+
+    <!-- ================================
+         BERITA TERBARU
+    ================================ -->
     <div class="card table-card mb-4">
+
         <div class="card-header d-flex justify-content-between align-items-center">
-            <span><i class="fas fa-newspaper me-2"></i> Informasi Berita Terkini</span>
-            <a href="{{ route('admin.berita') }}" class="btn btn-sm btn-light rounded-pill text-dark fw-bold px-3">Lihat Semua</a>
+
+            <span>
+                <i class="fas fa-newspaper me-2"></i>
+                Berita Terbaru
+            </span>
+
+            <a
+                href="{{ route('admin.berita') }}"
+                class="btn btn-sm btn-light rounded-pill text-dark fw-bold px-3">
+
+                Lihat Semua
+
+            </a>
+
         </div>
+
+
         <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-custom mb-0">
-                    <thead>
-                        <tr>
-                            <th width="5%">No</th>
-                            <th width="55%">Judul Berita</th>
-                            <th width="20%">Tanggal Publikasi</th>
-                            <th width="20%">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Contoh Dummy Data -->
-                        <tr>
-                            <td>1</td>
-                            <td class="fw-bold">Penerimaan Siswa Baru Tahun Ajaran 2026/2027 Dibuka</td>
-                            <td>19 September 2026</td>
-                            <td><span class="badge bg-success rounded-pill px-3">Aktif</span></td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td class="fw-bold">Tim Robotik SMK Raih Juara 1 Tingkat Nasional</td>
-                            <td>15 September 2026</td>
-                            <td><span class="badge bg-success rounded-pill px-3">Aktif</span></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td class="fw-bold">Jadwal Ujian Tengah Semester Ganjil</td>
-                            <td>10 September 2026</td>
-                            <td><span class="badge bg-secondary rounded-pill px-3">Arsip</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+
+            @if($beritaTerbaru->count() > 0)
+
+                <div class="table-responsive">
+
+                    <table class="table table-custom">
+
+                        <thead>
+
+                            <tr>
+                                <th width="5%">No</th>
+                                <th>Judul Berita</th>
+                                <th width="20%">Tanggal</th>
+                                <th width="15%">Status</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach($beritaTerbaru as $index => $berita)
+
+                                @php
+                                    $judul = $berita->judul
+                                        ?? $berita->title
+                                        ?? $berita->nama
+                                        ?? 'Tanpa Judul';
+
+                                    $tanggal = $berita->tanggal
+                                        ?? $berita->tanggal_publikasi
+                                        ?? $berita->created_at;
+
+                                    $status = $berita->status
+                                        ?? 'Aktif';
+                                @endphp
+
+                                <tr>
+
+                                    <td>
+                                        {{ $index + 1 }}
+                                    </td>
+
+                                    <td class="fw-semibold">
+                                        {{ $judul }}
+                                    </td>
+
+                                    <td>
+                                        {{ $tanggal ? \Carbon\Carbon::parse($tanggal)->format('d F Y') : '-' }}
+                                    </td>
+
+                                    <td>
+
+                                        <span class="badge bg-success rounded-pill px-3 py-2">
+                                            {{ $status }}
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                            @endforeach
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            @else
+
+                <div class="empty-state">
+
+                    <i class="fas fa-newspaper"></i>
+
+                    <p class="mb-0">
+                        Belum ada data berita.
+                    </p>
+
+                </div>
+
+            @endif
+
         </div>
+
     </div>
 
-    <!-- 4. BLOK BIRU BAWAH: Tabel Informasi Galeri -->
+
+    <!-- ================================
+         GALERI TERBARU
+    ================================ -->
     <div class="card table-card mb-4">
+
         <div class="card-header d-flex justify-content-between align-items-center">
-            <span><i class="fas fa-images me-2"></i> Informasi Galeri Terbaru</span>
-            <a href="{{ route('admin.galeri') }}" class="btn btn-sm btn-light rounded-pill text-dark fw-bold px-3">Lihat Semua</a>
+
+            <span>
+                <i class="fas fa-images me-2"></i>
+                Galeri Terbaru
+            </span>
+
+            <a
+                href="{{ route('admin.galeri') }}"
+                class="btn btn-sm btn-light rounded-pill text-dark fw-bold px-3">
+
+                Lihat Semua
+
+            </a>
+
         </div>
+
+
         <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-custom mb-0">
-                    <thead>
-                        <tr>
-                            <th width="5%">No</th>
-                            <th width="20%">Preview Foto</th>
-                            <th width="55%">Keterangan Kegiatan</th>
-                            <th width="20%">Tanggal Upload</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Contoh Dummy Data -->
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                <div style="width: 80px; height: 50px; background-color: #cbd5e1; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                                    <i class="fas fa-image text-white"></i>
-                                </div>
-                            </td>
-                            <td class="fw-bold">Kegiatan Lomba 17 Agustus di Lapangan Sekolah</td>
-                            <td>18 Agustus 2026</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>
-                                <div style="width: 80px; height: 50px; background-color: #cbd5e1; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                                    <i class="fas fa-image text-white"></i>
-                                </div>
-                            </td>
-                            <td class="fw-bold">Kunjungan Industri ke PT. Teknologi Maju</td>
-                            <td>05 Agustus 2026</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+
+            @if($galeriTerbaru->count() > 0)
+
+                <div class="table-responsive">
+
+                    <table class="table table-custom">
+
+                        <thead>
+
+                            <tr>
+                                <th width="5%">No</th>
+                                <th width="15%">Preview</th>
+                                <th>Keterangan</th>
+                                <th width="20%">Tanggal Upload</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach($galeriTerbaru as $index => $galeri)
+
+                                @php
+                                    $keterangan = $galeri->keterangan
+                                        ?? $galeri->judul
+                                        ?? $galeri->nama
+                                        ?? 'Tanpa keterangan';
+
+                                    $foto = $galeri->foto
+                                        ?? $galeri->gambar
+                                        ?? $galeri->image
+                                        ?? null;
+
+                                    $tanggal = $galeri->created_at;
+                                @endphp
+
+                                <tr>
+
+                                    <td>
+                                        {{ $index + 1 }}
+                                    </td>
+
+                                    <td>
+
+                                        <div class="gallery-preview">
+
+                                            @if($foto)
+
+                                                <img
+                                                    src="{{ asset('storage/' . $foto) }}"
+                                                    alt="{{ $keterangan }}">
+
+                                            @else
+
+                                                <i class="fas fa-image text-white"></i>
+
+                                            @endif
+
+                                        </div>
+
+                                    </td>
+
+                                    <td class="fw-semibold">
+                                        {{ $keterangan }}
+                                    </td>
+
+                                    <td>
+                                        {{ $tanggal ? $tanggal->format('d F Y') : '-' }}
+                                    </td>
+
+                                </tr>
+
+                            @endforeach
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            @else
+
+                <div class="empty-state">
+
+                    <i class="fas fa-images"></i>
+
+                    <p class="mb-0">
+                        Belum ada data galeri.
+                    </p>
+
+                </div>
+
+            @endif
+
         </div>
+
+    </div>
+
+
+    <!-- ================================
+         AKSES CEPAT
+    ================================ -->
+    <div class="card table-card mb-5">
+
+        <div class="card-header">
+
+            <i class="fas fa-bolt me-2"></i>
+            Akses Cepat
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <!-- Profil -->
+                <div class="col-12 col-md-4 col-xl-2">
+
+                    <a
+                        href="{{ route('admin.school_profile') }}"
+                        class="btn btn-light border w-100 py-3">
+
+                        <i class="fas fa-school d-block mb-2"
+                           style="font-size: 1.4rem; color: #273b69;"></i>
+
+                        Profil Sekolah
+
+                    </a>
+
+                </div>
+
+
+                <!-- Pengelola -->
+                <div class="col-12 col-md-4 col-xl-2">
+
+                    <a
+                        href="{{ route('admin.users.index') }}"
+                        class="btn btn-light border w-100 py-3">
+
+                        <i class="fas fa-users-cog d-block mb-2"
+                           style="font-size: 1.4rem; color: #273b69;"></i>
+
+                        Pengelola
+
+                    </a>
+
+                </div>
+
+
+                <!-- Berita -->
+                <div class="col-12 col-md-4 col-xl-2">
+
+                    <a
+                        href="{{ route('admin.berita') }}"
+                        class="btn btn-light border w-100 py-3">
+
+                        <i class="fas fa-newspaper d-block mb-2"
+                           style="font-size: 1.4rem; color: #273b69;"></i>
+
+                        Berita
+
+                    </a>
+
+                </div>
+
+
+                <!-- Ekstrakurikuler -->
+                <div class="col-12 col-md-4 col-xl-2">
+
+                    <a
+                        href="{{ route('admin.ekstrakulikuler') }}"
+                        class="btn btn-light border w-100 py-3">
+
+                        <i class="fas fa-basketball-ball d-block mb-2"
+                           style="font-size: 1.4rem; color: #273b69;"></i>
+
+                        Ekskul
+
+                    </a>
+
+                </div>
+
+
+                <!-- Guru -->
+                <div class="col-12 col-md-4 col-xl-2">
+
+                    <a
+                        href="{{ route('admin.guru') }}"
+                        class="btn btn-light border w-100 py-3">
+
+                        <i class="fas fa-chalkboard-teacher d-block mb-2"
+                           style="font-size: 1.4rem; color: #273b69;"></i>
+
+                        Guru
+
+                    </a>
+
+                </div>
+
+
+                <!-- Siswa -->
+                <div class="col-12 col-md-4 col-xl-2">
+
+                    <a
+                        href="{{ route('admin.siswa') }}"
+                        class="btn btn-light border w-100 py-3">
+
+                        <i class="fas fa-user-graduate d-block mb-2"
+                           style="font-size: 1.4rem; color: #273b69;"></i>
+
+                        Siswa
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
 </div>
+
 @endsection
