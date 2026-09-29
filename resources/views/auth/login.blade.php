@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Sistem Manajemen Sekolah</title>
+    <link rel="icon" type="image/png" href="{{ asset('assets/admin/img/logosuzuran.png') }}">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -126,14 +127,14 @@
             <div class="col-12">
                 
                 <div class="login-card row g-0 mx-auto">
-                    <!-- Sisi Kiri (Branding) -->
                     <div class="col-md-5 login-left d-none d-md-flex">
-                        <i class="fas fa-school"></i>
-                        <h2>Sistem Informasi Sekolah</h2>
+                        <img
+                            src="{{ asset('assets/admin/img/logosuzuran.png') }}"
+                        alt="">
+                        <h2>Sistem Manajemen Sekolah</h2>
                         <p class="text-light opacity-75 mb-0">Kelola data akademik, guru, dan siswa dengan lebih mudah dan efisien.</p>
                     </div>
 
-                    <!-- Sisi Kanan (Form Login) -->
                     <div class="col-md-7 login-right">
                         <div class="d-md-none text-center mb-4">
                             <i class="fas fa-school text-primary" style="font-size: 3rem; color: #273b69 !important;"></i>

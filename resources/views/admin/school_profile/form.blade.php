@@ -807,7 +807,7 @@
     </form>
 
 
-    <!-- ================= ZONA BAHAYA ================= -->
+    <!-- ================= ZONA BAHAYA =================
     <div
         class="card border-0 shadow-sm mb-5"
         style="border-radius: 15px;"
@@ -866,7 +866,7 @@
 
         </div>
 
-    </div>
+    </div> -->
 
 </div>
 

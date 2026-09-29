@@ -168,62 +168,6 @@
         font-family: 'Poppins', sans-serif;
     }
 
-    .table-custom {
-        margin: 0;
-    }
-
-    .table-custom th {
-        background-color: #f8fafc;
-        color: #475569;
-        font-weight: 600;
-        padding: 14px 20px;
-        border-bottom: 2px solid #e2e8f0;
-        white-space: nowrap;
-    }
-
-    .table-custom td {
-        padding: 14px 20px;
-        vertical-align: middle;
-        color: #334155;
-        border-bottom: 1px solid #e2e8f0;
-    }
-
-    .table-custom tbody tr:last-child td {
-        border-bottom: none;
-    }
-
-    .table-custom tbody tr:hover {
-        background-color: #f8fafc;
-    }
-
-    .empty-state {
-        padding: 40px 20px;
-        text-align: center;
-        color: #94a3b8;
-    }
-
-    .empty-state i {
-        font-size: 2.2rem;
-        margin-bottom: 10px;
-    }
-
-    .gallery-preview {
-        width: 75px;
-        height: 55px;
-        border-radius: 8px;
-        overflow: hidden;
-        background-color: #e2e8f0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .gallery-preview img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
     /* ================================
        RESPONSIVE
     ================================ */
@@ -248,11 +192,6 @@
 
         .table-card .card-header {
             padding: 15px;
-        }
-
-        .table-custom th,
-        .table-custom td {
-            padding: 12px 15px;
         }
     }
 </style>
@@ -301,7 +240,8 @@
 
                     <a
                         href="{{ route('admin.school_profile.edit') }}"
-                        class="dashboard-profile-button">
+                        class="dashboard-profile-button"
+                    >
 
                         <i class="fas fa-edit me-2"></i>
                         Edit Profil
@@ -457,240 +397,6 @@
 
 
     <!-- ================================
-         BERITA TERBARU
-    ================================ -->
-    <div class="card table-card mb-4">
-
-        <div class="card-header d-flex justify-content-between align-items-center">
-
-            <span>
-                <i class="fas fa-newspaper me-2"></i>
-                Berita Terbaru
-            </span>
-
-            <a
-                href="{{ route('admin.berita') }}"
-                class="btn btn-sm btn-light rounded-pill text-dark fw-bold px-3">
-
-                Lihat Semua
-
-            </a>
-
-        </div>
-
-
-        <div class="card-body p-0">
-
-            @if($beritaTerbaru->count() > 0)
-
-                <div class="table-responsive">
-
-                    <table class="table table-custom">
-
-                        <thead>
-
-                            <tr>
-                                <th width="5%">No</th>
-                                <th>Judul Berita</th>
-                                <th width="20%">Tanggal</th>
-                                <th width="15%">Status</th>
-                            </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                            @foreach($beritaTerbaru as $index => $berita)
-
-                                @php
-                                    $judul = $berita->judul
-                                        ?? $berita->title
-                                        ?? $berita->nama
-                                        ?? 'Tanpa Judul';
-
-                                    $tanggal = $berita->tanggal
-                                        ?? $berita->tanggal_publikasi
-                                        ?? $berita->created_at;
-
-                                    $status = $berita->status
-                                        ?? 'Aktif';
-                                @endphp
-
-                                <tr>
-
-                                    <td>
-                                        {{ $index + 1 }}
-                                    </td>
-
-                                    <td class="fw-semibold">
-                                        {{ $judul }}
-                                    </td>
-
-                                    <td>
-                                        {{ $tanggal ? \Carbon\Carbon::parse($tanggal)->format('d F Y') : '-' }}
-                                    </td>
-
-                                    <td>
-
-                                        <span class="badge bg-success rounded-pill px-3 py-2">
-                                            {{ $status }}
-                                        </span>
-
-                                    </td>
-
-                                </tr>
-
-                            @endforeach
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            @else
-
-                <div class="empty-state">
-
-                    <i class="fas fa-newspaper"></i>
-
-                    <p class="mb-0">
-                        Belum ada data berita.
-                    </p>
-
-                </div>
-
-            @endif
-
-        </div>
-
-    </div>
-
-
-    <!-- ================================
-         GALERI TERBARU
-    ================================ -->
-    <div class="card table-card mb-4">
-
-        <div class="card-header d-flex justify-content-between align-items-center">
-
-            <span>
-                <i class="fas fa-images me-2"></i>
-                Galeri Terbaru
-            </span>
-
-            <a
-                href="{{ route('admin.galeri') }}"
-                class="btn btn-sm btn-light rounded-pill text-dark fw-bold px-3">
-
-                Lihat Semua
-
-            </a>
-
-        </div>
-
-
-        <div class="card-body p-0">
-
-            @if($galeriTerbaru->count() > 0)
-
-                <div class="table-responsive">
-
-                    <table class="table table-custom">
-
-                        <thead>
-
-                            <tr>
-                                <th width="5%">No</th>
-                                <th width="15%">Preview</th>
-                                <th>Keterangan</th>
-                                <th width="20%">Tanggal Upload</th>
-                            </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                            @foreach($galeriTerbaru as $index => $galeri)
-
-                                @php
-                                    $keterangan = $galeri->keterangan
-                                        ?? $galeri->judul
-                                        ?? $galeri->nama
-                                        ?? 'Tanpa keterangan';
-
-                                    $foto = $galeri->foto
-                                        ?? $galeri->gambar
-                                        ?? $galeri->image
-                                        ?? null;
-
-                                    $tanggal = $galeri->created_at;
-                                @endphp
-
-                                <tr>
-
-                                    <td>
-                                        {{ $index + 1 }}
-                                    </td>
-
-                                    <td>
-
-                                        <div class="gallery-preview">
-
-                                            @if($foto)
-
-                                                <img
-                                                    src="{{ asset('storage/' . $foto) }}"
-                                                    alt="{{ $keterangan }}">
-
-                                            @else
-
-                                                <i class="fas fa-image text-white"></i>
-
-                                            @endif
-
-                                        </div>
-
-                                    </td>
-
-                                    <td class="fw-semibold">
-                                        {{ $keterangan }}
-                                    </td>
-
-                                    <td>
-                                        {{ $tanggal ? $tanggal->format('d F Y') : '-' }}
-                                    </td>
-
-                                </tr>
-
-                            @endforeach
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            @else
-
-                <div class="empty-state">
-
-                    <i class="fas fa-images"></i>
-
-                    <p class="mb-0">
-                        Belum ada data galeri.
-                    </p>
-
-                </div>
-
-            @endif
-
-        </div>
-
-    </div>
-
-
-    <!-- ================================
          AKSES CEPAT
     ================================ -->
     <div class="card table-card mb-5">
@@ -712,10 +418,13 @@
 
                     <a
                         href="{{ route('admin.school_profile') }}"
-                        class="btn btn-light border w-100 py-3">
+                        class="btn btn-light border w-100 py-3"
+                    >
 
-                        <i class="fas fa-school d-block mb-2"
-                           style="font-size: 1.4rem; color: #273b69;"></i>
+                        <i
+                            class="fas fa-school d-block mb-2"
+                            style="font-size: 1.4rem; color: #273b69;"
+                        ></i>
 
                         Profil Sekolah
 
@@ -729,10 +438,13 @@
 
                     <a
                         href="{{ route('admin.users.index') }}"
-                        class="btn btn-light border w-100 py-3">
+                        class="btn btn-light border w-100 py-3"
+                    >
 
-                        <i class="fas fa-users-cog d-block mb-2"
-                           style="font-size: 1.4rem; color: #273b69;"></i>
+                        <i
+                            class="fas fa-users-cog d-block mb-2"
+                            style="font-size: 1.4rem; color: #273b69;"
+                        ></i>
 
                         Pengelola
 
@@ -746,10 +458,13 @@
 
                     <a
                         href="{{ route('admin.berita') }}"
-                        class="btn btn-light border w-100 py-3">
+                        class="btn btn-light border w-100 py-3"
+                    >
 
-                        <i class="fas fa-newspaper d-block mb-2"
-                           style="font-size: 1.4rem; color: #273b69;"></i>
+                        <i
+                            class="fas fa-newspaper d-block mb-2"
+                            style="font-size: 1.4rem; color: #273b69;"
+                        ></i>
 
                         Berita
 
@@ -763,10 +478,13 @@
 
                     <a
                         href="{{ route('admin.ekstrakulikuler') }}"
-                        class="btn btn-light border w-100 py-3">
+                        class="btn btn-light border w-100 py-3"
+                    >
 
-                        <i class="fas fa-basketball-ball d-block mb-2"
-                           style="font-size: 1.4rem; color: #273b69;"></i>
+                        <i
+                            class="fas fa-basketball-ball d-block mb-2"
+                            style="font-size: 1.4rem; color: #273b69;"
+                        ></i>
 
                         Ekskul
 
@@ -780,10 +498,13 @@
 
                     <a
                         href="{{ route('admin.guru') }}"
-                        class="btn btn-light border w-100 py-3">
+                        class="btn btn-light border w-100 py-3"
+                    >
 
-                        <i class="fas fa-chalkboard-teacher d-block mb-2"
-                           style="font-size: 1.4rem; color: #273b69;"></i>
+                        <i
+                            class="fas fa-chalkboard-teacher d-block mb-2"
+                            style="font-size: 1.4rem; color: #273b69;"
+                        ></i>
 
                         Guru
 
@@ -797,10 +518,13 @@
 
                     <a
                         href="{{ route('admin.siswa') }}"
-                        class="btn btn-light border w-100 py-3">
+                        class="btn btn-light border w-100 py-3"
+                    >
 
-                        <i class="fas fa-user-graduate d-block mb-2"
-                           style="font-size: 1.4rem; color: #273b69;"></i>
+                        <i
+                            class="fas fa-user-graduate d-block mb-2"
+                            style="font-size: 1.4rem; color: #273b69;"
+                        ></i>
 
                         Siswa
 

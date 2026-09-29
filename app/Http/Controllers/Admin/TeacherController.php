@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Throwable;
 
 class TeacherController extends Controller
 {
@@ -24,6 +25,7 @@ class TeacherController extends Controller
         );
     }
 
+
     /**
      * Menampilkan form tambah guru.
      */
@@ -32,13 +34,18 @@ class TeacherController extends Controller
         return view('admin.teachers.form');
     }
 
+
     /**
      * Menyimpan data guru baru.
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'nama_guru' => 'required|string|max:40',
+        $validated = $request->validate([
+            'nama_guru' => [
+                'required',
+                'string',
+                'max:40',
+            ],
 
             'nip' => [
                 'nullable',
@@ -47,9 +54,18 @@ class TeacherController extends Controller
                 Rule::unique('teachers', 'nip'),
             ],
 
-            'mapel' => 'nullable|string|max:40',
+            'mapel' => [
+                'nullable',
+                'string',
+                'max:40',
+            ],
 
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png',
+                'max:2048',
+            ],
 
         ], [
             'nama_guru.required' => 'Nama guru wajib diisi.',
@@ -65,21 +81,27 @@ class TeacherController extends Controller
             'foto.max' => 'Ukuran foto maksimal 2 MB.',
         ]);
 
+
         $teacher = new Teacher();
 
-        $teacher->nama_guru = $request->nama_guru;
-        $teacher->nip = $request->nip;
-        $teacher->mapel = $request->mapel;
+        $teacher->nama_guru = $validated['nama_guru'];
+        $teacher->nip = $validated['nip'] ?? null;
+        $teacher->mapel = $validated['mapel'] ?? null;
+
 
         /**
          * Upload foto guru.
          */
         if ($request->hasFile('foto')) {
-            $teacher->foto = $request->file('foto')
+
+            $teacher->foto = $request
+                ->file('foto')
                 ->store('teachers', 'public');
         }
 
+
         $teacher->save();
+
 
         return redirect()
             ->route('admin.guru')
@@ -89,17 +111,17 @@ class TeacherController extends Controller
             );
     }
 
+
     /**
      * Menampilkan detail guru.
      */
-    public function show($id)
+    public function show($encryptedId)
     {
-        try {
-            $teacherId = Crypt::decrypt($id);
+        $teacher = $this->findTeacherByEncryptedId($encryptedId);
 
-            $teacher = Teacher::findOrFail($teacherId);
 
-        } catch (\Exception $e) {
+        if (!$teacher) {
+
             return redirect()
                 ->route('admin.guru')
                 ->with(
@@ -107,6 +129,7 @@ class TeacherController extends Controller
                     'Data guru tidak ditemukan.'
                 );
         }
+
 
         return view(
             'admin.teachers.show',
@@ -114,17 +137,17 @@ class TeacherController extends Controller
         );
     }
 
+
     /**
      * Menampilkan form edit guru.
      */
-    public function edit($id)
+    public function edit($encryptedId)
     {
-        try {
-            $teacherId = Crypt::decrypt($id);
+        $teacher = $this->findTeacherByEncryptedId($encryptedId);
 
-            $teacher = Teacher::findOrFail($teacherId);
 
-        } catch (\Exception $e) {
+        if (!$teacher) {
+
             return redirect()
                 ->route('admin.guru')
                 ->with(
@@ -132,6 +155,7 @@ class TeacherController extends Controller
                     'Data guru tidak ditemukan.'
                 );
         }
+
 
         return view(
             'admin.teachers.form',
@@ -139,17 +163,17 @@ class TeacherController extends Controller
         );
     }
 
+
     /**
      * Memperbarui data guru.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $encryptedId)
     {
-        try {
-            $teacherId = Crypt::decrypt($id);
+        $teacher = $this->findTeacherByEncryptedId($encryptedId);
 
-            $teacher = Teacher::findOrFail($teacherId);
 
-        } catch (\Exception $e) {
+        if (!$teacher) {
+
             return redirect()
                 ->route('admin.guru')
                 ->with(
@@ -158,20 +182,37 @@ class TeacherController extends Controller
                 );
         }
 
-        $request->validate([
-            'nama_guru' => 'required|string|max:40',
+
+        $validated = $request->validate([
+            'nama_guru' => [
+                'required',
+                'string',
+                'max:40',
+            ],
 
             'nip' => [
                 'nullable',
                 'string',
                 'max:15',
                 Rule::unique('teachers', 'nip')
-                    ->ignore($teacher->id, 'id'),
+                    ->ignore(
+                        $teacher->getKey(),
+                        $teacher->getKeyName()
+                    ),
             ],
 
-            'mapel' => 'nullable|string|max:40',
+            'mapel' => [
+                'nullable',
+                'string',
+                'max:40',
+            ],
 
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png',
+                'max:2048',
+            ],
 
         ], [
             'nama_guru.required' => 'Nama guru wajib diisi.',
@@ -187,13 +228,14 @@ class TeacherController extends Controller
             'foto.max' => 'Ukuran foto maksimal 2 MB.',
         ]);
 
-        $teacher->nama_guru = $request->nama_guru;
-        $teacher->nip = $request->nip;
-        $teacher->mapel = $request->mapel;
+
+        $teacher->nama_guru = $validated['nama_guru'];
+        $teacher->nip = $validated['nip'] ?? null;
+        $teacher->mapel = $validated['mapel'] ?? null;
+
 
         /**
          * Upload foto baru.
-         * Foto lama dihapus terlebih dahulu.
          */
         if ($request->hasFile('foto')) {
 
@@ -201,14 +243,21 @@ class TeacherController extends Controller
                 $teacher->foto &&
                 Storage::disk('public')->exists($teacher->foto)
             ) {
-                Storage::disk('public')->delete($teacher->foto);
+
+                Storage::disk('public')->delete(
+                    $teacher->foto
+                );
             }
 
-            $teacher->foto = $request->file('foto')
+
+            $teacher->foto = $request
+                ->file('foto')
                 ->store('teachers', 'public');
         }
 
+
         $teacher->save();
+
 
         return redirect()
             ->route('admin.guru')
@@ -218,17 +267,17 @@ class TeacherController extends Controller
             );
     }
 
+
     /**
      * Menghapus data guru.
      */
-    public function destroy($id)
+    public function destroy($encryptedId)
     {
-        try {
-            $teacherId = Crypt::decrypt($id);
+        $teacher = $this->findTeacherByEncryptedId($encryptedId);
 
-            $teacher = Teacher::findOrFail($teacherId);
 
-        } catch (\Exception $e) {
+        if (!$teacher) {
+
             return redirect()
                 ->route('admin.guru')
                 ->with(
@@ -237,20 +286,26 @@ class TeacherController extends Controller
                 );
         }
 
+
         /**
-         * Hapus foto guru dari storage.
+         * Hapus foto guru.
          */
         if (
             $teacher->foto &&
             Storage::disk('public')->exists($teacher->foto)
         ) {
-            Storage::disk('public')->delete($teacher->foto);
+
+            Storage::disk('public')->delete(
+                $teacher->foto
+            );
         }
 
+
         /**
-         * Hapus data guru dari database.
+         * Hapus data guru.
          */
         $teacher->delete();
+
 
         return redirect()
             ->route('admin.guru')
@@ -258,5 +313,40 @@ class TeacherController extends Controller
                 'success',
                 'Data guru berhasil dihapus.'
             );
+    }
+
+
+    /**
+     * Mencari guru berdasarkan ID terenkripsi.
+     */
+    private function findTeacherByEncryptedId($encryptedId)
+    {
+        try {
+
+            /**
+             * ID dibuat menggunakan:
+             *
+             * Crypt::encryptString($teacher->id)
+             *
+             * Maka decrypt menggunakan:
+             *
+             * Crypt::decryptString($encryptedId)
+             */
+            $teacherId = Crypt::decryptString($encryptedId);
+
+
+            /**
+             * Cari berdasarkan primary key model.
+             */
+            return Teacher::find($teacherId);
+
+        } catch (Throwable $e) {
+
+            /**
+             * Jika decrypt gagal,
+             * anggap data tidak valid.
+             */
+            return null;
+        }
     }
 }

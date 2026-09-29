@@ -1,11 +1,12 @@
+@extends('layouts.template')
+
 @php
     $isEdit = isset($teacher) && $teacher->exists;
+
     $encryptedId = $isEdit
-        ? \Illuminate\Support\Facades\Crypt::encrypt($teacher->id)
+        ? \Illuminate\Support\Facades\Crypt::encryptString($teacher->getKey())
         : null;
 @endphp
-
-@extends('layouts.template')
 
 @section('content')
 
@@ -16,43 +17,49 @@
 
     .form-card {
         background-color: #ffffff;
-        border: none;
-        border-radius: 16px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        border: 1px solid #d8e0e8;
+        border-radius: 6px;
         overflow: hidden;
     }
 
     .form-card-header {
-        background-color: #273b69;
+        background-color: #172a4d;
         color: #ffffff;
-        padding: 20px 24px;
+        padding: 18px 24px;
+        border-bottom: 1px solid #10203c;
     }
 
     .form-card-header h5 {
-        font-family: 'Poppins', sans-serif;
-        font-weight: 600;
         margin: 0;
+        color: #ffffff;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
     }
 
     .form-card-body {
-        padding: 30px;
+        padding: 28px;
     }
 
     .form-label {
+        margin-bottom: 7px;
         color: #334155;
-        margin-bottom: 8px;
+        font-size: 0.84rem;
+        font-weight: 600;
     }
 
     .form-control {
-        border: 1px solid #dbe2ea;
-        border-radius: 10px;
-        padding: 11px 14px;
-        transition: all 0.2s ease;
+        min-height: 44px;
+        padding: 10px 13px;
+        border: 1px solid #d8e0e8;
+        border-radius: 5px;
+        color: #334155;
+        font-size: 0.85rem;
     }
 
     .form-control:focus {
         border-color: #273b69;
-        box-shadow: 0 0 0 3px rgba(39, 59, 105, 0.10);
+        box-shadow: 0 0 0 2px rgba(39, 59, 105, 0.10);
     }
 
     textarea.form-control {
@@ -64,45 +71,32 @@
     ================================ */
 
     .current-photo-wrapper {
-        margin-top: 15px;
+        margin-top: 14px;
     }
 
     .current-photo {
         width: 120px;
         height: 120px;
         object-fit: cover;
-        border-radius: 12px;
-        border: 2px solid #e2e8f0;
         padding: 3px;
         background-color: #ffffff;
-    }
-
-    .photo-placeholder {
-        width: 120px;
-        height: 120px;
-        border-radius: 12px;
-        background-color: #f1f5f9;
-        border: 2px dashed #cbd5e1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #94a3b8;
-        font-size: 2rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 5px;
     }
 
     .preview-wrapper {
         display: none;
-        margin-top: 15px;
+        margin-top: 14px;
     }
 
     .preview-photo {
         width: 120px;
         height: 120px;
         object-fit: cover;
-        border-radius: 12px;
-        border: 2px solid #273b69;
         padding: 3px;
         background-color: #ffffff;
+        border: 2px solid #273b69;
+        border-radius: 5px;
     }
 
     /* ================================
@@ -110,23 +104,31 @@
     ================================ */
 
     .btn-main {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 9px 18px;
         background-color: #273b69;
-        border: none;
+        border: 1px solid #273b69;
+        border-radius: 5px;
         color: #ffffff;
-        border-radius: 10px;
-        padding: 10px 20px;
-        transition: all 0.2s ease;
+        font-size: 0.84rem;
+        font-weight: 600;
     }
 
     .btn-main:hover {
         background-color: #1f3159;
+        border-color: #1f3159;
         color: #ffffff;
-        transform: translateY(-1px);
     }
 
     .btn-back {
-        border-radius: 10px;
-        padding: 10px 20px;
+        min-height: 42px;
+        padding: 9px 18px;
+        border-radius: 5px;
+        font-size: 0.84rem;
+        font-weight: 600;
     }
 
     /* ================================
@@ -135,25 +137,26 @@
 
     .danger-card {
         background-color: #ffffff;
-        border: 1px solid #fecaca;
-        border-radius: 16px;
+        border: 1px solid #e2bcbc;
+        border-radius: 6px;
         overflow: hidden;
     }
 
     .danger-header {
-        background-color: #fef2f2;
-        color: #b91c1c;
-        padding: 18px 24px;
-        border-bottom: 1px solid #fecaca;
+        padding: 15px 20px;
+        background-color: #f8eeee;
+        border-bottom: 1px solid #e2bcbc;
+        color: #8b1e1e;
     }
 
     .danger-header h6 {
         margin: 0;
+        font-size: 0.87rem;
         font-weight: 700;
     }
 
     .danger-body {
-        padding: 24px;
+        padding: 20px;
     }
 
     /* ================================
@@ -167,11 +170,11 @@
         }
 
         .form-card-header {
-            padding: 18px 15px;
+            padding: 16px 15px;
         }
 
         .danger-body {
-            padding: 20px 15px;
+            padding: 18px 15px;
         }
 
         .action-wrapper {
@@ -182,6 +185,7 @@
         .action-wrapper button {
             width: 100%;
         }
+
     }
 </style>
 
@@ -228,13 +232,13 @@
 
 
     <!-- ================================
-         ALERT ERROR
+         ALERT ERROR VALIDASI
     ================================ -->
 
     @if($errors->any())
 
         <div
-            class="alert alert-danger alert-dismissible fade show border-0 shadow-sm"
+            class="alert alert-danger alert-dismissible fade show"
             role="alert">
 
             <div class="d-flex align-items-start">
@@ -266,7 +270,8 @@
             <button
                 type="button"
                 class="btn-close"
-                data-bs-dismiss="alert">
+                data-bs-dismiss="alert"
+                aria-label="Tutup">
             </button>
 
         </div>
@@ -281,7 +286,7 @@
     @if(session('success'))
 
         <div
-            class="alert alert-success alert-dismissible fade show border-0 shadow-sm"
+            class="alert alert-success alert-dismissible fade show"
             role="alert">
 
             <i class="fas fa-check-circle me-2"></i>
@@ -291,7 +296,8 @@
             <button
                 type="button"
                 class="btn-close"
-                data-bs-dismiss="alert">
+                data-bs-dismiss="alert"
+                aria-label="Tutup">
             </button>
 
         </div>
@@ -305,7 +311,7 @@
 
     <div class="form-card mb-4">
 
-        <!-- Header -->
+        <!-- HEADER FORM -->
 
         <div class="form-card-header">
 
@@ -323,7 +329,7 @@
         </div>
 
 
-        <!-- Body -->
+        <!-- BODY FORM -->
 
         <div class="form-card-body">
 
@@ -356,7 +362,7 @@
 
                         <label
                             for="nama_guru"
-                            class="form-label fw-semibold">
+                            class="form-label">
 
                             Nama Lengkap Guru
                             <span class="text-danger">*</span>
@@ -390,9 +396,10 @@
 
                         <label
                             for="nip"
-                            class="form-label fw-semibold">
+                            class="form-label">
 
                             NIP
+
                             <span class="text-muted fw-normal">
                                 (Opsional)
                             </span>
@@ -429,7 +436,7 @@
 
                     <label
                         for="mapel"
-                        class="form-label fw-semibold">
+                        class="form-label">
 
                         Mata Pelajaran
 
@@ -467,7 +474,7 @@
 
                     <label
                         for="foto"
-                        class="form-label fw-semibold">
+                        class="form-label">
 
                         Foto Guru
 
@@ -492,6 +499,7 @@
                         @if($isEdit)
 
                             <br>
+
                             Kosongkan jika tidak ingin mengganti foto.
 
                         @endif
@@ -508,7 +516,7 @@
                     @enderror
 
 
-                    <!-- Foto Saat Ini -->
+                    <!-- FOTO SAAT INI -->
 
                     @if($isEdit && $teacher->foto)
 
@@ -528,7 +536,7 @@
                     @endif
 
 
-                    <!-- Preview Foto Baru -->
+                    <!-- PREVIEW FOTO BARU -->
 
                     <div
                         id="previewWrapper"
@@ -541,7 +549,7 @@
                         <img
                             id="previewPhoto"
                             src=""
-                            alt="Preview"
+                            alt="Preview foto"
                             class="preview-photo">
 
                     </div>
@@ -550,7 +558,7 @@
 
 
                 <!-- ================================
-                     BUTTON SIMPAN
+                     BUTTON
                 ================================ -->
 
                 <div class="border-top pt-4">
@@ -562,6 +570,7 @@
                             class="btn btn-secondary btn-back">
 
                             <i class="fas fa-times me-2"></i>
+
                             Batal
 
                         </a>
@@ -592,7 +601,7 @@
 
 
     <!-- ================================
-         DELETE
+         ZONA BAHAYA
     ================================ -->
 
     @if($isEdit)
@@ -647,6 +656,7 @@
                             class="btn btn-outline-danger">
 
                             <i class="fas fa-trash-alt me-2"></i>
+
                             Hapus Data
 
                         </button>
@@ -665,7 +675,7 @@
 
 
 <!-- ================================
-     FOTO PREVIEW SCRIPT
+     PREVIEW FOTO
 ================================ -->
 
 <script>
@@ -675,42 +685,42 @@
         const previewWrapper = document.getElementById('previewWrapper');
         const previewPhoto = document.getElementById('previewPhoto');
 
-        if (fotoInput) {
-
-            fotoInput.addEventListener('change', function (event) {
-
-                const file = event.target.files[0];
-
-                if (!file) {
-
-                    previewWrapper.style.display = 'none';
-                    previewPhoto.src = '';
-
-                    return;
-                }
-
-                if (!file.type.startsWith('image/')) {
-
-                    previewWrapper.style.display = 'none';
-                    previewPhoto.src = '';
-
-                    return;
-                }
-
-                const reader = new FileReader();
-
-                reader.onload = function (e) {
-
-                    previewPhoto.src = e.target.result;
-                    previewWrapper.style.display = 'block';
-
-                };
-
-                reader.readAsDataURL(file);
-
-            });
-
+        if (!fotoInput) {
+            return;
         }
+
+        fotoInput.addEventListener('change', function (event) {
+
+            const file = event.target.files[0];
+
+            if (!file) {
+
+                previewWrapper.style.display = 'none';
+                previewPhoto.src = '';
+
+                return;
+            }
+
+            if (!file.type.startsWith('image/')) {
+
+                previewWrapper.style.display = 'none';
+                previewPhoto.src = '';
+
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+
+                previewPhoto.src = e.target.result;
+                previewWrapper.style.display = 'block';
+
+            };
+
+            reader.readAsDataURL(file);
+
+        });
 
     });
 </script>

@@ -20,7 +20,7 @@ class UserController extends Controller
         $users = User::orderByDesc('id_user')->get();
 
         return view(
-            'admin.user.index',
+            'admin.users.index',
             compact('users')
         );
     }
