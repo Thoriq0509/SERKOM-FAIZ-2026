@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('school_profiles', function (Blueprint $table) {
-            $table->id(); // Auto-increment biasa
+            $table->unsignedInteger('id')->autoIncrement()->primary();
             $table->string('nama_sekolah', 40);
             $table->string('kepala_sekolah', 40)->nullable();
             $table->string('foto', 100)->nullable();

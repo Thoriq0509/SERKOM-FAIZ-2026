@@ -4,9 +4,11 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\TeacherController;
-use App\Http\Controllers\ProfilSekolahController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\TeacherController;
+use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\SchoolProfileController;
+
 
 // ==========================================
 // 0. ROUTE PUBLIC
@@ -21,11 +23,12 @@ Route::get('/', function () {
 // ==========================================
 Route::middleware('guest')->group(function () {
 
-    // Halaman Login
+    // ------------------------------------------
+    // LOGIN
+    // ------------------------------------------
     Route::get('/login', [AuthController::class, 'index'])
         ->name('login');
 
-    // Proses Login
     Route::post('/login', [AuthController::class, 'login'])
         ->name('login.proses');
 });
@@ -44,7 +47,7 @@ Route::middleware('auth')->group(function () {
 
 
     // ==========================================
-    // ADMIN
+    // ADMIN AREA
     // ==========================================
     Route::prefix('admin')->group(function () {
 
@@ -61,59 +64,51 @@ Route::middleware('auth')->group(function () {
         // PROFIL SEKOLAH
         // Hanya Admin
         // ==========================================
-        Route::get('/profile', [ProfilSekolahController::class, 'index'])
+        Route::get('/profil', [SchoolProfileController::class, 'index'])
             ->middleware('role:Admin')
             ->name('admin.school_profile');
 
-        Route::get('/profile/edit', [ProfilSekolahController::class, 'edit'])
+        Route::get('/profil/edit', [SchoolProfileController::class, 'edit'])
             ->middleware('role:Admin')
             ->name('admin.school_profile.edit');
 
-        Route::put('/profile/update', [ProfilSekolahController::class, 'update'])
+        Route::put('/profil/update', [SchoolProfileController::class, 'update'])
             ->middleware('role:Admin')
             ->name('admin.school_profile.update');
 
-        Route::delete('/profile/delete', [ProfilSekolahController::class, 'destroy'])
+        Route::delete('/profil/delete', [SchoolProfileController::class, 'destroy'])
             ->middleware('role:Admin')
             ->name('admin.school_profile.destroy');
 
 
         // ==========================================
-        // DATA PENGELOLA
+        // DATA PENGELOLA / USER
         // Hanya Admin
         // ==========================================
-
-        // Daftar Data Pengelola
         Route::get('/users', [UserController::class, 'index'])
             ->middleware('role:Admin')
             ->name('admin.users.index');
 
-        // Form Tambah Data Pengelola
         Route::get('/users/create', [UserController::class, 'addEdit'])
             ->middleware('role:Admin')
             ->name('admin.users.create');
 
-        // Simpan Data Pengelola Baru
         Route::post('/users', [UserController::class, 'save'])
             ->middleware('role:Admin')
             ->name('admin.users.store');
 
-        // Detail Data Pengelola
         Route::get('/users/{id}', [UserController::class, 'show'])
             ->middleware('role:Admin')
             ->name('admin.users.show');
 
-        // Form Edit Data Pengelola
         Route::get('/users/{id}/edit', [UserController::class, 'addEdit'])
             ->middleware('role:Admin')
             ->name('admin.users.edit');
 
-        // Update Data Pengelola
         Route::put('/users/{id}', [UserController::class, 'save'])
             ->middleware('role:Admin')
             ->name('admin.users.update');
 
-        // Hapus Data Pengelola
         Route::delete('/users/{id}', [UserController::class, 'destroy'])
             ->middleware('role:Admin')
             ->name('admin.users.destroy');
@@ -126,26 +121,25 @@ Route::middleware('auth')->group(function () {
         Route::get('/berita', function () {
             return view('admin.news.news');
         })
-        ->middleware('role:Admin,Operator')
-        ->name('admin.berita');
+            ->middleware('role:Admin,Operator')
+            ->name('admin.berita');
 
 
         // ==========================================
-        // EKSTRAKULIKULER
+        // EKSTRAKURIKULER
         // Admin & Operator
         // ==========================================
         Route::get('/ekstrakulikuler', function () {
             return view('admin.Extracurricular.extracurricular');
         })
-        ->middleware('role:Admin,Operator')
-        ->name('admin.ekstrakulikuler');
+            ->middleware('role:Admin,Operator')
+            ->name('admin.ekstrakulikuler');
 
 
         // ==========================================
         // GURU
         // Admin & Operator
         // ==========================================
-
         Route::get('/guru', [TeacherController::class, 'index'])
             ->middleware('role:Admin,Operator')
             ->name('admin.guru');
@@ -179,11 +173,33 @@ Route::middleware('auth')->group(function () {
         // SISWA
         // Admin & Operator
         // ==========================================
-        Route::get('/siswa', function () {
-            return view('admin.students.students');
-        })
-        ->middleware('role:Admin,Operator')
-        ->name('admin.siswa');
+        Route::get('/siswa', [StudentController::class, 'index'])
+            ->middleware('role:Admin,Operator')
+            ->name('admin.siswa');
+
+        Route::get('/siswa/create', [StudentController::class, 'create'])
+            ->middleware('role:Admin,Operator')
+            ->name('admin.siswa.create');
+
+        Route::post('/siswa', [StudentController::class, 'store'])
+            ->middleware('role:Admin,Operator')
+            ->name('admin.siswa.store');
+
+        Route::get('/siswa/{id}', [StudentController::class, 'show'])
+            ->middleware('role:Admin,Operator')
+            ->name('admin.siswa.show');
+
+        Route::get('/siswa/{id}/edit', [StudentController::class, 'edit'])
+            ->middleware('role:Admin,Operator')
+            ->name('admin.siswa.edit');
+
+        Route::put('/siswa/{id}', [StudentController::class, 'update'])
+            ->middleware('role:Admin,Operator')
+            ->name('admin.siswa.update');
+
+        Route::delete('/siswa/{id}', [StudentController::class, 'destroy'])
+            ->middleware('role:Admin,Operator')
+            ->name('admin.siswa.destroy');
 
 
         // ==========================================
@@ -193,8 +209,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/galeri', function () {
             return view('admin.galeries.galeries');
         })
-        ->middleware('role:Admin,Operator')
-        ->name('admin.galeri');
+            ->middleware('role:Admin,Operator')
+            ->name('admin.galeri');
 
     });
+
 });

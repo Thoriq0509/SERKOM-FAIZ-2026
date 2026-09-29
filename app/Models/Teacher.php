@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 class Teacher extends Model
 {
@@ -16,42 +15,27 @@ class Teacher extends Model
     protected $table = 'teachers';
 
     /**
-     * Primary key menggunakan UUID.
+     * Primary key.
      */
     protected $primaryKey = 'id';
 
     /**
-     * UUID berupa string.
+     * Primary key berupa integer.
      */
-    protected $keyType = 'string';
+    protected $keyType = 'int';
 
     /**
-     * Primary key bukan auto increment.
+     * Primary key menggunakan auto increment.
      */
-    public $incrementing = false;
+    public $incrementing = true;
 
     /**
-     * Kolom yang boleh diisi.
+     * Kolom yang boleh diisi melalui mass assignment.
      */
     protected $fillable = [
-        'id',
         'nama_guru',
         'nip',
         'mapel',
         'foto',
     ];
-
-    /**
-     * Membuat UUID otomatis ketika data dibuat.
-     */
-    protected static function booted(): void
-    {
-        static::creating(function ($teacher) {
-
-            if (empty($teacher->id)) {
-                $teacher->id = (string) Str::uuid();
-            }
-
-        });
-    }
 }

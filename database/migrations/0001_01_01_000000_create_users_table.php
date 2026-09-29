@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->uuid('id_user')->primary();
+            $table->unsignedInteger('id_user')->autoIncrement()->primary();
             $table->string('username', 30)->unique();
             $table->string('password', 100);
             $table->enum('role', ['Admin', 'Operator'])->default('Admin');
@@ -24,7 +24,7 @@ return new class extends Migration
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->uuid('user_id')->nullable()->index();
+            $table->unsignedInteger('user_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');

@@ -9,8 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('teachers', function (Blueprint $table) {
-            // Menggunakan UUID sebagai Primary Key
-            $table->uuid('id')->primary(); 
+            $table->unsignedInteger('id')->autoIncrement()->primary();
             $table->string('nama_guru', 40);
             $table->string('nip', 15)->nullable();
             $table->string('mapel', 40)->nullable();

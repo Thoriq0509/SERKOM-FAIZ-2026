@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -17,7 +18,10 @@ class TeacherController extends Controller
     {
         $teachers = Teacher::latest()->paginate(10);
 
-        return view('admin.teachers.index', compact('teachers'));
+        return view(
+            'admin.teachers.index',
+            compact('teachers')
+        );
     }
 
     /**
@@ -35,14 +39,18 @@ class TeacherController extends Controller
     {
         $request->validate([
             'nama_guru' => 'required|string|max:40',
+
             'nip' => [
                 'nullable',
                 'string',
                 'max:15',
                 Rule::unique('teachers', 'nip'),
             ],
+
             'mapel' => 'nullable|string|max:40',
+
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+
         ], [
             'nama_guru.required' => 'Nama guru wajib diisi.',
             'nama_guru.max' => 'Nama guru maksimal 40 karakter.',
@@ -75,7 +83,10 @@ class TeacherController extends Controller
 
         return redirect()
             ->route('admin.guru')
-            ->with('success', 'Data guru berhasil ditambahkan.');
+            ->with(
+                'success',
+                'Data guru berhasil ditambahkan.'
+            );
     }
 
     /**
@@ -91,10 +102,16 @@ class TeacherController extends Controller
         } catch (\Exception $e) {
             return redirect()
                 ->route('admin.guru')
-                ->with('error', 'Data guru tidak ditemukan.');
+                ->with(
+                    'error',
+                    'Data guru tidak ditemukan.'
+                );
         }
 
-        return view('admin.teachers.show', compact('teacher'));
+        return view(
+            'admin.teachers.show',
+            compact('teacher')
+        );
     }
 
     /**
@@ -110,10 +127,16 @@ class TeacherController extends Controller
         } catch (\Exception $e) {
             return redirect()
                 ->route('admin.guru')
-                ->with('error', 'Data guru tidak ditemukan.');
+                ->with(
+                    'error',
+                    'Data guru tidak ditemukan.'
+                );
         }
 
-        return view('admin.teachers.form', compact('teacher'));
+        return view(
+            'admin.teachers.form',
+            compact('teacher')
+        );
     }
 
     /**
@@ -129,11 +152,15 @@ class TeacherController extends Controller
         } catch (\Exception $e) {
             return redirect()
                 ->route('admin.guru')
-                ->with('error', 'Data guru tidak ditemukan.');
+                ->with(
+                    'error',
+                    'Data guru tidak ditemukan.'
+                );
         }
 
         $request->validate([
             'nama_guru' => 'required|string|max:40',
+
             'nip' => [
                 'nullable',
                 'string',
@@ -141,8 +168,11 @@ class TeacherController extends Controller
                 Rule::unique('teachers', 'nip')
                     ->ignore($teacher->id, 'id'),
             ],
+
             'mapel' => 'nullable|string|max:40',
+
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+
         ], [
             'nama_guru.required' => 'Nama guru wajib diisi.',
             'nama_guru.max' => 'Nama guru maksimal 40 karakter.',
@@ -162,8 +192,8 @@ class TeacherController extends Controller
         $teacher->mapel = $request->mapel;
 
         /**
-         * Jika upload foto baru,
-         * hapus foto lama terlebih dahulu.
+         * Upload foto baru.
+         * Foto lama dihapus terlebih dahulu.
          */
         if ($request->hasFile('foto')) {
 
@@ -182,7 +212,10 @@ class TeacherController extends Controller
 
         return redirect()
             ->route('admin.guru')
-            ->with('success', 'Data guru berhasil diperbarui.');
+            ->with(
+                'success',
+                'Data guru berhasil diperbarui.'
+            );
     }
 
     /**
@@ -198,7 +231,10 @@ class TeacherController extends Controller
         } catch (\Exception $e) {
             return redirect()
                 ->route('admin.guru')
-                ->with('error', 'Data guru tidak ditemukan.');
+                ->with(
+                    'error',
+                    'Data guru tidak ditemukan.'
+                );
         }
 
         /**
@@ -212,12 +248,15 @@ class TeacherController extends Controller
         }
 
         /**
-         * Hapus data guru.
+         * Hapus data guru dari database.
          */
         $teacher->delete();
 
         return redirect()
             ->route('admin.guru')
-            ->with('success', 'Data guru berhasil dihapus.');
+            ->with(
+                'success',
+                'Data guru berhasil dihapus.'
+            );
     }
 }

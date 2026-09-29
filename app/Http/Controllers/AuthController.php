@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -16,62 +18,116 @@ class AuthController extends Controller
     }
 
     /**
-     * Memproses login user.
+     * Memproses login.
      */
     public function login(Request $request)
     {
-        // Validasi input
-        $credentials = $request->validate([
-            'username' => ['required', 'string'],
-            'password' => ['required', 'string'],
+        // ==========================================
+        // VALIDASI
+        // ==========================================
+        $request->validate([
+            'username' => [
+                'required',
+                'string',
+            ],
+
+            'password' => [
+                'required',
+                'string',
+            ],
+        ], [
+            'username.required' => 'Username wajib diisi.',
+            'password.required' => 'Password wajib diisi.',
         ]);
 
-        // Coba login
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        // ==========================================
+        // CARI USER BERDASARKAN USERNAME
+        // ==========================================
+        $user = User::where(
+            'username',
+            $request->username
+        )->first();
 
-            // Regenerate session untuk keamanan
-            $request->session()->regenerate();
-
-            // Ambil user yang berhasil login
-            $user = Auth::user();
-
-            // Redirect berdasarkan role
-            if (strcasecmp((string) $user->role, 'Admin') === 0) {
-                return redirect()->route('dashboard');
-            }
-
-            if (strcasecmp((string) $user->role, 'Operator') === 0) {
-                return redirect()->route('dashboard');
-            }
-
-            // Jika role tidak dikenali
-            Auth::logout();
-
-            return redirect()
-                ->route('login')
+        // Username tidak ditemukan.
+        if (!$user) {
+            return back()
                 ->withErrors([
-                    'username' => 'Role akun tidak memiliki akses.',
-                ]);
+                    'username' => 'Username atau password salah.',
+                ])
+                ->withInput(
+                    $request->only('username')
+                );
         }
 
-        // Login gagal
-        return back()
-            ->withErrors([
-                'username' => 'Username atau password salah.',
-            ])
-            ->withInput($request->only('username'));
+        // ==========================================
+        // CEK PASSWORD
+        // ==========================================
+        if (!Hash::check(
+            $request->password,
+            $user->password
+        )) {
+            return back()
+                ->withErrors([
+                    'username' => 'Username atau password salah.',
+                ])
+                ->withInput(
+                    $request->only('username')
+                );
+        }
+
+        // ==========================================
+        // CEK ROLE
+        // ==========================================
+        $role = strtolower(
+            trim(
+                (string) $user->role
+            )
+        );
+
+        if (!in_array(
+            $role,
+            [
+                'admin',
+                'operator',
+            ],
+            true
+        )) {
+            return back()
+                ->withErrors([
+                    'username' => 'Role akun tidak memiliki akses.',
+                ])
+                ->withInput(
+                    $request->only('username')
+                );
+        }
+
+        // ==========================================
+        // LOGIN MANUAL
+        // ==========================================
+        Auth::login($user);
+
+        // Regenerasi session.
+        $request->session()->regenerate();
+
+        // ==========================================
+        // REDIRECT DASHBOARD
+        // ==========================================
+        return redirect()
+            ->route('dashboard');
     }
 
     /**
-     * Logout user.
+     * Logout.
      */
     public function logout(Request $request)
     {
         Auth::logout();
 
         $request->session()->invalidate();
+
         $request->session()->regenerateToken();
 
-        return redirect()->route('login');
+        return redirect()
+            ->route('login');
     }
 }

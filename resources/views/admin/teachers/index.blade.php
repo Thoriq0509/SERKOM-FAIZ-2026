@@ -3,26 +3,31 @@
 @section('content')
 
 <style>
-    /* ================================
-       TABLE CARD
-    ================================ */
-
+    /* =========================
+       CARD TABEL
+    ========================== */
     .table-card {
         background-color: #ffffff;
-        border-radius: 16px;
+        border-radius: 15px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         overflow: hidden;
         border: none;
     }
 
+    /* =========================
+       HEADER TABEL
+    ========================== */
     .table-card .card-header {
         background-color: #273b69;
         color: #ffffff;
-        padding: 18px 24px;
-        border: none;
+        padding: 16px 25px;
         font-family: 'Poppins', sans-serif;
+        border-bottom: none;
     }
 
+    /* =========================
+       TABEL
+    ========================== */
     .table-custom {
         margin-bottom: 0;
     }
@@ -51,13 +56,12 @@
         background-color: #f8fafc;
     }
 
-    /* ================================
+    /* =========================
        FOTO GURU
-    ================================ */
-
+    ========================== */
     .teacher-photo {
-        width: 58px;
-        height: 58px;
+        width: 52px;
+        height: 52px;
         border-radius: 50%;
         object-fit: cover;
         border: 2px solid #e2e8f0;
@@ -65,25 +69,25 @@
     }
 
     .teacher-photo-placeholder {
-        width: 58px;
-        height: 58px;
+        width: 52px;
+        height: 52px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: #e2e8f0;
+        background-color: #f1f5f9;
         color: #64748b;
-        border: 2px solid #cbd5e1;
-        font-size: 1.3rem;
+        border: 2px solid #e2e8f0;
+        font-size: 1.2rem;
+        margin: 0 auto;
     }
 
-    /* ================================
-       BUTTON AKSI
-    ================================ */
-
+    /* =========================
+       TOMBOL AKSI
+    ========================== */
     .btn-action {
-        width: 34px;
-        height: 34px;
+        width: 32px;
+        height: 32px;
         padding: 0;
         display: inline-flex;
         align-items: center;
@@ -96,10 +100,18 @@
         transform: translateY(-2px);
     }
 
-    /* ================================
-       EMPTY STATE
-    ================================ */
+    /* =========================
+       BADGE MAPEL
+    ========================== */
+    .badge-mapel {
+        background-color: rgba(13, 110, 253, 0.1);
+        color: #0d6efd;
+        border: 1px solid rgba(13, 110, 253, 0.2);
+    }
 
+    /* =========================
+       EMPTY STATE
+    ========================== */
     .empty-state {
         padding: 60px 20px;
         text-align: center;
@@ -111,34 +123,9 @@
         margin-bottom: 15px;
     }
 
-    .empty-state h5 {
-        color: #475569;
-        font-weight: 600;
-    }
-
-    /* ================================
-       HEADER PAGE
-    ================================ */
-
-    .page-title {
-        font-family: 'Poppins', sans-serif;
-    }
-
-    .btn-main {
-        background-color: #273b69;
-        border: none;
-        color: #ffffff;
-    }
-
-    .btn-main:hover {
-        background-color: #1f3159;
-        color: #ffffff;
-    }
-
-    /* ================================
+    /* =========================
        RESPONSIVE
-    ================================ */
-
+    ========================== */
     @media (max-width: 767.98px) {
 
         .table-card .card-header {
@@ -150,10 +137,6 @@
             padding: 12px 15px;
         }
 
-        .page-title {
-            font-size: 1.5rem;
-        }
-
         .btn-main {
             width: 100%;
         }
@@ -163,44 +146,45 @@
 
 <div class="container-fluid p-0">
 
-    <!-- ================================
+    <!-- =========================
          HEADER
-    ================================ -->
-
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+    ========================== -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
 
         <div>
-            <h2 class="page-title fw-bold text-dark mb-1">
+            <h2
+                class="fw-bold text-dark mb-1"
+                style="font-family: 'Poppins', sans-serif;"
+            >
                 Data Guru
             </h2>
 
             <p class="text-muted mb-0">
-                Kelola seluruh data tenaga pendidik sekolah.
+                Kelola data tenaga pendidik sekolah.
             </p>
         </div>
 
         <a
             href="{{ route('admin.guru.create') }}"
-            class="btn btn-main rounded-pill px-4 py-2 shadow-sm">
-
+            class="btn rounded-pill px-4 shadow-sm text-white"
+            style="background-color: #273b69; border: none;"
+        >
             <i class="fas fa-plus me-2"></i>
-            Tambah Data Guru
-
+            Tambah Data
         </a>
 
     </div>
 
 
-    <!-- ================================
+    <!-- =========================
          ALERT SUCCESS
-    ================================ -->
-
-    @if(session('success'))
+    ========================== -->
+    @if (session('success'))
 
         <div
-            class="alert alert-success alert-dismissible fade show border-0 shadow-sm"
-            role="alert">
-
+            class="alert alert-success alert-dismissible fade show shadow-sm border-0"
+            role="alert"
+        >
             <i class="fas fa-check-circle me-2"></i>
 
             {{ session('success') }}
@@ -209,24 +193,22 @@
                 type="button"
                 class="btn-close"
                 data-bs-dismiss="alert"
-                aria-label="Close">
-            </button>
-
+                aria-label="Tutup"
+            ></button>
         </div>
 
     @endif
 
 
-    <!-- ================================
+    <!-- =========================
          ALERT ERROR
-    ================================ -->
-
-    @if(session('error'))
+    ========================== -->
+    @if (session('error'))
 
         <div
-            class="alert alert-danger alert-dismissible fade show border-0 shadow-sm"
-            role="alert">
-
+            class="alert alert-danger alert-dismissible fade show shadow-sm border-0"
+            role="alert"
+        >
             <i class="fas fa-exclamation-circle me-2"></i>
 
             {{ session('error') }}
@@ -235,286 +217,277 @@
                 type="button"
                 class="btn-close"
                 data-bs-dismiss="alert"
-                aria-label="Close">
-            </button>
-
+                aria-label="Tutup"
+            ></button>
         </div>
 
     @endif
 
 
-    <!-- ================================
-         CARD DATA GURU
-    ================================ -->
-
+    <!-- =========================
+         CARD TABEL
+    ========================== -->
     <div class="card table-card">
 
-        <!-- CARD HEADER -->
-
+        <!-- HEADER CARD -->
         <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
 
-            <h6 class="mb-0 fw-bold">
-
+            <h6 class="mb-0 fw-bold fs-6">
                 <i class="fas fa-chalkboard-teacher me-2"></i>
                 Daftar Tenaga Pendidik
-
             </h6>
 
-            <span class="badge bg-light text-dark rounded-pill px-3 py-2">
-
-                Total:
-                {{ $teachers->total() }}
-
-                Guru
-
+            <span class="small opacity-75">
+                Total: {{ $teachers->total() }} guru
             </span>
 
         </div>
 
 
-        <!-- CARD BODY -->
-
+        <!-- BODY CARD -->
         <div class="card-body p-0">
 
-            @if($teachers->count() > 0)
+            <!-- =========================
+                 TABEL RESPONSIVE
+            ========================== -->
+            <div class="table-responsive">
 
-                <div class="table-responsive">
+                <table class="table table-custom">
 
-                    <table class="table table-custom">
+                    <thead>
 
-                        <thead>
+                        <tr>
+
+                            <th width="5%">
+                                No
+                            </th>
+
+                            <th width="12%" class="text-center">
+                                Foto
+                            </th>
+
+                            <th width="28%">
+                                Nama Guru
+                            </th>
+
+                            <th width="20%">
+                                NIP
+                            </th>
+
+                            <th width="20%">
+                                Mata Pelajaran
+                            </th>
+
+                            <th width="15%" class="text-center">
+                                Aksi
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @forelse ($teachers as $teacher)
+
+                            @php
+                                $encryptedId = \Illuminate\Support\Facades\Crypt::encryptString($teacher->id);
+                            @endphp
 
                             <tr>
 
-                                <th width="5%">
-                                    No
-                                </th>
+                                <!-- Nomor -->
+                                <td>
+                                    {{ $teachers->firstItem() + $loop->index }}
+                                </td>
 
-                                <th width="12%" class="text-center">
-                                    Foto
-                                </th>
 
-                                <th width="28%">
-                                    Nama Guru
-                                </th>
+                                <!-- Foto -->
+                                <td class="text-center">
 
-                                <th width="20%">
-                                    NIP
-                                </th>
+                                    @if ($teacher->foto)
 
-                                <th width="20%">
-                                    Mata Pelajaran
-                                </th>
+                                        <img
+                                            src="{{ asset('storage/' . $teacher->foto) }}"
+                                            alt="Foto {{ $teacher->nama_guru }}"
+                                            class="teacher-photo"
+                                        >
 
-                                <th width="15%" class="text-center">
-                                    Aksi
-                                </th>
+                                    @else
+
+                                        <div class="teacher-photo-placeholder">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+
+                                    @endif
+
+                                </td>
+
+
+                                <!-- Nama Guru -->
+                                <td class="fw-bold text-dark">
+                                    {{ $teacher->nama_guru }}
+                                </td>
+
+
+                                <!-- NIP -->
+                                <td class="fw-semibold text-secondary">
+
+                                    @if ($teacher->nip)
+
+                                        {{ $teacher->nip }}
+
+                                    @else
+
+                                        <span class="text-muted">
+                                            -
+                                        </span>
+
+                                    @endif
+
+                                </td>
+
+
+                                <!-- Mata Pelajaran -->
+                                <td>
+
+                                    @if ($teacher->mapel)
+
+                                        <span class="badge badge-mapel px-3 py-2 rounded-pill fw-normal">
+                                            {{ $teacher->mapel }}
+                                        </span>
+
+                                    @else
+
+                                        <span class="text-muted">
+                                            -
+                                        </span>
+
+                                    @endif
+
+                                </td>
+
+
+                                <!-- Aksi -->
+                                <td class="text-center text-nowrap">
+
+                                    <!-- Detail -->
+                                    <a
+                                        href="{{ route('admin.guru.show', $encryptedId) }}"
+                                        class="btn btn-info btn-sm btn-action text-white shadow-sm me-1"
+                                        title="Lihat Detail"
+                                    >
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+
+
+                                    <!-- Edit -->
+                                    <a
+                                        href="{{ route('admin.guru.edit', $encryptedId) }}"
+                                        class="btn btn-warning btn-sm btn-action text-white shadow-sm me-1"
+                                        title="Edit Data"
+                                    >
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+
+
+                                    <!-- Hapus -->
+                                    <form
+                                        action="{{ route('admin.guru.destroy', $encryptedId) }}"
+                                        method="POST"
+                                        class="d-inline"
+                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus data guru {{ $teacher->nama_guru }}?');"
+                                    >
+
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-danger btn-sm btn-action shadow-sm"
+                                            title="Hapus Data"
+                                        >
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+
+                                    </form>
+
+                                </td>
 
                             </tr>
 
-                        </thead>
+                        @empty
 
+                            <!-- =========================
+                                 EMPTY STATE
+                            ========================== -->
+                            <tr>
 
-                        <tbody>
+                                <td colspan="6">
 
-                            @foreach($teachers as $teacher)
+                                    <div class="empty-state">
 
-                                @php
+                                        <i class="fas fa-chalkboard-teacher d-block"></i>
 
-                                    $encryptedId = \Illuminate\Support\Facades\Crypt::encrypt(
-                                        $teacher->id
-                                    );
+                                        <h6 class="fw-bold text-secondary">
+                                            Belum Ada Data Guru
+                                        </h6>
 
-                                @endphp
+                                        <p class="mb-3">
+                                            Data tenaga pendidik belum tersedia.
+                                        </p>
 
-                                <tr>
-
-                                    <!-- Nomor -->
-                                    <td>
-
-                                        {{ $teachers->firstItem() + $loop->index }}
-
-                                    </td>
-
-
-                                    <!-- Foto -->
-                                    <td class="text-center">
-
-                                        @if($teacher->foto)
-
-                                            <img
-                                                src="{{ asset('storage/' . $teacher->foto) }}"
-                                                alt="Foto {{ $teacher->nama_guru }}"
-                                                class="teacher-photo">
-
-                                        @else
-
-                                            <div
-                                                class="teacher-photo-placeholder mx-auto">
-
-                                                <i class="fas fa-user"></i>
-
-                                            </div>
-
-                                        @endif
-
-                                    </td>
-
-
-                                    <!-- Nama Guru -->
-                                    <td>
-
-                                        <div class="fw-bold text-dark">
-
-                                            {{ $teacher->nama_guru }}
-
-                                        </div>
-
-                                    </td>
-
-
-                                    <!-- NIP -->
-                                    <td>
-
-                                        @if($teacher->nip)
-
-                                            <span class="text-dark">
-                                                {{ $teacher->nip }}
-                                            </span>
-
-                                        @else
-
-                                            <span class="text-muted">
-                                                -
-                                            </span>
-
-                                        @endif
-
-                                    </td>
-
-
-                                    <!-- Mata Pelajaran -->
-                                    <td>
-
-                                        @if($teacher->mapel)
-
-                                            <span
-                                                class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-2 rounded-pill">
-
-                                                {{ $teacher->mapel }}
-
-                                            </span>
-
-                                        @else
-
-                                            <span class="text-muted">
-                                                -
-                                            </span>
-
-                                        @endif
-
-                                    </td>
-
-
-                                    <!-- Aksi -->
-                                    <td class="text-center text-nowrap">
-
-                                        <!-- Detail -->
                                         <a
-                                            href="{{ route('admin.guru.show', $encryptedId) }}"
-                                            class="btn btn-info btn-sm btn-action text-white shadow-sm me-1"
-                                            title="Lihat Detail">
-
-                                            <i class="fas fa-eye"></i>
-
+                                            href="{{ route('admin.guru.create') }}"
+                                            class="btn btn-sm text-white px-3"
+                                            style="background-color: #273b69; border: none;"
+                                        >
+                                            <i class="fas fa-plus me-1"></i>
+                                            Tambah Guru
                                         </a>
 
+                                    </div>
 
-                                        <!-- Edit -->
-                                        <a
-                                            href="{{ route('admin.guru.edit', $encryptedId) }}"
-                                            class="btn btn-warning btn-sm btn-action text-white shadow-sm me-1"
-                                            title="Edit Data">
+                                </td>
 
-                                            <i class="fas fa-edit"></i>
+                            </tr>
 
-                                        </a>
+                        @endforelse
 
+                    </tbody>
 
-                                        <!-- Hapus -->
-                                        <form
-                                            action="{{ route('admin.guru.destroy', $encryptedId) }}"
-                                            method="POST"
-                                            class="d-inline"
-                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus data guru {{ $teacher->nama_guru }}?');">
+                </table>
 
-                                            @csrf
-                                            @method('DELETE')
-
-                                            <button
-                                                type="submit"
-                                                class="btn btn-danger btn-sm btn-action shadow-sm"
-                                                title="Hapus Data">
-
-                                                <i class="fas fa-trash-alt"></i>
-
-                                            </button>
-
-                                        </form>
-
-                                    </td>
-
-                                </tr>
-
-                            @endforeach
-
-                        </tbody>
-
-                    </table>
-
-                </div>
+            </div>
 
 
-                <!-- ================================
-                     PAGINATION
-                ================================ -->
+            <!-- =========================
+                 PAGINATION
+            ========================== -->
+            @if ($teachers->hasPages())
 
-                @if($teachers->hasPages())
+                <div class="p-3 border-top bg-light">
 
-                    <div class="p-3 border-top bg-light">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
 
-                        {{ $teachers->links() }}
+                        <small class="text-muted">
+
+                            Menampilkan
+                            <strong>{{ $teachers->firstItem() }}</strong>
+                            sampai
+                            <strong>{{ $teachers->lastItem() }}</strong>
+                            dari
+                            <strong>{{ $teachers->total() }}</strong>
+                            data guru
+
+                        </small>
+
+                        <div>
+                            {{ $teachers->links() }}
+                        </div>
 
                     </div>
-
-                @endif
-
-            @else
-
-                <!-- ================================
-                     EMPTY STATE
-                ================================ -->
-
-                <div class="empty-state">
-
-                    <i class="fas fa-chalkboard-teacher"></i>
-
-                    <h5 class="mb-2">
-                        Belum Ada Data Guru
-                    </h5>
-
-                    <p class="mb-3">
-                        Belum ada tenaga pendidik yang tersimpan di database.
-                    </p>
-
-                    <a
-                        href="{{ route('admin.guru.create') }}"
-                        class="btn btn-main rounded-pill px-4">
-
-                        <i class="fas fa-plus me-2"></i>
-                        Tambah Guru Pertama
-
-                    </a>
 
                 </div>
 

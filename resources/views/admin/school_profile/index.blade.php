@@ -8,42 +8,50 @@
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
 
         <div>
-            <h2 class="fw-bold text-dark mb-1" style="font-family: 'Poppins', sans-serif;">
+
+            <h2
+                class="fw-bold text-dark mb-1"
+                style="font-family: 'Poppins', sans-serif;"
+            >
                 Profil Sekolah
             </h2>
 
             <p class="text-muted mb-0">
                 Informasi lengkap mengenai profil sekolah.
             </p>
+
         </div>
 
-        <a href="{{ route('admin.school_profile.edit') }}"
-           class="btn px-4 py-2 shadow-sm text-white"
-           style="background-color: #273b69; border: none;">
-
+        <a
+            href="{{ route('admin.school_profile.edit') }}"
+            class="btn px-4 py-2 shadow-sm text-white"
+            style="background-color: #273b69; border: none;"
+        >
             <i class="fas fa-edit me-2"></i>
             Edit Profil
-
         </a>
 
     </div>
 
 
     <!-- ================= ALERT SUCCESS ================= -->
-    @if(session('success'))
+    @if (session('success'))
 
-        <div class="alert alert-success alert-dismissible fade show shadow-sm border-0"
-             role="alert">
+        <div
+            class="alert alert-success alert-dismissible fade show shadow-sm border-0"
+            role="alert"
+        >
 
             <i class="fas fa-check-circle me-2"></i>
 
             {{ session('success') }}
 
-            <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="alert"
-                    aria-label="Close">
-            </button>
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+            ></button>
 
         </div>
 
@@ -51,20 +59,23 @@
 
 
     <!-- ================= ALERT ERROR ================= -->
-    @if(session('error'))
+    @if (session('error'))
 
-        <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0"
-             role="alert">
+        <div
+            class="alert alert-danger alert-dismissible fade show shadow-sm border-0"
+            role="alert"
+        >
 
             <i class="fas fa-exclamation-circle me-2"></i>
 
             {{ session('error') }}
 
-            <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="alert"
-                    aria-label="Close">
-            </button>
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+            ></button>
 
         </div>
 
@@ -72,34 +83,46 @@
 
 
     <!-- ================= CARD PROFIL SEKOLAH ================= -->
-    <div class="card border-0 shadow-sm overflow-hidden"
-         style="border-radius: 16px;">
+    <div
+        class="card border-0 shadow-sm overflow-hidden"
+        style="border-radius: 16px;"
+    >
 
         <div class="card-body p-0">
 
             <div class="row g-0">
 
                 <!-- ================= BAGIAN KIRI ================= -->
-                <div class="col-lg-4 text-center text-white p-4 p-md-5 d-flex flex-column justify-content-center align-items-center"
-                     style="background-color: #273b69;">
+                <div
+                    class="col-lg-4 text-center text-white p-4 p-md-5 d-flex flex-column justify-content-center align-items-center"
+                    style="background-color: #273b69;"
+                >
 
                     <!-- Logo Sekolah -->
-                    @if($profilSekolah && $profilSekolah->logo)
+                    @if ($schoolProfile && $schoolProfile->logo)
 
                         <img
-                            src="{{ asset('storage/' . $profilSekolah->logo) }}"
-                            alt="Logo {{ $profilSekolah->nama_sekolah ?? 'Sekolah' }}"
+                            src="{{ asset('storage/' . $schoolProfile->logo) }}"
+                            alt="Logo {{ $schoolProfile->nama_sekolah ?? 'Sekolah' }}"
                             class="rounded-circle bg-white p-2 shadow mb-4"
-                            style="width: 130px; height: 130px; object-fit: contain;">
+                            style="
+                                width: 130px;
+                                height: 130px;
+                                object-fit: contain;
+                            "
+                        >
 
                     @else
 
                         <div
                             class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center shadow mb-4"
-                            style="width: 130px; height: 130px; font-size: 3.2rem;">
-
+                            style="
+                                width: 130px;
+                                height: 130px;
+                                font-size: 3.2rem;
+                            "
+                        >
                             <i class="fas fa-school"></i>
-
                         </div>
 
                     @endif
@@ -108,7 +131,7 @@
                     <!-- Nama Sekolah -->
                     <h4 class="fw-bold mb-2">
 
-                        {{ $profilSekolah->nama_sekolah ?? 'Nama Sekolah Belum Diatur' }}
+                        {{ $schoolProfile->nama_sekolah ?? 'Nama Sekolah Belum Diatur' }}
 
                     </h4>
 
@@ -117,7 +140,9 @@
                     <p class="mb-1 opacity-75">
 
                         <i class="fas fa-id-card me-1"></i>
-                        NPSN: {{ $profilSekolah->npsn ?? '-' }}
+
+                        NPSN:
+                        {{ $schoolProfile->npsn ?? '-' }}
 
                     </p>
 
@@ -126,7 +151,9 @@
                     <p class="mb-0 opacity-75">
 
                         <i class="fas fa-calendar-alt me-1"></i>
-                        Berdiri {{ $profilSekolah->tahun_berdiri ?? '-' }}
+
+                        Berdiri:
+                        {{ $schoolProfile->tahun_berdiri ?? '-' }}
 
                     </p>
 
@@ -136,11 +163,15 @@
                 <!-- ================= BAGIAN KANAN ================= -->
                 <div class="col-lg-8 p-4 p-md-5">
 
-                    <!-- Informasi Detail -->
+
+                    <!-- ================= INFORMASI DETAIL ================= -->
                     <div class="mb-4">
 
-                        <h5 class="fw-bold text-secondary border-bottom pb-3 mb-4">
+                        <h5
+                            class="fw-bold text-secondary border-bottom pb-3 mb-4"
+                        >
                             <i class="fas fa-info-circle me-2"></i>
+
                             Informasi Detail
                         </h5>
 
@@ -153,7 +184,9 @@
                             </div>
 
                             <div class="col-md-8 text-dark">
-                                {{ $profilSekolah->kepala_sekolah ?? '-' }}
+
+                                {{ $schoolProfile->kepala_sekolah ?? '-' }}
+
                             </div>
 
                         </div>
@@ -167,7 +200,9 @@
                             </div>
 
                             <div class="col-md-8 text-dark">
-                                {{ $profilSekolah->tahun_berdiri ?? '-' }}
+
+                                {{ $schoolProfile->tahun_berdiri ?? '-' }}
+
                             </div>
 
                         </div>
@@ -181,7 +216,9 @@
                             </div>
 
                             <div class="col-md-8 text-dark">
-                                {{ $profilSekolah->npsn ?? '-' }}
+
+                                {{ $schoolProfile->npsn ?? '-' }}
+
                             </div>
 
                         </div>
@@ -195,7 +232,9 @@
                             </div>
 
                             <div class="col-md-8 text-dark">
-                                {{ $profilSekolah->kontak ?? '-' }}
+
+                                {{ $schoolProfile->kontak ?? '-' }}
+
                             </div>
 
                         </div>
@@ -209,7 +248,9 @@
                             </div>
 
                             <div class="col-md-8 text-dark">
-                                {{ $profilSekolah->alamat ?? '-' }}
+
+                                {{ $schoolProfile->alamat ?? '-' }}
+
                             </div>
 
                         </div>
@@ -217,54 +258,70 @@
                     </div>
 
 
-                    <!-- Visi Misi -->
+                    <!-- ================= VISI & MISI ================= -->
                     <div class="mb-4">
 
-                        <h5 class="fw-bold text-secondary border-bottom pb-3 mb-3">
+                        <h5
+                            class="fw-bold text-secondary border-bottom pb-3 mb-3"
+                        >
 
                             <i class="fas fa-bullseye me-2"></i>
+
                             Visi & Misi
 
                         </h5>
 
-                        <div class="text-dark"
-                             style="line-height: 1.8; white-space: pre-line;">
+                        <div
+                            class="text-dark"
+                            style="
+                                line-height: 1.8;
+                                white-space: pre-line;
+                            "
+                        >
 
-                            {{ $profilSekolah->visi_misi ?? 'Belum ada data visi dan misi.' }}
+                            {{ $schoolProfile->visi_misi ?? 'Belum ada data visi dan misi.' }}
 
                         </div>
 
                     </div>
 
 
-                    <!-- Deskripsi -->
+                    <!-- ================= DESKRIPSI ================= -->
                     <div class="mb-4">
 
-                        <h5 class="fw-bold text-secondary border-bottom pb-3 mb-3">
+                        <h5
+                            class="fw-bold text-secondary border-bottom pb-3 mb-3"
+                        >
 
                             <i class="fas fa-book-open me-2"></i>
+
                             Sejarah / Deskripsi
 
                         </h5>
 
-                        <p class="text-dark mb-0"
-                           style="line-height: 1.8;">
+                        <p
+                            class="text-dark mb-0"
+                            style="line-height: 1.8;"
+                        >
 
-                            {{ $profilSekolah->deskripsi ?? 'Belum ada deskripsi sekolah.' }}
+                            {{ $schoolProfile->deskripsi ?? 'Belum ada deskripsi sekolah.' }}
 
                         </p>
 
                     </div>
 
 
-                    <!-- Foto Gedung -->
-                    @if($profilSekolah && $profilSekolah->foto)
+                    <!-- ================= FOTO GEDUNG ================= -->
+                    @if ($schoolProfile && $schoolProfile->foto)
 
                         <div class="mt-4">
 
-                            <h5 class="fw-bold text-secondary border-bottom pb-3 mb-3">
+                            <h5
+                                class="fw-bold text-secondary border-bottom pb-3 mb-3"
+                            >
 
                                 <i class="fas fa-image me-2"></i>
+
                                 Foto Gedung Utama
 
                             </h5>
@@ -273,10 +330,37 @@
                             <div class="overflow-hidden rounded-3 shadow-sm">
 
                                 <img
-                                    src="{{ asset('storage/' . $profilSekolah->foto) }}"
-                                    alt="Foto Gedung {{ $profilSekolah->nama_sekolah ?? 'Sekolah' }}"
+                                    src="{{ asset('storage/' . $schoolProfile->foto) }}"
+                                    alt="Foto Gedung {{ $schoolProfile->nama_sekolah ?? 'Sekolah' }}"
                                     class="img-fluid w-100"
-                                    style="max-height: 350px; object-fit: cover;">
+                                    style="
+                                        max-height: 350px;
+                                        object-fit: cover;
+                                    "
+                                >
+
+                            </div>
+
+                        </div>
+
+                    @else
+
+                        <div class="mt-4">
+
+                            <div
+                                class="d-flex align-items-center justify-content-center bg-light border rounded-3 text-muted"
+                                style="height: 220px;"
+                            >
+
+                                <div class="text-center">
+
+                                    <i class="fas fa-image fa-2x mb-2"></i>
+
+                                    <div>
+                                        Belum ada foto gedung sekolah.
+                                    </div>
+
+                                </div>
 
                             </div>
 

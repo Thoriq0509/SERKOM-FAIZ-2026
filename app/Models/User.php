@@ -2,24 +2,45 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids; // <-- 1. Import trait ini
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasUuids, Notifiable; // <-- 2. Pasang HasUuids di sini
+    use Notifiable;
 
-    protected $primaryKey = 'id_user'; // Memberitahu Laravel nama primary key-nya
-    public $incrementing = false;      // Karena UUID bukan angka berurutan
-    protected $keyType = 'string';     // Tipe data primary key adalah string
+    /**
+     * Nama tabel.
+     */
+    protected $table = 'users';
 
+    /**
+     * Primary key.
+     */
+    protected $primaryKey = 'id_user';
+
+    /**
+     * Tipe primary key.
+     */
+    protected $keyType = 'int';
+
+    /**
+     * Primary key auto increment.
+     */
+    public $incrementing = true;
+
+    /**
+     * Kolom yang boleh diisi.
+     */
     protected $fillable = [
         'username',
         'password',
         'role',
     ];
 
+    /**
+     * Kolom yang disembunyikan.
+     */
     protected $hidden = [
         'password',
         'remember_token',
