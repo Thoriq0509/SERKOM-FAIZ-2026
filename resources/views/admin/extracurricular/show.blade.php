@@ -3,7 +3,7 @@
 @section('content')
 
 @php
-    $encryptedId = \Illuminate\Support\Facades\Crypt::encryptString($teacher->id);
+    $encryptedId = \Illuminate\Support\Facades\Crypt::encryptString($extracurricular->id);
 @endphp
 
 <style>
@@ -18,7 +18,7 @@
     }
 
     /* =========================
-       HEADER HALAMAN
+       PAGE HEADER
     ========================== */
     .page-title {
         font-family: 'Poppins', sans-serif;
@@ -123,7 +123,7 @@
     .hero-photo-placeholder {
         width: 72px;
         height: 72px;
-        border-radius: 12px;
+        border-radius: 50%;
         object-fit: cover;
         flex-shrink: 0;
         border: 1px solid var(--c-border);
@@ -135,10 +135,10 @@
         justify-content: center;
         background-color: var(--c-soft);
         color: var(--c-text-soft);
-        font-size: 1.8rem;
+        font-size: 1.6rem;
     }
 
-    .hero-info { min-width: 0; }
+    .hero-info { min-width: 0; flex: 1; }
 
     .hero-name {
         font-size: 1.15rem;
@@ -154,7 +154,7 @@
         align-items: center;
     }
 
-    .badge-mapel {
+    .badge-info {
         font-size: .75rem;
         font-weight: 500;
         padding: 4px 12px;
@@ -167,7 +167,7 @@
         gap: 5px;
     }
 
-    .badge-mapel.empty {
+    .badge-info.empty {
         background-color: #fff;
         color: var(--c-text-soft);
         font-style: italic;
@@ -204,6 +204,69 @@
         border: 0;
         border-top: 1px solid var(--c-border);
         margin: 4px 0 20px;
+    }
+
+    /* =========================
+       IMAGE
+    ========================== */
+    .ekskul-image-wrap {
+        border: 1px solid var(--c-border);
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: var(--c-bg);
+        margin-bottom: 24px;
+        max-width: 400px;
+    }
+
+    .ekskul-image-wrap img {
+        width: 100%;
+        height: auto;
+        max-height: 400px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .ekskul-image-empty {
+        padding: 60px 20px;
+        text-align: center;
+        color: var(--c-text-soft);
+        background-color: var(--c-bg);
+        border: 1px dashed var(--c-border);
+        border-radius: 8px;
+        margin-bottom: 24px;
+        max-width: 400px;
+    }
+
+    .ekskul-image-empty i {
+        font-size: 2rem;
+        color: #cbd5e1;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .ekskul-image-empty span {
+        font-size: .85rem;
+    }
+
+    /* =========================
+       DESCRIPTION
+    ========================== */
+    .ekskul-desc {
+        color: var(--c-text);
+        font-size: .95rem;
+        line-height: 1.75;
+        white-space: pre-wrap;
+        word-break: break-word;
+        margin-bottom: 28px;
+        padding: 16px 20px;
+        background-color: var(--c-bg);
+        border: 1px solid var(--c-border);
+        border-radius: 8px;
+    }
+
+    .ekskul-desc.empty {
+        color: var(--c-text-soft);
+        font-style: italic;
     }
 
     /* =========================
@@ -260,30 +323,6 @@
         font-weight: 400;
         font-style: italic;
         font-size: .86rem;
-    }
-
-    /* Status foto */
-    .status-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        font-size: .78rem;
-        font-weight: 500;
-        padding: 4px 12px;
-        border-radius: 20px;
-        border: 1px solid;
-    }
-
-    .status-pill.ok {
-        background-color: #f0fdf4;
-        border-color: #bbf7d0;
-        color: #166534;
-    }
-
-    .status-pill.no {
-        background-color: #fff;
-        border-color: var(--c-border);
-        color: var(--c-text-soft);
     }
 
     /* =========================
@@ -374,13 +413,14 @@
         .hero-head {
             padding: 18px 16px;
             gap: 14px;
+            align-items: flex-start;
         }
 
         .hero-photo,
         .hero-photo-placeholder {
             width: 60px;
             height: 60px;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
         }
 
         .hero-name { font-size: 1rem; }
@@ -404,14 +444,14 @@
 
 <div class="container-fluid p-0">
 
-    {{-- HEADER HALAMAN --}}
+    {{-- PAGE HEADER --}}
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
         <div>
-            <h2 class="page-title">Detail Guru</h2>
-            <p class="page-subtitle">Informasi lengkap tenaga pendidik.</p>
+            <h2 class="page-title">Detail Ekstrakurikuler</h2>
+            <p class="page-subtitle">Informasi lengkap kegiatan ekstrakurikuler.</p>
         </div>
 
-        <a href="{{ route('admin.guru') }}" class="btn btn-back">
+        <a href="{{ route('admin.extracurricular.index') }}" class="btn btn-back">
             <i class="fas fa-arrow-left me-2"></i>Kembali
         </a>
     </div>
@@ -438,37 +478,41 @@
         </div>
     @endif
 
-    {{-- CARD DETAIL --}}
+    {{-- DETAIL CARD --}}
     <div class="card-clean mb-5">
 
         {{-- HERO HEADER --}}
         <div class="hero-head">
-            @if ($teacher->foto)
-                <img src="{{ asset('storage/' . $teacher->foto) }}"
-                     alt="Foto {{ $teacher->nama_guru }}"
+            @if ($extracurricular->gambar)
+                <img src="{{ asset('storage/' . $extracurricular->gambar) }}"
+                     alt="{{ $extracurricular->nama_ekskul }}"
                      class="hero-photo">
             @else
                 <div class="hero-photo-placeholder">
-                    <i class="fas fa-user-tie"></i>
+                    <i class="fas fa-people-group"></i>
                 </div>
             @endif
 
             <div class="hero-info">
-                <h4 class="hero-name">{{ $teacher->nama_guru }}</h4>
+                <h4 class="hero-name">{{ $extracurricular->nama_ekskul }}</h4>
                 <div class="hero-badges">
-                    @if ($teacher->mapel)
-                        <span class="badge-mapel">
-                            <i class="fas fa-book-open"></i>{{ $teacher->mapel }}
+                    @if ($extracurricular->pembina)
+                        <span class="badge-info">
+                            <i class="fas fa-user-tie"></i>Pembina: {{ $extracurricular->pembina }}
                         </span>
                     @else
-                        <span class="badge-mapel empty">
-                            <i class="fas fa-book-open"></i>Mata pelajaran belum diisi
+                        <span class="badge-info empty">
+                            <i class="fas fa-user-tie"></i>Pembina belum diisi
                         </span>
                     @endif
 
-                    @if ($teacher->nip)
-                        <span class="badge-mapel">
-                            <i class="fas fa-id-badge"></i>NIP: {{ $teacher->nip }}
+                    @if ($extracurricular->jadwal_latihan)
+                        <span class="badge-info">
+                            <i class="far fa-clock"></i>{{ $extracurricular->jadwal_latihan }}
+                        </span>
+                    @else
+                        <span class="badge-info empty">
+                            <i class="far fa-clock"></i>Jadwal belum diisi
                         </span>
                     @endif
                 </div>
@@ -478,57 +522,32 @@
         {{-- BODY --}}
         <div class="card-body-clean">
 
-            {{-- SECTION: DATA GURU --}}
+            {{-- GAMBAR --}}
+            @if ($extracurricular->gambar)
+                <div class="ekskul-image-wrap">
+                    <img src="{{ asset('storage/' . $extracurricular->gambar) }}"
+                         alt="{{ $extracurricular->nama_ekskul }}">
+                </div>
+            @else
+                <div class="ekskul-image-empty">
+                    <i class="fas fa-image"></i>
+                    <span>Belum ada gambar untuk ekstrakurikuler ini.</span>
+                </div>
+            @endif
+
+            {{-- DESKRIPSI --}}
             <div class="section-title">
-                <i class="fas fa-id-card"></i>Data Guru
+                <i class="fas fa-align-left"></i>Deskripsi
             </div>
             <hr class="section-divider">
 
-            <div class="detail-grid">
-                <div class="detail-item">
-                    <div class="detail-label">Nama Guru</div>
-                    <div class="detail-value">{{ $teacher->nama_guru }}</div>
-                </div>
+            @if ($extracurricular->deskripsi)
+                <div class="ekskul-desc">{{ $extracurricular->deskripsi }}</div>
+            @else
+                <div class="ekskul-desc empty">Belum ada deskripsi untuk ekstrakurikuler ini.</div>
+            @endif
 
-                <div class="detail-item">
-                    <div class="detail-label">NIP</div>
-                    <div class="detail-value mono">
-                        @if ($teacher->nip)
-                            {{ $teacher->nip }}
-                        @else
-                            <span class="empty-value">NIP belum diisi</span>
-                        @endif
-                    </div>
-                </div>
-
-                <div class="detail-item">
-                    <div class="detail-label">Mata Pelajaran</div>
-                    <div class="detail-value">
-                        @if ($teacher->mapel)
-                            {{ $teacher->mapel }}
-                        @else
-                            <span class="empty-value">Mata pelajaran belum diisi</span>
-                        @endif
-                    </div>
-                </div>
-
-                <div class="detail-item">
-                    <div class="detail-label">Foto Guru</div>
-                    <div class="detail-value">
-                        @if ($teacher->foto)
-                            <span class="status-pill ok">
-                                <i class="fas fa-check-circle"></i>Sudah tersedia
-                            </span>
-                        @else
-                            <span class="status-pill no">
-                                <i class="fas fa-circle-minus"></i>Belum ada foto
-                            </span>
-                        @endif
-                    </div>
-                </div>
-            </div>
-
-            {{-- SECTION: INFORMASI DATA --}}
+            {{-- INFORMASI DATA --}}
             <div class="section-title">
                 <i class="fas fa-database"></i>Informasi Data
             </div>
@@ -537,23 +556,50 @@
             <div class="detail-grid">
                 <div class="detail-item">
                     <div class="detail-label">ID Data</div>
-                    <div class="detail-value mono">#{{ $teacher->id }}</div>
+                    <div class="detail-value mono">#{{ $extracurricular->id }}</div>
                 </div>
 
                 <div class="detail-item">
-                    <div class="detail-label">Tanggal Ditambahkan</div>
+                    <div class="detail-label">Nama Ekstrakurikuler</div>
+                    <div class="detail-value">{{ $extracurricular->nama_ekskul }}</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Pembina</div>
                     <div class="detail-value">
-                        {{ $teacher->created_at
-                            ? $teacher->created_at->translatedFormat('d F Y, H:i')
+                        @if ($extracurricular->pembina)
+                            {{ $extracurricular->pembina }}
+                        @else
+                            <span class="empty-value">Belum diisi</span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Jadwal Latihan</div>
+                    <div class="detail-value">
+                        @if ($extracurricular->jadwal_latihan)
+                            {{ $extracurricular->jadwal_latihan }}
+                        @else
+                            <span class="empty-value">Belum diisi</span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Ditambahkan</div>
+                    <div class="detail-value">
+                        {{ $extracurricular->created_at
+                            ? $extracurricular->created_at->translatedFormat('d F Y, H:i')
                             : '-' }}
                     </div>
                 </div>
 
-                <div class="detail-item" style="grid-column: 1 / -1;">
+                <div class="detail-item">
                     <div class="detail-label">Terakhir Diperbarui</div>
                     <div class="detail-value">
-                        {{ $teacher->updated_at
-                            ? $teacher->updated_at->translatedFormat('d F Y, H:i')
+                        {{ $extracurricular->updated_at
+                            ? $extracurricular->updated_at->translatedFormat('d F Y, H:i')
                             : '-' }}
                     </div>
                 </div>
@@ -561,17 +607,17 @@
 
             {{-- ACTION BAR --}}
             <div class="action-bar">
-                <a href="{{ route('admin.guru') }}" class="btn btn-cancel">
+                <a href="{{ route('admin.extracurricular.index') }}" class="btn btn-cancel">
                     <i class="fas fa-arrow-left me-2"></i>Kembali
                 </a>
 
-                <a href="{{ route('admin.guru.edit', $encryptedId) }}" class="btn btn-primary-soft">
+                <a href="{{ route('admin.extracurricular.edit', $encryptedId) }}" class="btn btn-primary-soft">
                     <i class="fas fa-edit me-2"></i>Edit Data
                 </a>
 
-                <form action="{{ route('admin.guru.destroy', $encryptedId) }}"
+                <form action="{{ route('admin.extracurricular.destroy', $encryptedId) }}"
                       method="POST"
-                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus data {{ $teacher->nama_guru }}? Data yang sudah dihapus tidak dapat dikembalikan.');">
+                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus ekstrakurikuler {{ $extracurricular->nama_ekskul }}? Data yang sudah dihapus tidak dapat dikembalikan.');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger-soft">

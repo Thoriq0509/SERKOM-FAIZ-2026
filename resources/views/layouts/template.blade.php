@@ -1,266 +1,260 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Dashboard Admin - Sistem Sekolah</title>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap"
-        rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-
-    <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ asset('assets/admin/img/logosuzuran.png') }}">
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/all.min.css') }}">
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
+
+        html, body { min-height: 100%; width: 100%; max-width: 100%; }
 
         body {
-            background-color: #f8fafc;
             margin: 0;
             padding: 0;
+            background: #f4f6f8;
+            color: #212529;
+            font-family: "Segoe UI", Arial, sans-serif;
             overflow-x: hidden;
-            font-family: 'Inter', sans-serif;
-            color: #334155;
+            -webkit-text-size-adjust: 100%;
         }
 
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6,
-        .brand-box {
-            font-family: 'Poppins', sans-serif;
-        }
+        a { text-decoration: none; }
+        img { max-width: 100%; height: auto; }
 
-        /* ================= SIDEBAR ================= */
-
+        /* ============ SIDEBAR ============ */
         .sidebar {
-            width: 280px;
-            background-color: #273b69;
-            color: #ffffff;
+            width: 260px;
             height: 100vh;
+            height: 100dvh;
             position: fixed;
             top: 0;
             left: 0;
+            background: #1f2f46;
+            color: #fff;
             overflow-y: auto;
             overflow-x: hidden;
-            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.05);
+            border-right: 1px solid #172337;
             z-index: 1050;
-            transition: transform 0.3s ease-in-out;
+            transition: transform .25s ease;
+            -webkit-overflow-scrolling: touch;
         }
 
-        .sidebar::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .sidebar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .sidebar::-webkit-scrollbar-thumb {
-            background-color: rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-        }
+        .sidebar::-webkit-scrollbar { width: 5px; }
+        .sidebar::-webkit-scrollbar-track { background: #1f2f46; }
+        .sidebar::-webkit-scrollbar-thumb { background: #53667d; }
 
         .brand-box {
-            background-color: #1a2849;
-            margin: 15px;
-            padding: 16px 10px;
-            border-radius: 12px;
+            min-height: 70px;
             display: flex;
             align-items: center;
-            justify-content: center;
+            padding: 0 20px;
+            background: #19273a;
+            border-bottom: 1px solid #30435b;
+            color: #fff;
+            font-size: .88rem;
             font-weight: 700;
-            font-size: 1.05rem;
-            color: #ffffff;
+            letter-spacing: .5px;
             text-decoration: none;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            line-height: 1.25;
         }
 
+        .brand-box:hover { background: #172337; color: #fff; }
+
         .brand-box i {
-            margin-right: 12px;
-            font-size: 1.3rem;
-            color: #60a5fa;
+            width: 30px;
+            min-width: 30px;
+            margin-right: 10px;
+            color: #d6b36a;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .brand-box span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .nav-section-title {
-            font-size: 0.75rem;
+            padding: 18px 20px 7px;
+            color: #aeb9c8;
+            font-size: .67rem;
             font-weight: 600;
-            padding: 15px 20px 8px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #94a3b8;
+            letter-spacing: .9px;
         }
 
-        .sidebar-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .sidebar-menu li {
-            width: 100%;
-        }
+        .sidebar-menu { list-style: none; margin: 0; padding: 0; }
+        .sidebar-menu li { width: 100%; }
 
         .sidebar-menu li a {
+            width: 100%;
             display: flex;
             align-items: center;
-            width: 100%;
-            color: #cbd5e1;
-            text-decoration: none;
-            padding: 14px 20px;
-            font-size: 0.95rem;
+            padding: 10px 20px;
+            color: #d5dce5;
+            border-left: 3px solid transparent;
+            font-size: .86rem;
             font-weight: 500;
-            transition: all 0.2s ease;
-            border-left: 4px solid transparent;
+            transition: background-color .15s ease, color .15s ease, border-color .15s ease;
         }
 
         .sidebar-menu li a i {
-            width: 30px;
-            min-width: 30px;
-            font-size: 1.15rem;
-            text-align: center;
+            width: 24px;
+            min-width: 24px;
             margin-right: 12px;
-            color: #94a3b8;
-            transition: color 0.2s;
+            color: #aeb9c8;
+            font-size: .93rem;
+            text-align: center;
+            transition: color .15s ease;
         }
 
-        .sidebar-menu li a:hover,
-        .sidebar-menu li a.active {
-            background-color: rgba(255, 255, 255, 0.08);
-            color: #ffffff;
-            border-left: 4px solid #60a5fa;
+        .sidebar-menu li a span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
+        .sidebar-menu li a:hover { background: #293c56; color: #fff; }
         .sidebar-menu li a:hover i,
-        .sidebar-menu li a.active i {
-            color: #60a5fa;
+        .sidebar-menu li a.active i { color: #d6b36a; }
+
+        .sidebar-menu li a.active {
+            background: #2b405c;
+            color: #fff;
+            border-left-color: #d6b36a;
         }
 
-        /* ================= OVERLAY MOBILE ================= */
-
+        /* ============ OVERLAY MOBILE ============ */
         .sidebar-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
+            inset: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1040;
+            height: 100dvh;
+            background: rgba(0,0,0,.45);
             display: none;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            z-index: 1040;
+            transition: opacity .25s ease;
         }
 
-        /* ================= MAIN CONTENT ================= */
-
+        /* ============ MAIN ============ */
         .main-wrapper {
-            margin-left: 280px;
             min-height: 100vh;
+            min-height: 100dvh;
+            margin-left: 260px;
             display: flex;
             flex-direction: column;
-            transition: margin-left 0.3s ease-in-out;
+            transition: margin-left .25s ease;
+            min-width: 0;
+            max-width: 100%;
         }
 
-        /* ================= TOP NAVBAR ================= */
-
+        /* ============ NAVBAR ============ */
         .top-navbar {
-            background-color: #ffffff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 30px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            min-height: 68px;
             position: sticky;
             top: 0;
             z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 12px 25px;
+            background: #fff;
+            border-bottom: 1px solid #d9dee5;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .top-navbar > .d-flex {
+            flex: 1;
+            min-width: 0;
+            max-width: 100%;
         }
 
         .toggle-btn {
             display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: #334155;
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            padding: 0;
+            background: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            color: #344054;
+            font-size: 1rem;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            padding: 5px;
+            flex-shrink: 0;
         }
 
-        /* ================= SEARCH ================= */
+        .toggle-btn:hover { background: #f6f7f9; }
 
         .search-form {
-            background-color: #f1f5f9;
-            border: 1px solid transparent;
-            border-radius: 50px;
-            padding: 8px 20px;
+            width: 100%;
+            max-width: 320px;
             display: flex;
             align-items: center;
-            width: 320px;
-            transition: all 0.3s ease;
+            padding: 7px 12px;
+            background: #f8f9fa;
+            border: 1px solid #d9dee5;
+            border-radius: 5px;
         }
 
-        .search-form:focus-within {
-            background-color: #ffffff;
-            border-color: #60a5fa;
-            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
-        }
+        .search-form:focus-within { background: #fff; border-color: #8d99a8; }
+        .search-form i { color: #6c757d; font-size: .82rem; flex-shrink: 0; }
 
         .search-form input {
+            width: 100%;
+            min-width: 0;
+            padding: 0 0 0 10px;
+            background: transparent;
             border: none;
             outline: none;
-            background: transparent;
-            width: 100%;
-            padding: 0 10px;
-            font-size: 0.9rem;
-            color: #334155;
+            color: #212529;
+            font-size: .85rem;
         }
 
-        .search-form input::placeholder {
-            color: #94a3b8;
-        }
+        .search-form input::placeholder { color: #8993a0; }
 
-        .search-form i {
-            color: #94a3b8;
-        }
-
-        /* ================= ADMIN PROFILE ================= */
-
+        /* ============ ADMIN PROFILE ============ */
         .admin-profile-btn {
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 50px;
-            padding: 6px 18px 6px 6px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            padding: 4px 10px 4px 4px;
+            background: #fff;
+            border: 1px solid #d9dee5;
+            border-radius: 5px;
+            color: #212529;
             cursor: pointer;
-            transition: all 0.2s ease;
-            color: #334155;
+            transition: .15s ease;
+            max-width: 100%;
+            flex-shrink: 0;
         }
 
         .admin-profile-btn:hover,
         .admin-profile-btn[aria-expanded="true"] {
-            background-color: #f8fafc;
-            border-color: #cbd5e1;
+            background: #f8f9fa;
+            border-color: #aeb7c2;
         }
 
         .admin-profile-btn img {
             width: 38px;
             height: 38px;
-            border-radius: 50%;
+            min-width: 38px;
             object-fit: cover;
-            border: 2px solid #e2e8f0;
+            border: 1px solid #d9dee5;
+            border-radius: 4px;
         }
 
         .admin-info {
@@ -268,108 +262,219 @@
             flex-direction: column;
             text-align: left;
             line-height: 1.2;
+            min-width: 0;
         }
 
         .admin-name {
+            color: #212529;
+            font-size: .85rem;
             font-weight: 600;
-            font-size: 0.9rem;
-            font-family: 'Poppins', sans-serif;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 140px;
         }
 
         .admin-role {
-            font-size: 0.7rem;
-            color: #64748b;
+            margin-top: 2px;
+            color: #6c757d;
+            font-size: .7rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 140px;
         }
 
-        .dropdown-toggle::after {
+        .dropdown-toggle::after { display: none; }
+
+        /* ============ DROPDOWN ============ */
+        .dropdown { position: relative; flex-shrink: 0; }
+
+        .admin-dropdown {
+            position: fixed !important;
+            top: auto;
+            right: auto;
+            left: auto;
+            min-width: 260px;
+            max-width: calc(100vw - 20px);
+            padding: 0;
+            margin: 0 !important;
+            background: #fff;
+            border: 1px solid #d9dee5;
+            border-radius: 6px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.15);
+            z-index: 3000;
             display: none;
+            opacity: 0;
+            transform: translateY(-6px);
+            transition: opacity .15s ease, transform .15s ease;
+            overflow: hidden;
         }
 
-        /* ================= CONTENT ================= */
-
-        .content-area {
-            padding: 30px;
-            flex-grow: 1;
+        .admin-dropdown.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        /* ================= FOOTER ================= */
+        .admin-dropdown .dropdown-header {
+            padding: 18px 15px 14px;
+            white-space: normal;
+        }
 
-        .footer-box {
-            background-color: #ffffff;
-            border-top: 1px solid #e2e8f0;
-            padding: 20px;
+        .admin-dropdown .dropdown-header img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid #d9dee5;
+        }
+
+        .admin-dropdown .dropdown-header h6 {
+            margin: 8px 0 4px;
+            font-size: .9rem;
+            font-weight: 600;
+            color: #212529;
+        }
+
+        .admin-dropdown .dropdown-header small { font-size: .75rem; }
+
+        .admin-dropdown .dropdown-divider {
+            margin: 0;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .admin-dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 11px 16px;
+            color: #212529;
+            font-size: .85rem;
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            transition: background .15s ease;
+        }
+
+        .admin-dropdown-item:hover { background: #f8f9fa; }
+
+        .admin-dropdown-item.text-danger { color: #dc3545 !important; }
+
+        .admin-dropdown-item i {
+            width: 18px;
             text-align: center;
-            color: #64748b;
-            font-size: 0.9rem;
-            font-weight: 500;
+            margin-right: 10px;
+            font-size: .85rem;
         }
 
-        /* ================= RESPONSIVE ================= */
+        /* ============ CONTENT ============ */
+        .content-area {
+            flex: 1;
+            padding: 25px;
+            background: #f4f6f8;
+            min-width: 0;
+            max-width: 100%;
+        }
+
+        .content-area .table-responsive,
+        .content-area .table { max-width: 100%; }
+
+        .content-area img,
+        .content-area video,
+        .content-area iframe {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* ============ FOOTER ============ */
+        .footer-box {
+            padding: 15px 25px;
+            background: #fff;
+            border-top: 1px solid #d9dee5;
+            color: #6c757d;
+            text-align: center;
+            font-size: .8rem;
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 1199.98px) {
+            .search-form { max-width: 260px; }
+            .admin-name, .admin-role { max-width: 110px; }
+        }
 
         @media (max-width: 991.98px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); }
+            .main-wrapper { margin-left: 0; }
+            .toggle-btn { display: inline-flex; }
 
-            .sidebar {
-                transform: translateX(-100%);
-            }
+            .top-navbar { padding: 10px 16px; gap: 8px; }
 
-            .sidebar.show {
-                transform: translateX(0);
-            }
-
-            .main-wrapper {
-                margin-left: 0;
-            }
-
-            .toggle-btn {
-                display: block;
-            }
-
-            .top-navbar {
-                padding: 15px 20px;
-                gap: 15px;
-            }
-
-            .search-form {
-                display: none;
-            }
-
-            .admin-info {
-                display: none;
-            }
+            .search-form { display: none; }
+            .admin-info { display: none; }
 
             .admin-profile-btn {
                 padding: 4px;
                 border: none;
-                gap: 0;
+                background: transparent;
             }
 
-            .admin-profile-btn i.fa-chevron-down {
-                display: none;
+            .admin-profile-btn:hover,
+            .admin-profile-btn[aria-expanded="true"] {
+                background: #f8f9fa;
+                border: none;
             }
 
-            .content-area {
-                padding: 20px 15px;
-            }
+            .admin-profile-btn .fa-chevron-down { display: none; }
+            .content-area { padding: 18px 16px; }
+        }
+
+        @media (max-width: 767.98px) {
+            .top-navbar { min-height: 60px; padding: 8px 12px; }
+            .toggle-btn { width: 38px; height: 38px; min-width: 38px; }
+            .content-area { padding: 14px 12px; }
+            .footer-box { padding: 12px 10px; font-size: .75rem; }
         }
 
         @media (max-width: 575.98px) {
+            .brand-box { min-height: 62px; padding: 0 16px; font-size: .8rem; }
+            .top-navbar { min-height: 56px; padding: 8px 10px; }
+            .toggle-btn { width: 36px; height: 36px; min-width: 36px; font-size: .9rem; }
 
-            .brand-box {
-                font-size: 0.95rem;
-                margin: 12px;
+            .admin-profile-btn img {
+                width: 34px;
+                height: 34px;
+                min-width: 34px;
             }
 
+            .content-area { padding: 12px 10px; }
+            .footer-box { padding: 10px 8px; font-size: .72rem; }
+
+            .admin-dropdown {
+                min-width: 0;
+                width: calc(100vw - 20px);
+                max-width: calc(100vw - 20px);
+            }
+
+            .admin-dropdown .dropdown-header { padding: 14px 12px 10px; }
+            .admin-dropdown-item { padding: 10px 14px; font-size: .82rem; }
+        }
+
+        @media (max-width: 360px) {
+            .brand-box { font-size: .74rem; }
+            .brand-box span { white-space: normal; line-height: 1.15; }
+            .content-area { padding: 10px 8px; }
+        }
+
+        @supports (padding: max(0px)) {
             .top-navbar {
-                padding: 12px 15px;
+                padding-left: max(12px, env(safe-area-inset-left));
+                padding-right: max(12px, env(safe-area-inset-right));
             }
-
-            .content-area {
-                padding: 15px 12px;
-            }
-
             .footer-box {
-                padding: 15px 10px;
-                font-size: 0.8rem;
+                padding-bottom: max(12px, env(safe-area-inset-bottom));
             }
         }
     </style>
@@ -377,323 +482,288 @@
 
 <body>
 
-    <!-- Overlay Mobile -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- ================= SIDEBAR ================= -->
+<aside class="sidebar" id="sidebar">
+    <a href="{{ route('dashboard') }}" class="brand-box">
+        <i class="fas fa-building-columns"></i>
+        <span>SISTEM MANAJEMEN SEKOLAH</span>
+    </a>
 
-    <aside class="sidebar" id="sidebar">
+    <div class="nav-section-title">Navigasi Utama</div>
+    <ul class="sidebar-menu">
+        <li>
+            <a href="{{ route('dashboard') }}"
+               class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                <i class="fas fa-gauge-high"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+    </ul>
 
-        <!-- Brand -->
-        <a href="{{ route('dashboard') }}" class="brand-box">
-            <i class="fas fa-layer-group"></i>
-            DASHBOARD ADMIN
-        </a>
+    <div class="nav-section-title">Manajemen Data</div>
+    <ul class="sidebar-menu">
 
-        <!-- Navigasi Utama -->
-        <div class="nav-section-title">
-            Navigasi Utama
+        {{-- SCHOOL PROFILE --}}
+        <li>
+            <a href="{{ route('admin.school_profile') }}"
+               class="{{ request()->routeIs('admin.school_profile*') ? 'active' : '' }}">
+                <i class="fas fa-school"></i>
+                <span>Profil Sekolah</span>
+            </a>
+        </li>
+
+        {{-- USERS --}}
+        <li>
+            <a href="{{ route('admin.users.index') }}"
+               class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                <i class="fas fa-user-gear"></i>
+                <span>Data Pengelola</span>
+            </a>
+        </li>
+
+        {{-- NEWS --}}
+        <li>
+            <a href="{{ route('admin.news.index') }}"
+               class="{{ request()->routeIs('admin.news.*') ? 'active' : '' }}">
+                <i class="fas fa-newspaper"></i>
+                <span>Kelola Berita</span>
+            </a>
+        </li>
+
+        {{-- EXTRACURRICULAR --}}
+        <li>
+            <a href="{{ route('admin.extracurricular.index') }}"
+               class="{{ request()->routeIs('admin.extracurricular.*') ? 'active' : '' }}">
+                <i class="fas fa-people-group"></i>
+                <span>Ekstrakurikuler</span>
+            </a>
+        </li>
+
+        {{-- TEACHERS --}}
+        <li>
+            <a href="{{ route('admin.guru') }}"
+               class="{{ request()->routeIs('admin.guru*') ? 'active' : '' }}">
+                <i class="fas fa-chalkboard"></i>
+                <span>Kelola Guru</span>
+            </a>
+        </li>
+
+        {{-- STUDENTS --}}
+        <li>
+            <a href="{{ route('admin.siswa') }}"
+               class="{{ request()->routeIs('admin.siswa*') ? 'active' : '' }}">
+                <i class="fas fa-user-graduate"></i>
+                <span>Kelola Siswa</span>
+            </a>
+        </li>
+
+        {{-- ✅ GALLERY — SUDAH DIPERBAIKI --}}
+        <li>
+            <a href="{{ route('admin.gallery.index') }}"
+               class="{{ request()->routeIs('admin.gallery.*') ? 'active' : '' }}">
+                <i class="fas fa-images"></i>
+                <span>Kelola Galeri</span>
+            </a>
+        </li>
+
+    </ul>
+</aside>
+
+<div class="main-wrapper">
+
+    <header class="top-navbar">
+        <div class="d-flex align-items-center gap-2 gap-md-3">
+            <button class="toggle-btn" id="sidebarToggle" type="button" aria-label="Buka menu">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <form action="#" method="GET" class="search-form">
+                <i class="fas fa-magnifying-glass"></i>
+                <input type="text" name="query" placeholder="Cari data...">
+            </form>
         </div>
 
-        <ul class="sidebar-menu">
-            <li>
-                <a href="{{ route('dashboard') }}"
-                   class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                    <i class="fas fa-border-all"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-        </ul>
-
-        <!-- Manajemen Data -->
-        <div class="nav-section-title mt-3">
-            Manajemen Data
-        </div>
-
-        <ul class="sidebar-menu">
-
-            <!-- Profil Sekolah -->
-            <li>
-                <a href="{{ route('admin.school_profile') }}"
-                   class="{{ request()->routeIs('admin.school_profile*') ? 'active' : '' }}">
-                    <i class="fas fa-building"></i>
-                    <span>Profil Sekolah</span>
-                </a>
-            </li>
-
-            <!-- Data Pengelola -->
-            <li>
-                <a href="{{ route('admin.users.index') }}"
-                   class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
-                    <i class="fas fa-users-cog"></i>
-                    <span>Data Pengelola</span>
-                </a>
-            </li>
-
-            <!-- Kelola Berita -->
-            <li>
-                <a href="{{ route('admin.berita') }}"
-                   class="{{ request()->routeIs('admin.berita') ? 'active' : '' }}">
-                    <i class="fas fa-newspaper"></i>
-                    <span>Kelola Berita</span>
-                </a>
-            </li>
-
-            <!-- Ekstrakurikuler -->
-            <li>
-                <a href="{{ route('admin.ekstrakulikuler') }}"
-                   class="{{ request()->routeIs('admin.ekstrakulikuler') ? 'active' : '' }}">
-                    <i class="fas fa-basketball-ball"></i>
-                    <span>Ekstrakurikuler</span>
-                </a>
-            </li>
-
-            <!-- Guru -->
-            <li>
-                <a href="{{ route('admin.guru') }}"
-                   class="{{ request()->routeIs('admin.guru') ? 'active' : '' }}">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                    <span>Kelola Guru</span>
-                </a>
-            </li>
-
-            <!-- Siswa -->
-            <li>
-                <a href="{{ route('admin.siswa') }}"
-                   class="{{ request()->routeIs('admin.siswa') ? 'active' : '' }}">
-                    <i class="fas fa-user-graduate"></i>
-                    <span>Kelola Siswa</span>
-                </a>
-            </li>
-
-            <!-- Galeri -->
-            <li>
-                <a href="{{ route('admin.galeri') }}"
-                   class="{{ request()->routeIs('admin.galeri') ? 'active' : '' }}">
-                    <i class="fas fa-images"></i>
-                    <span>Kelola Galeri</span>
-                </a>
-            </li>
-
-        </ul>
-    </aside>
-
-    <!-- ================= MAIN WRAPPER ================= -->
-
-    <div class="main-wrapper">
-
-        <!-- ================= TOP NAVBAR ================= -->
-
-        <header class="top-navbar">
-
-            <div class="d-flex align-items-center gap-3 w-100">
-
-                <!-- Mobile Toggle -->
-                <button
-                    class="toggle-btn"
-                    id="sidebarToggle"
-                    type="button"
-                    aria-label="Buka menu">
-                    <i class="fas fa-bars"></i>
-                </button>
-
-                <!-- Search -->
-                <form action="#" method="GET" class="search-form me-auto">
-                    <i class="fas fa-search"></i>
-
-                    <input
-                        type="text"
-                        name="query"
-                        placeholder="Cari data guru, siswa, berita...">
-                </form>
-
-            </div>
-
-            <!-- ================= ADMIN PROFILE ================= -->
-
-            <div class="dropdown">
-
-                <button
-                    class="admin-profile-btn dropdown-toggle"
+        <div class="dropdown" id="adminDropdownWrapper">
+            <button class="admin-profile-btn"
                     type="button"
                     id="adminDropdown"
-                    data-bs-toggle="dropdown"
+                    aria-haspopup="true"
                     aria-expanded="false">
+                <img src="{{ asset('assets/admin/img/faiz.png') }}"
+                     alt="Foto Profil"
+                     onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->username ?? 'Admin') }}&background=1f2f46&color=fff&rounded=true'">
 
-                    <img
-                        src="{{ asset('assets/admin/img/faiz.png') }}"
-                        alt="Profile Admin"
-                        onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->username ?? 'Admin') }}&background=273b69&color=fff&rounded=true'">
+                <div class="admin-info">
+                    <span class="admin-name">{{ Auth::user()->username ?? 'Admin' }}</span>
+                    <span class="admin-role">{{ Auth::user()->role ?? 'Administrator' }}</span>
+                </div>
 
-                    <div class="admin-info">
+                <i class="fas fa-chevron-down" style="font-size:.7rem;color:#6c757d;"></i>
+            </button>
 
-                        <span class="admin-name">
-                            {{ Auth::user()->username ?? 'Admin Sagara' }}
-                        </span>
+            <ul class="admin-dropdown" id="adminDropdownMenu" role="menu">
+                <li>
+                    <div class="dropdown-header text-center">
+                        <img src="{{ asset('assets/admin/img/faiz.png') }}"
+                             alt="User"
+                             onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->username ?? 'Admin') }}&background=1f2f46&color=fff&size=100'">
 
-                        <span class="admin-role">
-                            {{ Auth::user()->role ?? 'Administrator' }}
-                        </span>
-
-                    </div>
-
-                    <i class="fas fa-chevron-down ms-2 text-muted"
-                       style="font-size: 0.8rem;">
-                    </i>
-
-                </button>
-
-                <!-- Dropdown -->
-                <ul
-                    class="dropdown-menu dropdown-menu-end border-0 shadow mt-2 rounded-3"
-                    aria-labelledby="adminDropdown"
-                    style="min-width: 220px;">
-
-                    <!-- User Information -->
-                    <li>
-                        <div class="dropdown-header text-center pt-3 pb-2">
-
-                            <img
-                                src="{{ asset('assets/admin/img/faiz.png') }}"
-                                alt="User"
-                                class="rounded-circle mb-2"
-                                width="60"
-                                height="60"
-                                style="object-fit: cover; border: 2px solid #e2e8f0;"
-                                onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->username ?? 'Admin') }}&background=273b69&color=fff&size=100'">
-
-                            <h6 class="mb-0 text-dark fw-bold">
-                                {{ Auth::user()->username ?? 'Admin Sagara' }}
-                            </h6>
-
-                            <small class="text-muted">
-                                ID: {{ Auth::user()->id_user ?? '10293' }}
+                        <h6>{{ Auth::user()->username ?? 'Admin' }}</h6>
+                        <small class="text-muted d-block">
+                            ID: {{ Auth::user()->id_user ?? '10293' }}
+                        </small>
+                        <div class="mt-1">
+                            <small class="fw-semibold" style="color:#1f3b5b;">
+                                {{ Auth::user()->role ?? 'Administrator' }}
                             </small>
-
-                            <div class="mt-1">
-                                <small class="text-primary fw-semibold">
-                                    {{ Auth::user()->role ?? 'Administrator' }}
-                                </small>
-                            </div>
-
                         </div>
-                    </li>
+                    </div>
+                </li>
 
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
+                <li><hr class="dropdown-divider"></li>
 
-                    <!-- Logout -->
-                    <li>
-                        <form
-                            action="{{ route('logout') }}"
-                            method="POST"
-                            class="m-0 p-0">
+                <li>
+                    <form action="{{ route('logout') }}" method="POST" class="m-0">
+                        @csrf
+                        <button type="submit" class="admin-dropdown-item text-danger">
+                            <i class="fas fa-right-from-bracket"></i>
+                            Keluar Aplikasi
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </header>
 
-                            @csrf
+    <main class="content-area">
+        @yield('content')
+    </main>
 
-                            <button
-                                type="submit"
-                                class="dropdown-item text-danger fw-bold py-2 px-4 d-flex align-items-center">
+    <footer class="footer-box">
+        &copy; 2026 Sistem Manajemen Sekolah. Hak cipta dilindungi.
+    </footer>
 
-                                <i class="fas fa-sign-out-alt me-3"></i>
-                                Keluar Aplikasi
+</div>
 
-                            </button>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
 
-                        </form>
-                    </li>
+    /* ============================================================
+       SIDEBAR TOGGLE
+       ============================================================ */
+    const sidebarToggle  = document.getElementById("sidebarToggle");
+    const sidebarOverlay = document.getElementById("sidebarOverlay");
+    const sidebar        = document.getElementById("sidebar");
 
-                </ul>
+    function openSidebar() {
+        sidebar.classList.add("show");
+        sidebarOverlay.style.display = "block";
+        requestAnimationFrame(() => sidebarOverlay.style.opacity = "1");
+        document.body.style.overflow = "hidden";
+    }
 
-            </div>
-        </header>
+    function closeSidebar() {
+        sidebar.classList.remove("show");
+        sidebarOverlay.style.opacity = "0";
+        document.body.style.overflow = "";
+        setTimeout(() => sidebarOverlay.style.display = "none", 250);
+    }
 
-        <!-- ================= CONTENT ================= -->
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener("click", function () {
+            sidebar.classList.contains("show") ? closeSidebar() : openSidebar();
+        });
+    }
 
-        <main class="content-area">
-            @yield('content')
-        </main>
+    if (sidebarOverlay) sidebarOverlay.addEventListener("click", closeSidebar);
 
-        <!-- ================= FOOTER ================= -->
+    document.querySelectorAll(".sidebar-menu a").forEach(function (link) {
+        link.addEventListener("click", function () {
+            if (window.innerWidth <= 991.98) closeSidebar();
+        });
+    });
 
-        <footer class="footer-box">
-            &copy; 2026 Dashboard Admin Sekolah Terpadu. All rights reserved.
-        </footer>
+    /* ============================================================
+       ADMIN DROPDOWN
+       ============================================================ */
+    const adminBtn   = document.getElementById("adminDropdown");
+    const adminMenu  = document.getElementById("adminDropdownMenu");
+    const adminWrap  = document.getElementById("adminDropdownWrapper");
 
-    </div>
+    function positionDropdown() {
+        if (!adminBtn || !adminMenu) return;
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        const rect = adminBtn.getBoundingClientRect();
+        const menuWidth = Math.min(260, window.innerWidth - 20);
 
-    <!-- Sidebar Mobile -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        adminMenu.style.width = menuWidth + "px";
 
-            const sidebarToggle = document.getElementById("sidebarToggle");
-            const sidebarOverlay = document.getElementById("sidebarOverlay");
-            const sidebar = document.getElementById("sidebar");
+        let left = rect.right - menuWidth;
+        if (left < 10) left = 10;
+        if (left + menuWidth > window.innerWidth - 10) {
+            left = window.innerWidth - menuWidth - 10;
+        }
 
-            function openSidebar() {
-                sidebar.classList.add("show");
-                sidebarOverlay.style.display = "block";
+        adminMenu.style.top   = (rect.bottom + 8) + "px";
+        adminMenu.style.left  = left + "px";
+        adminMenu.style.right = "auto";
+    }
 
-                setTimeout(function () {
-                    sidebarOverlay.style.opacity = "1";
-                }, 10);
+    function openDropdown() {
+        if (!adminMenu) return;
+        positionDropdown();
+        adminMenu.classList.add("show");
+        adminBtn.setAttribute("aria-expanded", "true");
+    }
+
+    function closeDropdown() {
+        if (!adminMenu) return;
+        adminMenu.classList.remove("show");
+        adminBtn.setAttribute("aria-expanded", "false");
+    }
+
+    function toggleDropdown(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        adminMenu.classList.contains("show") ? closeDropdown() : openDropdown();
+    }
+
+    if (adminBtn && adminMenu) {
+        adminBtn.addEventListener("click", toggleDropdown);
+
+        adminMenu.addEventListener("click", function (e) {
+            e.stopPropagation();
+        });
+
+        document.addEventListener("click", function (e) {
+            if (!adminWrap.contains(e.target) && !adminMenu.contains(e.target)) {
+                closeDropdown();
             }
+        });
 
-            function closeSidebar() {
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") closeDropdown();
+        });
+
+        window.addEventListener("resize", function () {
+            if (adminMenu.classList.contains("show")) positionDropdown();
+
+            if (window.innerWidth > 991.98) {
                 sidebar.classList.remove("show");
                 sidebarOverlay.style.opacity = "0";
-
-                setTimeout(function () {
-                    sidebarOverlay.style.display = "none";
-                }, 300);
+                sidebarOverlay.style.display = "none";
+                document.body.style.overflow = "";
             }
-
-            if (sidebarToggle) {
-                sidebarToggle.addEventListener("click", function () {
-
-                    if (sidebar.classList.contains("show")) {
-                        closeSidebar();
-                    } else {
-                        openSidebar();
-                    }
-
-                });
-            }
-
-            if (sidebarOverlay) {
-                sidebarOverlay.addEventListener("click", closeSidebar);
-            }
-
-            // Tutup sidebar setelah memilih menu di perangkat mobile
-            document.querySelectorAll(".sidebar-menu a").forEach(function (link) {
-
-                link.addEventListener("click", function () {
-
-                    if (window.innerWidth <= 991.98) {
-                        closeSidebar();
-                    }
-
-                });
-
-            });
-
-            // Reset sidebar saat kembali ke ukuran desktop
-            window.addEventListener("resize", function () {
-
-                if (window.innerWidth > 991.98) {
-                    sidebar.classList.remove("show");
-                    sidebarOverlay.style.opacity = "0";
-                    sidebarOverlay.style.display = "none";
-                }
-
-            });
-
         });
-    </script>
+
+        window.addEventListener("scroll", function () {
+            if (adminMenu.classList.contains("show")) positionDropdown();
+        }, true);
+    }
+
+});
+</script>
 
 </body>
 </html>

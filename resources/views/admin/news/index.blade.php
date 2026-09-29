@@ -159,53 +159,74 @@
     .table-clean tbody tr:last-child td { border-bottom: none; }
     .table-clean tbody tr:hover { background-color: var(--c-bg); }
 
-    .cell-nip {
-        font-family: 'Courier New', monospace;
-        color: var(--c-text-soft);
-        font-size: .82rem;
-    }
-
-    .cell-name {
-        font-weight: 600;
-        color: var(--c-primary-d);
-    }
-
     /* =========================
-       FOTO GURU
+       THUMBNAIL GAMBAR
     ========================== */
-    .teacher-photo {
-        width: 46px;
-        height: 46px;
-        border-radius: 50%;
+    .news-thumb {
+        width: 80px;
+        height: 55px;
         object-fit: cover;
+        border-radius: 6px;
         border: 1px solid var(--c-border);
+        display: block;
     }
 
-    .teacher-photo-placeholder {
-        width: 46px;
-        height: 46px;
-        border-radius: 50%;
+    .news-thumb-placeholder {
+        width: 80px;
+        height: 55px;
+        border-radius: 6px;
+        background-color: var(--c-soft);
+        border: 1px solid var(--c-border);
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        background-color: var(--c-soft);
         color: var(--c-text-soft);
-        border: 1px solid var(--c-border);
-        font-size: 1rem;
+        font-size: .9rem;
     }
 
     /* =========================
-       BADGE MAPEL
+       TEXT CELL
     ========================== */
-    .badge-mapel {
+    .news-title {
+        font-weight: 600;
+        color: var(--c-primary-d);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.4;
+    }
+
+    .news-date {
+        font-size: .82rem;
+        color: var(--c-text-soft);
+        font-family: 'Courier New', monospace;
+    }
+
+    /* =========================
+       BADGE STATUS
+    ========================== */
+    .badge-status {
         font-size: .75rem;
         font-weight: 500;
         padding: 5px 12px;
         border-radius: 20px;
+        border: 1px solid;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .badge-status.publish {
+        background-color: #f0fdf4;
+        border-color: #bbf7d0;
+        color: #166534;
+    }
+
+    .badge-status.draft {
         background-color: var(--c-soft);
-        border: 1px solid var(--c-border);
-        color: var(--c-text);
-        display: inline-block;
+        border-color: var(--c-border);
+        color: var(--c-text-soft);
     }
 
     /* =========================
@@ -263,19 +284,19 @@
     }
 
     /* =========================
-       PAGINATION FOOTER
+       TABLE FOOTER (PAGINATION)
     ========================== */
     .table-foot {
         padding: 14px 22px;
         border-top: 1px solid var(--c-border);
         background-color: var(--c-bg);
+        font-size: .8rem;
+        color: var(--c-text-soft);
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
         gap: 12px;
-        font-size: .8rem;
-        color: var(--c-text-soft);
     }
 </style>
 
@@ -284,18 +305,18 @@
     {{-- HEADER --}}
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
         <div>
-            <h2 class="page-title">Data Guru</h2>
-            <p class="page-subtitle">Kelola data tenaga pendidik sekolah.</p>
+            <h2 class="page-title">Kelola Berita</h2>
+            <p class="page-subtitle">Kelola berita dan informasi sekolah.</p>
         </div>
 
-        <a href="{{ route('admin.guru.create') }}" class="btn btn-primary-soft">
-            <i class="fas fa-plus me-2"></i>Tambah Data
+        <a href="{{ route('admin.news.create') }}" class="btn btn-primary-soft">
+            <i class="fas fa-plus me-2"></i>Tambah Berita
         </a>
     </div>
 
     {{-- ALERT SUCCESS --}}
     @if (session('success'))
-        <div class="alert alert-success alert-soft alert-dismissible fade show" role="alert" data-alert>
+        <div class="alert alert-success alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-check-circle"></i>
             <span class="alert-text">{{ session('success') }}</span>
             <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
@@ -306,7 +327,7 @@
 
     {{-- ALERT ERROR --}}
     @if (session('error'))
-        <div class="alert alert-danger alert-soft alert-dismissible fade show" role="alert" data-alert>
+        <div class="alert alert-danger alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-exclamation-circle"></i>
             <span class="alert-text">{{ session('error') }}</span>
             <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
@@ -319,8 +340,8 @@
     <div class="card-clean">
 
         <div class="card-head">
-            <h6><i class="fas fa-chalkboard-teacher me-2"></i>Daftar Tenaga Pendidik</h6>
-            <span class="count">Total: {{ $teachers->total() }} guru</span>
+            <h6><i class="fas fa-newspaper me-2"></i>Daftar Berita Sekolah</h6>
+            <span class="count">Total: {{ $news->total() ?? 0 }} berita</span>
         </div>
 
         <div class="table-responsive">
@@ -329,63 +350,76 @@
                 <thead>
                     <tr>
                         <th width="5%">No</th>
-                        <th width="12%" class="text-center">Foto</th>
-                        <th width="28%">Nama Guru</th>
-                        <th width="20%">NIP</th>
-                        <th width="20%">Mata Pelajaran</th>
-                        <th width="15%" class="text-center">Aksi</th>
+                        <th width="12%">Gambar</th>
+                        <th width="35%">Judul Berita</th>
+                        <th width="15%">Tanggal</th>
+                        <th width="13%" class="text-center">Status</th>
+                        <th width="20%" class="text-center">Aksi</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @forelse ($teachers as $teacher)
+                    @forelse ($news as $index => $item)
                         @php
-                            $encryptedId = \Illuminate\Support\Facades\Crypt::encryptString($teacher->id);
+                            $encryptedId = \Illuminate\Support\Facades\Crypt::encryptString($item->id);
                         @endphp
 
                         <tr>
-                            <td>{{ $teachers->firstItem() + $loop->index }}</td>
+                            <td>{{ $news->firstItem() + $index }}</td>
 
-                            <td class="text-center">
-                                @if ($teacher->foto)
-                                    <img src="{{ asset('storage/' . $teacher->foto) }}"
-                                         alt="Foto {{ $teacher->nama_guru }}"
-                                         class="teacher-photo">
+                            {{-- Thumbnail --}}
+                            <td>
+                                @if ($item->gambar)
+                                    <img src="{{ asset('storage/' . $item->gambar) }}"
+                                         alt="{{ $item->judul }}"
+                                         class="news-thumb">
                                 @else
-                                    <div class="teacher-photo-placeholder">
-                                        <i class="fas fa-user"></i>
+                                    <div class="news-thumb-placeholder">
+                                        <i class="fas fa-image"></i>
                                     </div>
                                 @endif
                             </td>
 
-                            <td class="cell-name">{{ $teacher->nama_guru }}</td>
-
-                            <td class="cell-nip">
-                                {{ $teacher->nip ?: '-' }}
+                            {{-- Judul --}}
+                            <td>
+                                <div class="news-title">{{ $item->judul }}</div>
                             </td>
 
+                            {{-- Tanggal --}}
                             <td>
-                                @if ($teacher->mapel)
-                                    <span class="badge-mapel">{{ $teacher->mapel }}</span>
+                                <span class="news-date">
+                                    {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y') }}
+                                </span>
+                            </td>
+
+                            {{-- Status --}}
+                            <td class="text-center">
+                                @if ($item->status === 'Publish')
+                                    <span class="badge-status publish">
+                                        <i class="fas fa-circle-check"></i>Publish
+                                    </span>
                                 @else
-                                    <span class="text-muted">-</span>
+                                    <span class="badge-status draft">
+                                        <i class="fas fa-circle-dot"></i>Draft
+                                    </span>
                                 @endif
                             </td>
 
+                            {{-- Aksi --}}
                             <td class="text-center text-nowrap">
-                                <a href="{{ route('admin.guru.show', $encryptedId) }}"
+                                <a href="{{ route('admin.news.show', $encryptedId) }}"
                                    class="btn-icon view me-1" title="Lihat Detail">
                                     <i class="fas fa-eye"></i>
                                 </a>
 
-                                <a href="{{ route('admin.guru.edit', $encryptedId) }}"
+                                <a href="{{ route('admin.news.edit', $encryptedId) }}"
                                    class="btn-icon edit me-1" title="Edit Data">
                                     <i class="fas fa-edit"></i>
                                 </a>
 
-                                <form action="{{ route('admin.guru.destroy', $encryptedId) }}"
+                                <form action="{{ route('admin.news.destroy', $encryptedId) }}"
                                       method="POST" class="d-inline"
-                                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus data guru {{ $teacher->nama_guru }}?');">
+                                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus berita ini? Data yang dihapus tidak dapat dikembalikan.');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn-icon delete" title="Hapus Data">
@@ -398,9 +432,9 @@
                         <tr>
                             <td colspan="6">
                                 <div class="empty-state">
-                                    <i class="fas fa-chalkboard-teacher"></i>
-                                    <h6>Belum Ada Data Guru</h6>
-                                    <p>Data tenaga pendidik belum tersedia.</p>
+                                    <i class="fas fa-newspaper"></i>
+                                    <h6>Belum Ada Berita</h6>
+                                    <p>Belum terdapat berita yang dipublikasikan.</p>
                                 </div>
                             </td>
                         </tr>
@@ -410,14 +444,15 @@
             </table>
         </div>
 
-        @if ($teachers->hasPages())
+        {{-- PAGINATION --}}
+        @if (isset($news) && $news->hasPages())
             <div class="table-foot">
                 <small>
-                    Menampilkan <strong>{{ $teachers->firstItem() }}</strong>
-                    sampai <strong>{{ $teachers->lastItem() }}</strong>
-                    dari <strong>{{ $teachers->total() }}</strong> data guru
+                    Menampilkan <strong>{{ $news->firstItem() }}</strong>
+                    sampai <strong>{{ $news->lastItem() }}</strong>
+                    dari <strong>{{ $news->total() }}</strong> berita
                 </small>
-                <div>{{ $teachers->links() }}</div>
+                <div>{{ $news->links() }}</div>
             </div>
         @endif
 

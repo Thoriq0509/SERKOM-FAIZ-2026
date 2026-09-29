@@ -14,7 +14,7 @@
     }
 
     /* =========================
-       HEADER HALAMAN
+       PAGE HEADER
     ========================== */
     .page-title {
         font-family: 'Poppins', sans-serif;
@@ -130,7 +130,7 @@
     }
 
     /* =========================
-       TABEL
+       TABLE
     ========================== */
     .table-clean {
         margin: 0;
@@ -159,57 +159,72 @@
     .table-clean tbody tr:last-child td { border-bottom: none; }
     .table-clean tbody tr:hover { background-color: var(--c-bg); }
 
-    .cell-nip {
-        font-family: 'Courier New', monospace;
-        color: var(--c-text-soft);
-        font-size: .82rem;
+    /* =========================
+       THUMBNAIL
+    ========================== */
+    .thumb-round {
+        width: 52px;
+        height: 52px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 1px solid var(--c-border);
+        display: block;
+        margin: 0 auto;
     }
 
+    .thumb-placeholder {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background-color: var(--c-soft);
+        border: 1px solid var(--c-border);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--c-text-soft);
+        font-size: .95rem;
+        margin: 0 auto;
+    }
+
+    /* =========================
+       TEXT CELLS
+    ========================== */
     .cell-name {
         font-weight: 600;
         color: var(--c-primary-d);
     }
 
-    /* =========================
-       FOTO GURU
-    ========================== */
-    .teacher-photo {
-        width: 46px;
-        height: 46px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 1px solid var(--c-border);
+    .cell-desc {
+        font-size: .82rem;
+        color: var(--c-text-soft);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.4;
     }
 
-    .teacher-photo-placeholder {
-        width: 46px;
-        height: 46px;
-        border-radius: 50%;
+    .schedule-pill {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
-        background-color: var(--c-soft);
-        color: var(--c-text-soft);
-        border: 1px solid var(--c-border);
-        font-size: 1rem;
-    }
-
-    /* =========================
-       BADGE MAPEL
-    ========================== */
-    .badge-mapel {
+        gap: 5px;
         font-size: .75rem;
-        font-weight: 500;
-        padding: 5px 12px;
+        padding: 4px 12px;
         border-radius: 20px;
         background-color: var(--c-soft);
         border: 1px solid var(--c-border);
         color: var(--c-text);
-        display: inline-block;
+        white-space: nowrap;
+    }
+
+    .empty-val {
+        color: var(--c-text-soft);
+        font-style: italic;
+        font-size: .82rem;
     }
 
     /* =========================
-       TOMBOL AKSI
+       ACTION BUTTONS
     ========================== */
     .btn-icon {
         width: 32px;
@@ -269,33 +284,33 @@
         padding: 14px 22px;
         border-top: 1px solid var(--c-border);
         background-color: var(--c-bg);
+        font-size: .8rem;
+        color: var(--c-text-soft);
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
         gap: 12px;
-        font-size: .8rem;
-        color: var(--c-text-soft);
     }
 </style>
 
 <div class="container-fluid p-0">
 
-    {{-- HEADER --}}
+    {{-- PAGE HEADER --}}
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
         <div>
-            <h2 class="page-title">Data Guru</h2>
-            <p class="page-subtitle">Kelola data tenaga pendidik sekolah.</p>
+            <h2 class="page-title">Data Ekstrakurikuler</h2>
+            <p class="page-subtitle">Kelola kegiatan ekstrakurikuler sekolah.</p>
         </div>
 
-        <a href="{{ route('admin.guru.create') }}" class="btn btn-primary-soft">
+        <a href="{{ route('admin.extracurricular.create') }}" class="btn btn-primary-soft">
             <i class="fas fa-plus me-2"></i>Tambah Data
         </a>
     </div>
 
     {{-- ALERT SUCCESS --}}
     @if (session('success'))
-        <div class="alert alert-success alert-soft alert-dismissible fade show" role="alert" data-alert>
+        <div class="alert alert-success alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-check-circle"></i>
             <span class="alert-text">{{ session('success') }}</span>
             <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
@@ -306,7 +321,7 @@
 
     {{-- ALERT ERROR --}}
     @if (session('error'))
-        <div class="alert alert-danger alert-soft alert-dismissible fade show" role="alert" data-alert>
+        <div class="alert alert-danger alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-exclamation-circle"></i>
             <span class="alert-text">{{ session('error') }}</span>
             <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
@@ -315,12 +330,12 @@
         </div>
     @endif
 
-    {{-- CARD TABEL --}}
+    {{-- TABLE CARD --}}
     <div class="card-clean">
 
         <div class="card-head">
-            <h6><i class="fas fa-chalkboard-teacher me-2"></i>Daftar Tenaga Pendidik</h6>
-            <span class="count">Total: {{ $teachers->total() }} guru</span>
+            <h6><i class="fas fa-basketball me-2"></i>Daftar Ekstrakurikuler</h6>
+            <span class="count">Total: {{ $extracurriculars->total() ?? 0 }} ekstrakurikuler</span>
         </div>
 
         <div class="table-responsive">
@@ -329,63 +344,88 @@
                 <thead>
                     <tr>
                         <th width="5%">No</th>
-                        <th width="12%" class="text-center">Foto</th>
-                        <th width="28%">Nama Guru</th>
-                        <th width="20%">NIP</th>
-                        <th width="20%">Mata Pelajaran</th>
-                        <th width="15%" class="text-center">Aksi</th>
+                        <th width="10%" class="text-center">Gambar</th>
+                        <th width="20%">Nama</th>
+                        <th width="18%">Pembina</th>
+                        <th width="17%">Jadwal</th>
+                        <th width="20%">Deskripsi</th>
+                        <th width="10%" class="text-center">Aksi</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @forelse ($teachers as $teacher)
+                    @forelse ($extracurriculars as $index => $item)
                         @php
-                            $encryptedId = \Illuminate\Support\Facades\Crypt::encryptString($teacher->id);
+                            $encryptedId = \Illuminate\Support\Facades\Crypt::encryptString($item->id);
                         @endphp
 
                         <tr>
-                            <td>{{ $teachers->firstItem() + $loop->index }}</td>
+                            <td>{{ $extracurriculars->firstItem() + $index }}</td>
 
+                            {{-- Thumbnail --}}
                             <td class="text-center">
-                                @if ($teacher->foto)
-                                    <img src="{{ asset('storage/' . $teacher->foto) }}"
-                                         alt="Foto {{ $teacher->nama_guru }}"
-                                         class="teacher-photo">
+                                @if ($item->gambar)
+                                    <img src="{{ asset('storage/' . $item->gambar) }}"
+                                         alt="{{ $item->nama_ekskul }}"
+                                         class="thumb-round">
                                 @else
-                                    <div class="teacher-photo-placeholder">
-                                        <i class="fas fa-user"></i>
+                                    <div class="thumb-placeholder">
+                                        <i class="fas fa-basketball"></i>
                                     </div>
                                 @endif
                             </td>
 
-                            <td class="cell-name">{{ $teacher->nama_guru }}</td>
-
-                            <td class="cell-nip">
-                                {{ $teacher->nip ?: '-' }}
+                            {{-- ✅ Nama Ekstrakurikuler --}}
+                            <td>
+                                <div class="cell-name">{{ $item->nama_ekskul }}</div>
                             </td>
 
+                            {{-- Pembina --}}
                             <td>
-                                @if ($teacher->mapel)
-                                    <span class="badge-mapel">{{ $teacher->mapel }}</span>
+                                @if ($item->pembina)
+                                    {{ $item->pembina }}
                                 @else
-                                    <span class="text-muted">-</span>
+                                    <span class="empty-val">Belum diisi</span>
                                 @endif
                             </td>
 
+                            {{-- ✅ Jadwal Latihan --}}
+                            <td>
+                                @if ($item->jadwal_latihan)
+                                    <span class="schedule-pill">
+                                        <i class="far fa-clock"></i>{{ $item->jadwal_latihan }}
+                                    </span>
+                                @else
+                                    <span class="empty-val">Belum ada</span>
+                                @endif
+                            </td>
+
+                            {{-- Deskripsi --}}
+                            <td>
+                                <div class="cell-desc">
+                                    @if ($item->deskripsi)
+                                        {{ $item->deskripsi }}
+                                    @else
+                                        <span class="empty-val">Belum ada deskripsi</span>
+                                    @endif
+                                </div>
+                            </td>
+
+                            {{-- Aksi --}}
                             <td class="text-center text-nowrap">
-                                <a href="{{ route('admin.guru.show', $encryptedId) }}"
+                                <a href="{{ route('admin.extracurricular.show', $encryptedId) }}"
                                    class="btn-icon view me-1" title="Lihat Detail">
                                     <i class="fas fa-eye"></i>
                                 </a>
 
-                                <a href="{{ route('admin.guru.edit', $encryptedId) }}"
+                                <a href="{{ route('admin.extracurricular.edit', $encryptedId) }}"
                                    class="btn-icon edit me-1" title="Edit Data">
                                     <i class="fas fa-edit"></i>
                                 </a>
 
-                                <form action="{{ route('admin.guru.destroy', $encryptedId) }}"
+                                <form action="{{ route('admin.extracurricular.destroy', $encryptedId) }}"
                                       method="POST" class="d-inline"
-                                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus data guru {{ $teacher->nama_guru }}?');">
+                                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus ekstrakurikuler {{ $item->nama_ekskul }}?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn-icon delete" title="Hapus Data">
@@ -396,11 +436,11 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6">
+                            <td colspan="7">
                                 <div class="empty-state">
-                                    <i class="fas fa-chalkboard-teacher"></i>
-                                    <h6>Belum Ada Data Guru</h6>
-                                    <p>Data tenaga pendidik belum tersedia.</p>
+                                    <i class="fas fa-basketball"></i>
+                                    <h6>Belum Ada Data Ekstrakurikuler</h6>
+                                    <p>Belum terdapat kegiatan ekstrakurikuler yang terdaftar.</p>
                                 </div>
                             </td>
                         </tr>
@@ -410,14 +450,15 @@
             </table>
         </div>
 
-        @if ($teachers->hasPages())
+        {{-- PAGINATION --}}
+        @if (isset($extracurriculars) && $extracurriculars->hasPages())
             <div class="table-foot">
                 <small>
-                    Menampilkan <strong>{{ $teachers->firstItem() }}</strong>
-                    sampai <strong>{{ $teachers->lastItem() }}</strong>
-                    dari <strong>{{ $teachers->total() }}</strong> data guru
+                    Menampilkan <strong>{{ $extracurriculars->firstItem() }}</strong>
+                    sampai <strong>{{ $extracurriculars->lastItem() }}</strong>
+                    dari <strong>{{ $extracurriculars->total() }}</strong> data
                 </small>
-                <div>{{ $teachers->links() }}</div>
+                <div>{{ $extracurriculars->links() }}</div>
             </div>
         @endif
 

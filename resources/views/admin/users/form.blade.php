@@ -3,10 +3,10 @@
 @section('content')
 
 @php
-    $isEdit = $student->exists;
+    $isEdit = isset($user) && $user !== null;
 
     $encryptedId = $isEdit
-        ? \Illuminate\Support\Facades\Crypt::encryptString($student->id)
+        ? \Illuminate\Support\Facades\Crypt::encryptString($user->id_user)
         : null;
 @endphp
 
@@ -56,12 +56,10 @@
     }
 
     /* =========================
-       ALERT ERROR
+       ALERT
     ========================== */
     .alert-soft {
-        border: 1px solid #fecaca;
-        background-color: #fef2f2;
-        color: #991b1b;
+        border: 1px solid;
         border-radius: 8px;
         font-size: .875rem;
         padding: 14px 18px;
@@ -72,12 +70,16 @@
 
     .alert-soft .alert-body { flex: 1; }
 
-    .alert-soft strong { color: #7f1d1d; }
-
     .alert-soft ul {
         margin: 6px 0 0;
         padding-left: 18px;
         font-size: .82rem;
+    }
+
+    .alert-soft.alert-danger {
+        background-color: #fef2f2;
+        border-color: #fecaca;
+        color: #991b1b;
     }
 
     .alert-soft .alert-close {
@@ -99,7 +101,7 @@
     }
 
     /* =========================
-       CARD FORM
+       CARD
     ========================== */
     .card-clean {
         background-color: #fff;
@@ -207,9 +209,11 @@
         margin-bottom: 8px;
     }
 
-    .form-label .req {
-        color: #dc2626;
-        margin-left: 2px;
+    .form-label .req { color: #dc2626; margin-left: 2px; }
+    .form-label .opt {
+        color: var(--c-text-soft);
+        font-weight: 400;
+        font-size: .78rem;
     }
 
     .form-control,
@@ -258,7 +262,41 @@
     }
 
     /* =========================
-       BUTTON AKSI
+       PASSWORD TOGGLE
+    ========================== */
+    .input-group-clean {
+        position: relative;
+    }
+
+    .input-group-clean .form-control {
+        padding-right: 44px;
+    }
+
+    .toggle-pass {
+        position: absolute;
+        top: 50%;
+        right: 6px;
+        transform: translateY(-50%);
+        width: 34px;
+        height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        color: var(--c-text-soft);
+        cursor: pointer;
+        border-radius: 6px;
+        transition: background .15s ease, color .15s ease;
+    }
+
+    .toggle-pass:hover {
+        background-color: var(--c-soft);
+        color: var(--c-primary);
+    }
+
+    /* =========================
+       ACTION BAR
     ========================== */
     .action-bar {
         border-top: 1px solid var(--c-border);
@@ -329,24 +367,24 @@
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
         <div>
             <h2 class="page-title">
-                {{ $isEdit ? 'Edit Data Siswa' : 'Tambah Data Siswa' }}
+                {{ $isEdit ? 'Edit Data Pengelola' : 'Tambah Data Pengelola' }}
             </h2>
             <p class="page-subtitle">
                 {{ $isEdit
-                    ? 'Perbarui informasi data peserta didik.'
-                    : 'Tambahkan data peserta didik baru.'
+                    ? 'Perbarui informasi akun pengelola.'
+                    : 'Tambahkan akun pengelola baru ke dalam sistem.'
                 }}
             </p>
         </div>
 
-        <a href="{{ route('admin.siswa') }}" class="btn btn-back">
+        <a href="{{ route('admin.users.index') }}" class="btn btn-back">
             <i class="fas fa-arrow-left me-2"></i>Kembali
         </a>
     </div>
 
     {{-- ALERT ERROR VALIDASI --}}
     @if ($errors->any())
-        <div class="alert-soft mb-4" role="alert" data-alert>
+        <div class="alert-soft alert-danger mb-4" role="alert" data-alert>
             <i class="fas fa-exclamation-triangle"></i>
             <div class="alert-body">
                 <strong>Gagal menyimpan data.</strong>
@@ -368,27 +406,30 @@
 
         <div class="card-head">
             <div class="head-icon">
-                <i class="fas fa-user-graduate"></i>
+                <i class="fas {{ $isEdit ? 'fa-user-pen' : 'fa-user-plus' }}"></i>
             </div>
             <div>
-                <h6>{{ $isEdit ? 'Form Edit Siswa' : 'Form Tambah Siswa' }}</h6>
-                <small>Lengkapi data siswa dengan benar.</small>
+                <h6>{{ $isEdit ? 'Form Edit Pengelola' : 'Form Tambah Pengelola' }}</h6>
+                <small>Lengkapi data akun pengelola dengan benar.</small>
             </div>
         </div>
 
         <div class="card-body">
 
+            {{-- ✅ ACTION FORM DIPERBAIKI --}}
             <form action="{{ $isEdit
-                    ? route('admin.siswa.update', $encryptedId)
-                    : route('admin.siswa.store')
+                    ? route('admin.users.update', $encryptedId)
+                    : route('admin.users.store')
                 }}"
                 method="POST">
                 @csrf
-                @if ($isEdit) @method('PUT') @endif
+                @if ($isEdit)
+                    @method('PUT')
+                @endif
 
-                {{-- SECTION TITLE --}}
+                {{-- SECTION: AKUN --}}
                 <div class="section-title">
-                    <i class="fas fa-id-card"></i>Informasi Siswa
+                    <i class="fas fa-user-shield"></i>Informasi Akun
                 </div>
                 <hr class="section-divider">
 
@@ -396,102 +437,120 @@
                 <div class="info-box">
                     <i class="fas fa-circle-info"></i>
                     <span>
-                        Pastikan <strong>NISN</strong>, <strong>nama</strong>,
-                        <strong>jenis kelamin</strong>, dan <strong>tahun masuk</strong>
-                        sudah sesuai dengan data siswa.
+                        <strong>Username</strong> digunakan untuk login dan harus unik.
+                        @if ($isEdit)
+                            Kosongkan <strong>password</strong> jika tidak ingin mengubahnya.
+                        @else
+                            <strong>Password</strong> minimal 6 karakter.
+                        @endif
                     </span>
                 </div>
 
                 <div class="row">
 
-                    {{-- NISN --}}
+                    {{-- Username --}}
                     <div class="col-md-6 mb-4">
-                        <label for="nisn" class="form-label">
-                            NISN <span class="req">*</span>
+                        <label for="username" class="form-label">
+                            Username <span class="req">*</span>
                         </label>
                         <input type="text"
-                               id="nisn"
-                               name="nisn"
-                               class="form-control @error('nisn') is-invalid @enderror"
-                               value="{{ old('nisn', $student->nisn) }}"
-                               maxlength="10"
-                               inputmode="numeric"
-                               placeholder="Masukkan NISN"
+                               id="username"
+                               name="username"
+                               class="form-control @error('username') is-invalid @enderror"
+                               value="{{ old('username', $user->username ?? '') }}"
+                               maxlength="30"
+                               autocomplete="off"
+                               placeholder="Masukkan username"
                                required>
-                        @error('nisn')
+                        @error('username')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <small class="form-hint">Maksimal 10 karakter.</small>
+                        <small class="form-hint">Maksimal 30 karakter, harus unik.</small>
                     </div>
 
-                    {{-- Nama Siswa --}}
+                    {{-- Role --}}
                     <div class="col-md-6 mb-4">
-                        <label for="nama_siswa" class="form-label">
-                            Nama Siswa <span class="req">*</span>
+                        <label for="role" class="form-label">
+                            Role <span class="req">*</span>
                         </label>
-                        <input type="text"
-                               id="nama_siswa"
-                               name="nama_siswa"
-                               class="form-control @error('nama_siswa') is-invalid @enderror"
-                               value="{{ old('nama_siswa', $student->nama_siswa) }}"
-                               maxlength="40"
-                               placeholder="Masukkan nama lengkap siswa"
-                               required>
-                        @error('nama_siswa')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <small class="form-hint">Maksimal 40 karakter.</small>
-                    </div>
-
-                    {{-- Jenis Kelamin --}}
-                    <div class="col-md-6 mb-4">
-                        <label for="jenis_kelamin" class="form-label">
-                            Jenis Kelamin <span class="req">*</span>
-                        </label>
-                        <select id="jenis_kelamin"
-                                name="jenis_kelamin"
-                                class="form-select @error('jenis_kelamin') is-invalid @enderror"
+                        <select id="role"
+                                name="role"
+                                class="form-select @error('role') is-invalid @enderror"
                                 required>
-                            <option value="">Pilih Jenis Kelamin</option>
-                            <option value="Laki-Laki"
-                                {{ old('jenis_kelamin', $student->jenis_kelamin) === 'Laki-Laki' ? 'selected' : '' }}>
-                                Laki-Laki
+                            <option value="">Pilih Role</option>
+                            <option value="Admin"
+                                {{ old('role', $user->role ?? '') === 'Admin' ? 'selected' : '' }}>
+                                Admin
                             </option>
-                            <option value="Perempuan"
-                                {{ old('jenis_kelamin', $student->jenis_kelamin) === 'Perempuan' ? 'selected' : '' }}>
-                                Perempuan
+                            <option value="Operator"
+                                {{ old('role', $user->role ?? '') === 'Operator' ? 'selected' : '' }}>
+                                Operator
                             </option>
                         </select>
-                        @error('jenis_kelamin')
+                        @error('role')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                        <small class="form-hint">Admin punya akses penuh, Operator terbatas.</small>
                     </div>
 
-                    {{-- Tahun Masuk --}}
+                    {{-- Password --}}
                     <div class="col-md-6 mb-4">
-                        <label for="tahun_masuk" class="form-label">
-                            Tahun Masuk <span class="req">*</span>
+                        <label for="password" class="form-label">
+                            Password
+                            @if ($isEdit)
+                                <span class="opt">(Opsional)</span>
+                            @else
+                                <span class="req">*</span>
+                            @endif
                         </label>
-                        <input type="number"
-                               id="tahun_masuk"
-                               name="tahun_masuk"
-                               class="form-control @error('tahun_masuk') is-invalid @enderror"
-                               value="{{ old('tahun_masuk', $student->tahun_masuk) }}"
-                               min="1900"
-                               max="{{ date('Y') }}"
-                               placeholder="Contoh: {{ date('Y') }}"
-                               required>
-                        @error('tahun_masuk')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="input-group-clean">
+                            <input type="password"
+                                   id="password"
+                                   name="password"
+                                   class="form-control @error('password') is-invalid @enderror"
+                                   placeholder="{{ $isEdit ? 'Kosongkan jika tidak diubah' : 'Masukkan password' }}"
+                                   autocomplete="new-password"
+                                   {{ $isEdit ? '' : 'required' }}>
+                            <button type="button" class="toggle-pass" data-toggle-pass="password" aria-label="Tampilkan password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        @error('password')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
                         @enderror
-                        <small class="form-hint">Masukkan tahun dalam format 4 digit.</small>
+                        <small class="form-hint">Minimal 6 karakter.</small>
+                    </div>
+
+                    {{-- Konfirmasi Password --}}
+                    <div class="col-md-6 mb-4">
+                        <label for="password_confirmation" class="form-label">
+                            Konfirmasi Password
+                            @if ($isEdit)
+                                <span class="opt">(Opsional)</span>
+                            @else
+                                <span class="req">*</span>
+                            @endif
+                        </label>
+                        <div class="input-group-clean">
+                            <input type="password"
+                                   id="password_confirmation"
+                                   name="password_confirmation"
+                                   class="form-control"
+                                   placeholder="Ulangi password"
+                                   autocomplete="new-password"
+                                   {{ $isEdit ? '' : 'required' }}>
+                            <button type="button" class="toggle-pass" data-toggle-pass="password_confirmation" aria-label="Tampilkan password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <small class="form-hint">Harus sama dengan password di atas.</small>
                     </div>
 
                 </div>
 
                 {{-- ACTION BAR --}}
                 <div class="action-bar">
-                    <a href="{{ route('admin.siswa') }}" class="btn btn-cancel">
+                    <a href="{{ route('admin.users.index') }}" class="btn btn-cancel">
                         <i class="fas fa-times me-2"></i>Batal
                     </a>
                     <button type="submit" class="btn btn-save">
@@ -508,9 +567,28 @@
 
 </div>
 
-{{-- FALLBACK CLOSE ALERT --}}
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+
+    /* ============ TOGGLE PASSWORD ============ */
+    document.querySelectorAll("[data-toggle-pass]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+            const targetId = btn.getAttribute("data-toggle-pass");
+            const input    = document.getElementById(targetId);
+            if (!input) return;
+
+            const isPassword = input.type === "password";
+            input.type = isPassword ? "text" : "password";
+
+            const icon = btn.querySelector("i");
+            if (icon) {
+                icon.classList.toggle("fa-eye", !isPassword);
+                icon.classList.toggle("fa-eye-slash", isPassword);
+            }
+        });
+    });
+
+    /* ============ FALLBACK CLOSE ALERT ============ */
     document.querySelectorAll("[data-alert-close]").forEach(function (btn) {
         btn.addEventListener("click", function (e) {
             e.preventDefault();
@@ -521,6 +599,7 @@ document.addEventListener("DOMContentLoaded", function () {
             setTimeout(() => box.remove(), 200);
         });
     });
+
 });
 </script>
 

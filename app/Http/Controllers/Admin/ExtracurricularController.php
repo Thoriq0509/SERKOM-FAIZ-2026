@@ -1,0 +1,191 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Extracurricular;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
+
+class ExtracurricularController extends Controller
+{
+    /* =====================================================
+     |  INDEX
+     ===================================================== */
+    public function index()
+    {
+        $extracurriculars = Extracurricular::orderByDesc('id')->paginate(10);
+
+        return view('admin.extracurricular.index', compact('extracurriculars'));
+    }
+
+    /* =====================================================
+     |  CREATE
+     ===================================================== */
+    public function create()
+    {
+        return view('admin.extracurricular.form', [
+            'extracurricular' => new Extracurricular(),
+            'isEdit'          => false,
+        ]);
+    }
+
+    /* =====================================================
+     |  STORE
+     ===================================================== */
+    public function store(Request $request)
+    {
+        $validated = $request->validate($this->rules(), $this->messages());
+
+        if ($request->hasFile('gambar')) {
+            $validated['gambar'] = $request->file('gambar')->store('extracurricular', 'public');
+        }
+
+        Extracurricular::create($validated);
+
+        return redirect()
+            ->route('admin.extracurricular.index')
+            ->with('success', 'Data ekstrakurikuler berhasil ditambahkan.');
+    }
+
+    /* =====================================================
+     |  SHOW
+     ===================================================== */
+    public function show($id)
+    {
+        $extracurricular = $this->findExtracurricular($id);
+
+        if (! $extracurricular) {
+            return $this->backWithError('Data ekstrakurikuler tidak ditemukan.');
+        }
+
+        return view('admin.extracurricular.show', compact('extracurricular'));
+    }
+
+    /* =====================================================
+     |  EDIT
+     ===================================================== */
+    public function edit($id)
+    {
+        $extracurricular = $this->findExtracurricular($id);
+
+        if (! $extracurricular) {
+            return $this->backWithError('Data ekstrakurikuler tidak ditemukan.');
+        }
+
+        return view('admin.extracurricular.form', [
+            'extracurricular' => $extracurricular,
+            'isEdit'          => true,
+        ]);
+    }
+
+    /* =====================================================
+     |  UPDATE
+     ===================================================== */
+    public function update(Request $request, $id)
+    {
+        $extracurricular = $this->findExtracurricular($id);
+
+        if (! $extracurricular) {
+            return $this->backWithError('Data ekstrakurikuler tidak ditemukan.');
+        }
+
+        $validated = $request->validate($this->rules(), $this->messages());
+
+        if ($request->hasFile('gambar')) {
+            // Hapus gambar lama
+            if ($extracurricular->gambar && Storage::disk('public')->exists($extracurricular->gambar)) {
+                Storage::disk('public')->delete($extracurricular->gambar);
+            }
+
+            $validated['gambar'] = $request->file('gambar')->store('extracurricular', 'public');
+        }
+
+        $extracurricular->update($validated);
+
+        return redirect()
+            ->route('admin.extracurricular.index')
+            ->with('success', 'Data ekstrakurikuler berhasil diperbarui.');
+    }
+
+    /* =====================================================
+     |  DESTROY
+     ===================================================== */
+    public function destroy($id)
+    {
+        $extracurricular = $this->findExtracurricular($id);
+
+        if (! $extracurricular) {
+            return $this->backWithError('Data ekstrakurikuler tidak ditemukan.');
+        }
+
+        if ($extracurricular->gambar && Storage::disk('public')->exists($extracurricular->gambar)) {
+            Storage::disk('public')->delete($extracurricular->gambar);
+        }
+
+        $extracurricular->delete();
+
+        return redirect()
+            ->route('admin.extracurricular.index')
+            ->with('success', 'Data ekstrakurikuler berhasil dihapus.');
+    }
+
+    /* =====================================================
+     |  HELPER
+     ===================================================== */
+
+    /**
+     * Find extracurricular by encrypted ID.
+     */
+    private function findExtracurricular(string $encryptedId): ?Extracurricular
+    {
+        try {
+            return Extracurricular::find(Crypt::decryptString($encryptedId));
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Redirect to index with error message.
+     */
+    private function backWithError(string $message)
+    {
+        return redirect()
+            ->route('admin.extracurricular.index')
+            ->with('error', $message);
+    }
+
+    /**
+     * Validation rules.
+     */
+    private function rules(): array
+    {
+        return [
+            'nama_ekskul'    => ['required', 'string', 'max:40'],
+            'pembina'        => ['nullable', 'string', 'max:40'],
+            'jadwal_latihan' => ['nullable', 'string', 'max:40'],
+            'deskripsi'      => ['nullable', 'string'],
+            'gambar'         => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+        ];
+    }
+
+    /**
+     * Validation messages.
+     */
+    private function messages(): array
+    {
+        return [
+            'nama_ekskul.required' => 'Nama ekstrakurikuler wajib diisi.',
+            'nama_ekskul.max'      => 'Nama ekstrakurikuler maksimal 40 karakter.',
+
+            'pembina.max'          => 'Nama pembina maksimal 40 karakter.',
+            'jadwal_latihan.max'   => 'Jadwal latihan maksimal 40 karakter.',
+
+            'gambar.image'         => 'File harus berupa gambar.',
+            'gambar.mimes'         => 'Format gambar harus JPG, JPEG, PNG, atau WEBP.',
+            'gambar.max'           => 'Ukuran gambar maksimal 2 MB.',
+        ];
+    }
+}

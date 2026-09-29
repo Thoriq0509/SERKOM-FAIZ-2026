@@ -3,412 +3,431 @@
 @section('content')
 
 <style>
-    /* =========================
-       CARD TABEL
-    ========================== */
-    .table-card {
-        background-color: #ffffff;
-        border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        overflow: hidden;
-        border: none;
+    :root {
+        --c-primary:   #334155;
+        --c-primary-d: #1e293b;
+        --c-soft:      #f1f5f9;
+        --c-border:    #e2e8f0;
+        --c-text:      #334155;
+        --c-text-soft: #64748b;
+        --c-bg:        #f8fafc;
     }
 
     /* =========================
-       HEADER TABEL
+       HEADER HALAMAN
     ========================== */
-    .table-card .card-header {
-        background-color: #273b69;
-        color: #ffffff;
-        padding: 16px 25px;
+    .page-title {
         font-family: 'Poppins', sans-serif;
-        border-bottom: none;
+        font-size: 1.35rem;
+        font-weight: 600;
+        color: var(--c-primary-d);
+        margin-bottom: 4px;
+    }
+
+    .page-subtitle {
+        color: var(--c-text-soft);
+        font-size: .875rem;
+        margin: 0;
+    }
+
+    .btn-primary-soft {
+        background-color: var(--c-primary);
+        border: 1px solid var(--c-primary);
+        color: #fff;
+        font-size: .875rem;
+        font-weight: 500;
+        padding: 8px 20px;
+        border-radius: 8px;
+        transition: all .15s ease;
+    }
+
+    .btn-primary-soft:hover {
+        background-color: var(--c-primary-d);
+        border-color: var(--c-primary-d);
+        color: #fff;
+    }
+
+    /* =========================
+       ALERT
+    ========================== */
+    .alert-soft {
+        border: 1px solid;
+        border-radius: 8px;
+        font-size: .875rem;
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .alert-soft .alert-text { flex: 1; }
+
+    .alert-soft.alert-success {
+        background-color: #f0fdf4;
+        border-color: #bbf7d0;
+        color: #166534;
+    }
+
+    .alert-soft.alert-danger {
+        background-color: #fef2f2;
+        border-color: #fecaca;
+        color: #991b1b;
+    }
+
+    /* Tombol close custom agar pasti bisa diklik */
+    .alert-soft .alert-close {
+        background: transparent;
+        border: none;
+        color: inherit;
+        font-size: .9rem;
+        opacity: .6;
+        padding: 4px 6px;
+        line-height: 1;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: opacity .15s ease, background .15s ease;
+    }
+
+    .alert-soft .alert-close:hover {
+        opacity: 1;
+        background: rgba(0,0,0,.06);
+    }
+
+    /* =========================
+       CARD
+    ========================== */
+    .card-clean {
+        background-color: #fff;
+        border: 1px solid var(--c-border);
+        border-radius: 10px;
+        box-shadow: 0 1px 2px rgba(15,23,42,.04);
+        overflow: hidden;
+    }
+
+    .card-clean .card-head {
+        padding: 16px 22px;
+        border-bottom: 1px solid var(--c-border);
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .card-clean .card-head h6 {
+        margin: 0;
+        font-size: .95rem;
+        font-weight: 600;
+        color: var(--c-primary-d);
+    }
+
+    .card-clean .card-head .count {
+        font-size: .8rem;
+        color: var(--c-text-soft);
+        background-color: var(--c-soft);
+        padding: 4px 10px;
+        border-radius: 20px;
     }
 
     /* =========================
        TABEL
     ========================== */
-    .table-custom {
-        margin-bottom: 0;
+    .table-clean {
+        margin: 0;
+        font-size: .875rem;
     }
 
-    .table-custom th {
-        background-color: #f8fafc;
-        color: #475569;
+    .table-clean thead th {
+        background-color: var(--c-bg);
+        color: var(--c-text-soft);
         font-weight: 600;
-        padding: 15px 20px;
-        border-bottom: 2px solid #e2e8f0;
+        font-size: .75rem;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        padding: 14px 20px;
+        border-bottom: 1px solid var(--c-border);
         white-space: nowrap;
     }
 
-    .table-custom td {
-        padding: 15px 20px;
+    .table-clean tbody td {
+        padding: 14px 20px;
+        color: var(--c-text);
+        border-bottom: 1px solid var(--c-border);
         vertical-align: middle;
-        color: #334155;
-        border-bottom: 1px solid #e2e8f0;
     }
 
-    .table-custom tbody tr:last-child td {
-        border-bottom: none;
+    .table-clean tbody tr:last-child td { border-bottom: none; }
+    .table-clean tbody tr:hover { background-color: var(--c-bg); }
+
+    .cell-nisn {
+        font-family: 'Courier New', monospace;
+        color: var(--c-text-soft);
+        font-size: .82rem;
     }
 
-    .table-custom tbody tr:hover {
-        background-color: #f8fafc;
+    .cell-name {
+        font-weight: 600;
+        color: var(--c-primary-d);
+    }
+
+    /* =========================
+       BADGE JENIS KELAMIN
+    ========================== */
+    .badge-jk {
+        font-size: .75rem;
+        font-weight: 500;
+        padding: 5px 12px;
+        border-radius: 20px;
+        border: 1px solid;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .badge-jk.lk {
+        background-color: #eff6ff;
+        border-color: #bfdbfe;
+        color: #1d4ed8;
+    }
+
+    .badge-jk.pr {
+        background-color: #fdf2f8;
+        border-color: #fbcfe8;
+        color: #be185d;
     }
 
     /* =========================
        TOMBOL AKSI
     ========================== */
-    .btn-action {
+    .btn-icon {
         width: 32px;
         height: 32px;
         padding: 0;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        border-radius: 8px;
-        transition: all 0.2s ease;
+        border-radius: 6px;
+        border: 1px solid;
+        font-size: .8rem;
+        transition: all .15s ease;
     }
 
-    .btn-action:hover {
-        transform: translateY(-2px);
-    }
+    .btn-icon:hover { transform: translateY(-1px); }
 
-    /* =========================
-       BADGE JENIS KELAMIN
-    ========================== */
-    .badge-lk {
-        background-color: rgba(13, 110, 253, 0.1);
-        color: #0d6efd;
-        border: 1px solid rgba(13, 110, 253, 0.2);
-    }
+    .btn-icon.view   { background:#eff6ff; border-color:#bfdbfe; color:#1d4ed8; }
+    .btn-icon.view:hover { background:#dbeafe; color:#1e40af; }
 
-    .badge-pr {
-        background-color: rgba(214, 51, 132, 0.1);
-        color: #d63384;
-        border: 1px solid rgba(214, 51, 132, 0.2);
-    }
+    .btn-icon.edit   { background:#fffbeb; border-color:#fde68a; color:#b45309; }
+    .btn-icon.edit:hover { background:#fef3c7; color:#92400e; }
+
+    .btn-icon.delete { background:#fef2f2; border-color:#fecaca; color:#b91c1c; }
+    .btn-icon.delete:hover { background:#fee2e2; color:#991b1b; }
 
     /* =========================
-       EMPTY STATE
+       EMPTY STATE (tanpa tombol)
     ========================== */
     .empty-state {
-        padding: 60px 20px;
+        padding: 70px 20px;
         text-align: center;
-        color: #94a3b8;
+        color: var(--c-text-soft);
     }
 
     .empty-state i {
-        font-size: 3rem;
-        margin-bottom: 15px;
+        font-size: 2.5rem;
+        color: #cbd5e1;
+        margin-bottom: 14px;
+        display: block;
+    }
+
+    .empty-state h6 {
+        color: var(--c-primary-d);
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+
+    .empty-state p {
+        margin: 0;
+        font-size: .85rem;
+    }
+
+    /* =========================
+       PAGINATION FOOTER
+    ========================== */
+    .table-foot {
+        padding: 14px 22px;
+        border-top: 1px solid var(--c-border);
+        background-color: var(--c-bg);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        font-size: .8rem;
+        color: var(--c-text-soft);
     }
 </style>
 
-
 <div class="container-fluid p-0">
 
-    <!-- =========================
-         HEADER
-    ========================== -->
+    {{-- HEADER --}}
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-
         <div>
-            <h2
-                class="fw-bold text-dark mb-1"
-                style="font-family: 'Poppins', sans-serif;"
-            >
-                Data Siswa
-            </h2>
-
-            <p class="text-muted mb-0">
-                Kelola data peserta didik sekolah.
-            </p>
+            <h2 class="page-title">Data Siswa</h2>
+            <p class="page-subtitle">Kelola data peserta didik sekolah.</p>
         </div>
 
-        <a
-            href="{{ route('admin.siswa.create') }}"
-            class="btn rounded-pill px-4 shadow-sm text-white"
-            style="background-color: #273b69; border: none;"
-        >
-            <i class="fas fa-plus me-2"></i>
-            Tambah Data
+        <a href="{{ route('admin.siswa.create') }}" class="btn btn-primary-soft">
+            <i class="fas fa-plus me-2"></i>Tambah Data
         </a>
-
     </div>
 
-
-    <!-- =========================
-         ALERT SUCCESS
-    ========================== -->
+    {{-- ALERT SUCCESS --}}
     @if (session('success'))
-
-        <div
-            class="alert alert-success alert-dismissible fade show shadow-sm border-0"
-            role="alert"
-        >
-            <i class="fas fa-check-circle me-2"></i>
-
-            {{ session('success') }}
-
-            <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Tutup"
-            ></button>
+        <div class="alert alert-success alert-soft alert-dismissible fade show" role="alert" data-alert>
+            <i class="fas fa-check-circle"></i>
+            <span class="alert-text">{{ session('success') }}</span>
+            <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
+                <i class="fas fa-xmark"></i>
+            </button>
         </div>
-
     @endif
 
-
-    <!-- =========================
-         ALERT ERROR
-    ========================== -->
+    {{-- ALERT ERROR --}}
     @if (session('error'))
-
-        <div
-            class="alert alert-danger alert-dismissible fade show shadow-sm border-0"
-            role="alert"
-        >
-            <i class="fas fa-exclamation-circle me-2"></i>
-
-            {{ session('error') }}
-
-            <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Tutup"
-            ></button>
+        <div class="alert alert-danger alert-soft alert-dismissible fade show" role="alert" data-alert>
+            <i class="fas fa-exclamation-circle"></i>
+            <span class="alert-text">{{ session('error') }}</span>
+            <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
+                <i class="fas fa-xmark"></i>
+            </button>
         </div>
-
     @endif
 
+    {{-- CARD TABEL --}}
+    <div class="card-clean">
 
-    <!-- =========================
-         CARD TABEL
-    ========================== -->
-    <div class="card table-card">
-
-        <!-- Header Card -->
-        <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-
-            <h6 class="mb-0 fw-bold fs-6">
-                <i class="fas fa-user-graduate me-2"></i>
-                Daftar Peserta Didik
-            </h6>
-
-            <span class="small opacity-75">
-                Total: {{ $students->total() }} siswa
-            </span>
-
+        <div class="card-head">
+            <h6><i class="fas fa-user-graduate me-2"></i>Daftar Peserta Didik</h6>
+            <span class="count">Total: {{ $students->total() }} siswa</span>
         </div>
 
+        <div class="table-responsive">
+            <table class="table table-clean">
 
-        <!-- Body Card -->
-        <div class="card-body p-0">
+                <thead>
+                    <tr>
+                        <th width="5%">No</th>
+                        <th width="15%">NISN</th>
+                        <th width="30%">Nama Siswa</th>
+                        <th width="15%" class="text-center">Jenis Kelamin</th>
+                        <th width="15%" class="text-center">Tahun Masuk</th>
+                        <th width="20%" class="text-center">Aksi</th>
+                    </tr>
+                </thead>
 
-            <!-- =========================
-                 TABEL RESPONSIVE
-            ========================== -->
-            <div class="table-responsive">
+                <tbody>
+                    @forelse ($students as $student)
+                        @php
+                            $encryptedId = \Illuminate\Support\Facades\Crypt::encryptString($student->id);
+                        @endphp
 
-                <table class="table table-custom">
-
-                    <thead>
                         <tr>
-                            <th width="5%">No</th>
-                            <th width="15%">NISN</th>
-                            <th width="30%">Nama Siswa</th>
-                            <th width="15%" class="text-center">
-                                Jenis Kelamin
-                            </th>
-                            <th width="15%" class="text-center">
-                                Tahun Masuk
-                            </th>
-                            <th width="20%" class="text-center">
-                                Aksi
-                            </th>
+                            <td>{{ $students->firstItem() + $loop->index }}</td>
+
+                            <td class="cell-nisn">{{ $student->nisn }}</td>
+
+                            <td class="cell-name">{{ $student->nama_siswa }}</td>
+
+                            <td class="text-center">
+                                @if ($student->jenis_kelamin === 'Laki-Laki')
+                                    <span class="badge-jk lk">
+                                        <i class="fas fa-mars"></i>Laki-Laki
+                                    </span>
+                                @else
+                                    <span class="badge-jk pr">
+                                        <i class="fas fa-venus"></i>Perempuan
+                                    </span>
+                                @endif
+                            </td>
+
+                            <td class="text-center fw-semibold">{{ $student->tahun_masuk }}</td>
+
+                            <td class="text-center text-nowrap">
+                                <a href="{{ route('admin.siswa.show', $encryptedId) }}"
+                                   class="btn-icon view me-1" title="Lihat Detail">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                <a href="{{ route('admin.siswa.edit', $encryptedId) }}"
+                                   class="btn-icon edit me-1" title="Edit Data">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+
+                                <form action="{{ route('admin.siswa.destroy', $encryptedId) }}"
+                                      method="POST" class="d-inline"
+                                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus data siswa ini?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn-icon delete" title="Hapus Data">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
-                    </thead>
+                    @empty
+                        <tr>
+                            <td colspan="6">
+                                {{-- Empty state TANPA tombol --}}
+                                <div class="empty-state">
+                                    <i class="fas fa-user-graduate"></i>
+                                    <h6>Belum Ada Data Siswa</h6>
+                                    <p>Data peserta didik belum tersedia.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
 
-                    <tbody>
-
-                        @forelse ($students as $student)
-
-                            @php
-                                $encryptedId = \Illuminate\Support\Facades\Crypt::encryptString($student->id);
-                            @endphp
-
-                            <tr>
-
-                                <!-- Nomor -->
-                                <td>
-                                    {{ $students->firstItem() + $loop->index }}
-                                </td>
-
-
-                                <!-- NISN -->
-                                <td class="fw-semibold text-secondary">
-                                    {{ $student->nisn }}
-                                </td>
-
-
-                                <!-- Nama Siswa -->
-                                <td class="fw-bold text-dark">
-                                    {{ $student->nama_siswa }}
-                                </td>
-
-
-                                <!-- Jenis Kelamin -->
-                                <td class="text-center">
-
-                                    @if ($student->jenis_kelamin === 'Laki-Laki')
-
-                                        <span class="badge badge-lk px-3 py-2 rounded-pill fw-normal">
-                                            <i class="fas fa-mars me-1"></i>
-                                            Laki-Laki
-                                        </span>
-
-                                    @else
-
-                                        <span class="badge badge-pr px-3 py-2 rounded-pill fw-normal">
-                                            <i class="fas fa-venus me-1"></i>
-                                            Perempuan
-                                        </span>
-
-                                    @endif
-
-                                </td>
-
-
-                                <!-- Tahun Masuk -->
-                                <td class="text-center fw-bold text-secondary">
-                                    {{ $student->tahun_masuk }}
-                                </td>
-
-
-                                <!-- Aksi -->
-                                <td class="text-center text-nowrap">
-
-                                    <!-- Detail -->
-                                    <a
-                                        href="{{ route('admin.siswa.show', $encryptedId) }}"
-                                        class="btn btn-info btn-sm btn-action text-white shadow-sm me-1"
-                                        title="Lihat Detail"
-                                    >
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-
-
-                                    <!-- Edit -->
-                                    <a
-                                        href="{{ route('admin.siswa.edit', $encryptedId) }}"
-                                        class="btn btn-warning btn-sm btn-action text-white shadow-sm me-1"
-                                        title="Edit Data"
-                                    >
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-
-
-                                    <!-- Hapus -->
-                                    <form
-                                        action="{{ route('admin.siswa.destroy', $encryptedId) }}"
-                                        method="POST"
-                                        class="d-inline"
-                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus data siswa ini?');"
-                                    >
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button
-                                            type="submit"
-                                            class="btn btn-danger btn-sm btn-action shadow-sm"
-                                            title="Hapus Data"
-                                        >
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </form>
-
-                                </td>
-
-                            </tr>
-
-                        @empty
-
-                            <tr>
-
-                                <td colspan="6">
-
-                                    <div class="empty-state">
-
-                                        <i class="fas fa-user-graduate d-block"></i>
-
-                                        <h6 class="fw-bold text-secondary">
-                                            Belum Ada Data Siswa
-                                        </h6>
-
-                                        <p class="mb-3">
-                                            Data peserta didik belum tersedia.
-                                        </p>
-
-                                        <a
-                                            href="{{ route('admin.siswa.create') }}"
-                                            class="btn btn-sm text-white px-3"
-                                            style="background-color: #273b69; border: none;"
-                                        >
-                                            <i class="fas fa-plus me-1"></i>
-                                            Tambah Siswa
-                                        </a>
-
-                                    </div>
-
-                                </td>
-
-                            </tr>
-
-                        @endforelse
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-
-            <!-- =========================
-                 PAGINATION
-            ========================== -->
-            @if ($students->hasPages())
-
-                <div class="p-3 border-top bg-light">
-
-                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-
-                        <small class="text-muted">
-                            Menampilkan
-                            <strong>{{ $students->firstItem() }}</strong>
-                            sampai
-                            <strong>{{ $students->lastItem() }}</strong>
-                            dari
-                            <strong>{{ $students->total() }}</strong>
-                            data siswa
-                        </small>
-
-                        <div>
-                            {{ $students->links() }}
-                        </div>
-
-                    </div>
-
-                </div>
-
-            @endif
-
+            </table>
         </div>
+
+        @if ($students->hasPages())
+            <div class="table-foot">
+                <small>
+                    Menampilkan <strong>{{ $students->firstItem() }}</strong>
+                    sampai <strong>{{ $students->lastItem() }}</strong>
+                    dari <strong>{{ $students->total() }}</strong> data siswa
+                </small>
+                <div>{{ $students->links() }}</div>
+            </div>
+        @endif
 
     </div>
 
 </div>
+
+{{-- =========================================================
+     SCRIPT: FALLBACK CLOSE ALERT
+     Berfungsi walau Bootstrap JS tidak ter-load / error
+========================================================== --}}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("[data-alert-close]").forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+            e.preventDefault();
+            const alertBox = btn.closest("[data-alert]");
+            if (!alertBox) return;
+
+            alertBox.style.transition = "opacity .2s ease";
+            alertBox.style.opacity = "0";
+
+            setTimeout(function () {
+                alertBox.remove();
+            }, 200);
+        });
+    });
+});
+</script>
 
 @endsection

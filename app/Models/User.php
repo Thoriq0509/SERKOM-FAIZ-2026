@@ -2,47 +2,33 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use HasFactory, Notifiable;
 
-    /**
-     * Nama tabel.
-     */
     protected $table = 'users';
-
-    /**
-     * Primary key.
-     */
     protected $primaryKey = 'id_user';
-
-    /**
-     * Tipe primary key.
-     */
+    public $incrementing = true;
     protected $keyType = 'int';
 
-    /**
-     * Primary key auto increment.
-     */
-    public $incrementing = true;
-
-    /**
-     * Kolom yang boleh diisi.
-     */
     protected $fillable = [
         'username',
         'password',
         'role',
     ];
 
-    /**
-     * Kolom yang disembunyikan.
-     */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'password' => 'hashed',
+        ];
+    }
 }

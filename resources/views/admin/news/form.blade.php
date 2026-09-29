@@ -3,10 +3,10 @@
 @section('content')
 
 @php
-    $isEdit = $student->exists;
+    $isEdit = isset($news) && $news->exists;
 
     $encryptedId = $isEdit
-        ? \Illuminate\Support\Facades\Crypt::encryptString($student->id)
+        ? \Illuminate\Support\Facades\Crypt::encryptString($news->id)
         : null;
 @endphp
 
@@ -22,7 +22,7 @@
     }
 
     /* =========================
-       HEADER HALAMAN
+       PAGE HEADER
     ========================== */
     .page-title {
         font-family: 'Poppins', sans-serif;
@@ -56,12 +56,10 @@
     }
 
     /* =========================
-       ALERT ERROR
+       ALERT
     ========================== */
     .alert-soft {
-        border: 1px solid #fecaca;
-        background-color: #fef2f2;
-        color: #991b1b;
+        border: 1px solid;
         border-radius: 8px;
         font-size: .875rem;
         padding: 14px 18px;
@@ -72,12 +70,16 @@
 
     .alert-soft .alert-body { flex: 1; }
 
-    .alert-soft strong { color: #7f1d1d; }
-
     .alert-soft ul {
         margin: 6px 0 0;
         padding-left: 18px;
         font-size: .82rem;
+    }
+
+    .alert-soft.alert-danger {
+        background-color: #fef2f2;
+        border-color: #fecaca;
+        color: #991b1b;
     }
 
     .alert-soft .alert-close {
@@ -99,7 +101,7 @@
     }
 
     /* =========================
-       CARD FORM
+       CARD
     ========================== */
     .card-clean {
         background-color: #fff;
@@ -207,9 +209,11 @@
         margin-bottom: 8px;
     }
 
-    .form-label .req {
-        color: #dc2626;
-        margin-left: 2px;
+    .form-label .req { color: #dc2626; margin-left: 2px; }
+    .form-label .opt {
+        color: var(--c-text-soft);
+        font-weight: 400;
+        font-size: .78rem;
     }
 
     .form-control,
@@ -244,6 +248,11 @@
         box-shadow: 0 0 0 .15rem rgba(220,38,38,.12);
     }
 
+    textarea.form-control {
+        resize: vertical;
+        min-height: 140px;
+    }
+
     .invalid-feedback {
         font-size: .78rem;
         color: #dc2626;
@@ -258,7 +267,36 @@
     }
 
     /* =========================
-       BUTTON AKSI
+       IMAGE PREVIEW
+    ========================== */
+    .photo-preview-box {
+        width: 200px;
+        height: 140px;
+        padding: 4px;
+        background-color: #fff;
+        border: 1px solid var(--c-border);
+        border-radius: 8px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .photo-preview-box.new {
+        border: 2px solid var(--c-primary);
+    }
+
+    .photo-label {
+        display: block;
+        font-size: .75rem;
+        color: var(--c-text-soft);
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    .photo-wrapper { margin-top: 16px; }
+    .preview-wrapper { display: none; margin-top: 16px; }
+
+    /* =========================
+       ACTION BAR
     ========================== */
     .action-bar {
         border-top: 1px solid var(--c-border);
@@ -325,28 +363,28 @@
 
 <div class="container-fluid p-0">
 
-    {{-- HEADER HALAMAN --}}
+    {{-- PAGE HEADER --}}
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
         <div>
             <h2 class="page-title">
-                {{ $isEdit ? 'Edit Data Siswa' : 'Tambah Data Siswa' }}
+                {{ $isEdit ? 'Edit Berita' : 'Tambah Berita' }}
             </h2>
             <p class="page-subtitle">
                 {{ $isEdit
-                    ? 'Perbarui informasi data peserta didik.'
-                    : 'Tambahkan data peserta didik baru.'
+                    ? 'Perbarui informasi berita sekolah.'
+                    : 'Tambahkan berita baru ke dalam sistem.'
                 }}
             </p>
         </div>
 
-        <a href="{{ route('admin.siswa') }}" class="btn btn-back">
+        <a href="{{ route('admin.news.index') }}" class="btn btn-back">
             <i class="fas fa-arrow-left me-2"></i>Kembali
         </a>
     </div>
 
-    {{-- ALERT ERROR VALIDASI --}}
+    {{-- VALIDATION ERROR ALERT --}}
     @if ($errors->any())
-        <div class="alert-soft mb-4" role="alert" data-alert>
+        <div class="alert-soft alert-danger mb-4" role="alert" data-alert>
             <i class="fas fa-exclamation-triangle"></i>
             <div class="alert-body">
                 <strong>Gagal menyimpan data.</strong>
@@ -363,32 +401,33 @@
         </div>
     @endif
 
-    {{-- CARD FORM --}}
+    {{-- FORM CARD --}}
     <div class="card-clean mb-5">
 
         <div class="card-head">
             <div class="head-icon">
-                <i class="fas fa-user-graduate"></i>
+                <i class="fas {{ $isEdit ? 'fa-pen-to-square' : 'fa-newspaper' }}"></i>
             </div>
             <div>
-                <h6>{{ $isEdit ? 'Form Edit Siswa' : 'Form Tambah Siswa' }}</h6>
-                <small>Lengkapi data siswa dengan benar.</small>
+                <h6>{{ $isEdit ? 'Form Edit Berita' : 'Form Tambah Berita' }}</h6>
+                <small>Lengkapi data berita dengan benar.</small>
             </div>
         </div>
 
         <div class="card-body">
 
             <form action="{{ $isEdit
-                    ? route('admin.siswa.update', $encryptedId)
-                    : route('admin.siswa.store')
+                    ? route('admin.news.update', $encryptedId)
+                    : route('admin.news.store')
                 }}"
-                method="POST">
+                method="POST"
+                enctype="multipart/form-data">
                 @csrf
                 @if ($isEdit) @method('PUT') @endif
 
-                {{-- SECTION TITLE --}}
+                {{-- SECTION: NEWS INFO --}}
                 <div class="section-title">
-                    <i class="fas fa-id-card"></i>Informasi Siswa
+                    <i class="fas fa-newspaper"></i>Informasi Berita
                 </div>
                 <hr class="section-divider">
 
@@ -396,107 +435,153 @@
                 <div class="info-box">
                     <i class="fas fa-circle-info"></i>
                     <span>
-                        Pastikan <strong>NISN</strong>, <strong>nama</strong>,
-                        <strong>jenis kelamin</strong>, dan <strong>tahun masuk</strong>
-                        sudah sesuai dengan data siswa.
+                        Isi data berita dengan lengkap.
+                        @if ($isEdit)
+                            Kosongkan <strong>gambar</strong> jika tidak ingin menggantinya.
+                        @else
+                            Format gambar: <strong>JPG, JPEG, PNG, WEBP</strong>, maksimal 2 MB.
+                        @endif
                     </span>
                 </div>
 
                 <div class="row">
 
-                    {{-- NISN --}}
-                    <div class="col-md-6 mb-4">
-                        <label for="nisn" class="form-label">
-                            NISN <span class="req">*</span>
+                    {{-- Judul --}}
+                    <div class="col-md-8 mb-4">
+                        <label for="judul" class="form-label">
+                            Judul Berita <span class="req">*</span>
                         </label>
                         <input type="text"
-                               id="nisn"
-                               name="nisn"
-                               class="form-control @error('nisn') is-invalid @enderror"
-                               value="{{ old('nisn', $student->nisn) }}"
-                               maxlength="10"
-                               inputmode="numeric"
-                               placeholder="Masukkan NISN"
+                               id="judul"
+                               name="judul"
+                               class="form-control @error('judul') is-invalid @enderror"
+                               value="{{ old('judul', $news->judul ?? '') }}"
+                               maxlength="50"
+                               placeholder="Masukkan judul berita"
                                required>
-                        @error('nisn')
+                        @error('judul')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <small class="form-hint">Maksimal 10 karakter.</small>
+                        <small class="form-hint">Maksimal 50 karakter.</small>
                     </div>
 
-                    {{-- Nama Siswa --}}
-                    <div class="col-md-6 mb-4">
-                        <label for="nama_siswa" class="form-label">
-                            Nama Siswa <span class="req">*</span>
+                    {{-- Tanggal --}}
+                    <div class="col-md-4 mb-4">
+                        <label for="tanggal" class="form-label">
+                            Tanggal Publikasi <span class="req">*</span>
                         </label>
-                        <input type="text"
-                               id="nama_siswa"
-                               name="nama_siswa"
-                               class="form-control @error('nama_siswa') is-invalid @enderror"
-                               value="{{ old('nama_siswa', $student->nama_siswa) }}"
-                               maxlength="40"
-                               placeholder="Masukkan nama lengkap siswa"
+                        <input type="date"
+                               id="tanggal"
+                               name="tanggal"
+                               class="form-control @error('tanggal') is-invalid @enderror"
+                               value="{{ old('tanggal', $news->tanggal ? $news->tanggal->format('Y-m-d') : date('Y-m-d')) }}"
                                required>
-                        @error('nama_siswa')
+                        @error('tanggal')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <small class="form-hint">Maksimal 40 karakter.</small>
                     </div>
 
-                    {{-- Jenis Kelamin --}}
-                    <div class="col-md-6 mb-4">
-                        <label for="jenis_kelamin" class="form-label">
-                            Jenis Kelamin <span class="req">*</span>
+                    {{-- Status --}}
+                    <div class="col-md-4 mb-4">
+                        <label for="status" class="form-label">
+                            Status <span class="req">*</span>
                         </label>
-                        <select id="jenis_kelamin"
-                                name="jenis_kelamin"
-                                class="form-select @error('jenis_kelamin') is-invalid @enderror"
+                        <select id="status"
+                                name="status"
+                                class="form-select @error('status') is-invalid @enderror"
                                 required>
-                            <option value="">Pilih Jenis Kelamin</option>
-                            <option value="Laki-Laki"
-                                {{ old('jenis_kelamin', $student->jenis_kelamin) === 'Laki-Laki' ? 'selected' : '' }}>
-                                Laki-Laki
+                            <option value="">Pilih Status</option>
+                            <option value="Publish"
+                                {{ old('status', $news->status ?? '') === 'Publish' ? 'selected' : '' }}>
+                                Publish
                             </option>
-                            <option value="Perempuan"
-                                {{ old('jenis_kelamin', $student->jenis_kelamin) === 'Perempuan' ? 'selected' : '' }}>
-                                Perempuan
+                            <option value="Draft"
+                                {{ old('status', $news->status ?? '') === 'Draft' ? 'selected' : '' }}>
+                                Draft
                             </option>
                         </select>
-                        @error('jenis_kelamin')
+                        @error('status')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                    </div>
-
-                    {{-- Tahun Masuk --}}
-                    <div class="col-md-6 mb-4">
-                        <label for="tahun_masuk" class="form-label">
-                            Tahun Masuk <span class="req">*</span>
-                        </label>
-                        <input type="number"
-                               id="tahun_masuk"
-                               name="tahun_masuk"
-                               class="form-control @error('tahun_masuk') is-invalid @enderror"
-                               value="{{ old('tahun_masuk', $student->tahun_masuk) }}"
-                               min="1900"
-                               max="{{ date('Y') }}"
-                               placeholder="Contoh: {{ date('Y') }}"
-                               required>
-                        @error('tahun_masuk')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <small class="form-hint">Masukkan tahun dalam format 4 digit.</small>
+                        <small class="form-hint">Publish = tampil, Draft = simpan sementara.</small>
                     </div>
 
                 </div>
 
+                {{-- SECTION: NEWS CONTENT --}}
+                <div class="section-title mt-2">
+                    <i class="fas fa-align-left"></i>Isi Berita
+                </div>
+                <hr class="section-divider">
+
+                <div class="mb-4">
+                    <label for="isi" class="form-label">
+                        Isi Berita <span class="req">*</span>
+                    </label>
+                    <textarea id="isi"
+                              name="isi"
+                              class="form-control @error('isi') is-invalid @enderror"
+                              rows="8"
+                              placeholder="Tulis isi berita di sini..."
+                              required>{{ old('isi', $news->isi ?? '') }}</textarea>
+                    @error('isi')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                {{-- SECTION: NEWS IMAGE --}}
+                <div class="section-title mt-2">
+                    <i class="fas fa-image"></i>Gambar Berita
+                </div>
+                <hr class="section-divider">
+
+                <div class="mb-4">
+                    <label for="gambar" class="form-label">
+                        Gambar <span class="opt">(Opsional)</span>
+                    </label>
+                    <input type="file"
+                           id="gambar"
+                           name="gambar"
+                           class="form-control @error('gambar') is-invalid @enderror"
+                           accept=".jpg,.jpeg,.png,.webp">
+                    @error('gambar')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                    <small class="form-hint">
+                        Format JPG, JPEG, PNG, WEBP. Ukuran maksimal 2 MB.
+                        @if ($isEdit)
+                            Kosongkan jika tidak ingin mengganti gambar.
+                        @endif
+                    </small>
+
+                    {{-- Gambar saat ini --}}
+                    @if ($isEdit && $news->gambar)
+                        <div class="photo-wrapper">
+                            <span class="photo-label">Gambar saat ini:</span>
+                            <img src="{{ asset('storage/' . $news->gambar) }}"
+                                 alt="{{ $news->judul }}"
+                                 class="photo-preview-box">
+                        </div>
+                    @endif
+
+                    {{-- Preview gambar baru --}}
+                    <div id="previewWrapper" class="preview-wrapper">
+                        <span class="photo-label">Preview gambar baru:</span>
+                        <img id="previewPhoto"
+                             src=""
+                             alt="Preview gambar"
+                             class="photo-preview-box new">
+                    </div>
+                </div>
+
                 {{-- ACTION BAR --}}
                 <div class="action-bar">
-                    <a href="{{ route('admin.siswa') }}" class="btn btn-cancel">
+                    <a href="{{ route('admin.news.index') }}" class="btn btn-cancel">
                         <i class="fas fa-times me-2"></i>Batal
                     </a>
                     <button type="submit" class="btn btn-save">
                         <i class="fas fa-save me-2"></i>
-                        {{ $isEdit ? 'Simpan Perubahan' : 'Simpan Data' }}
+                        {{ $isEdit ? 'Simpan Perubahan' : 'Simpan Berita' }}
                     </button>
                 </div>
 
@@ -508,19 +593,45 @@
 
 </div>
 
-{{-- FALLBACK CLOSE ALERT --}}
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll("[data-alert-close]").forEach(function (btn) {
-        btn.addEventListener("click", function (e) {
+
+    /* ============ IMAGE PREVIEW ============ */
+    const fotoInput      = document.getElementById('gambar');
+    const previewWrapper = document.getElementById('previewWrapper');
+    const previewPhoto   = document.getElementById('previewPhoto');
+
+    if (fotoInput && previewWrapper && previewPhoto) {
+        fotoInput.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+
+            if (!file || !file.type.startsWith('image/')) {
+                previewWrapper.style.display = 'none';
+                previewPhoto.src = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                previewPhoto.src = e.target.result;
+                previewWrapper.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    /* ============ FALLBACK CLOSE ALERT ============ */
+    document.querySelectorAll('[data-alert-close]').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
             e.preventDefault();
-            const box = btn.closest("[data-alert]");
+            const box = btn.closest('[data-alert]');
             if (!box) return;
-            box.style.transition = "opacity .2s ease";
-            box.style.opacity = "0";
+            box.style.transition = 'opacity .2s ease';
+            box.style.opacity = '0';
             setTimeout(() => box.remove(), 200);
         });
     });
+
 });
 </script>
 

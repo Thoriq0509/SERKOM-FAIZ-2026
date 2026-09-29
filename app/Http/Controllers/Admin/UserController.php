@@ -7,235 +7,173 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
     /**
-     * Menampilkan daftar semua pengguna sistem.
+     * Tampilkan daftar pengguna.
      */
     public function index()
     {
         $users = User::orderByDesc('id_user')->get();
 
-        return view(
-            'admin.users.index',
-            compact('users')
-        );
+        return view('admin.users.index', compact('users'));
     }
 
     /**
-     * Menampilkan form tambah atau edit pengguna.
+     * Form tambah / edit pengguna.
      */
     public function addEdit($id = null)
     {
-        try {
-            $user = null;
+        $user = $id ? $this->findUser($id) : null;
 
-            // Jika ada ID, berarti mode edit.
-            if ($id) {
-                $decryptedId = Crypt::decryptString($id);
-
-                $user = User::where(
-                    'id_user',
-                    $decryptedId
-                )->firstOrFail();
-            }
-
-            return view(
-                'admin.user.form',
-                compact('user')
-            );
-
-        } catch (\Exception $e) {
-            return redirect()
-                ->route('admin.users.index')
-                ->with(
-                    'error',
-                    'Data pengguna tidak ditemukan.'
-                );
+        if ($id && ! $user) {
+            return $this->backWithError('Data pengguna tidak ditemukan.');
         }
+
+        return view('admin.users.form', compact('user'));
     }
 
     /**
-     * Menyimpan data baru atau mengubah data pengguna.
+     * Simpan data baru / ubah data pengguna.
      */
     public function save(Request $request, $id = null)
     {
-        $userId = null;
+        $user = $id ? $this->findUser($id) : new User();
 
-        // ==========================================
-        // AMBIL DATA USER SAAT EDIT
-        // ==========================================
-        if ($id) {
-            try {
-                $userId = Crypt::decryptString($id);
-
-                $user = User::where(
-                    'id_user',
-                    $userId
-                )->firstOrFail();
-
-            } catch (\Exception $e) {
-                return redirect()
-                    ->route('admin.users.index')
-                    ->with(
-                        'error',
-                        'Data pengguna tidak ditemukan.'
-                    );
-            }
-        } else {
-            // ==========================================
-            // TAMBAH USER BARU
-            // ==========================================
-            $user = new User();
+        if ($id && ! $user) {
+            return $this->backWithError('Data pengguna tidak ditemukan.');
         }
 
-        // ==========================================
-        // VALIDASI
-        // ==========================================
-        $request->validate([
-            'username' => [
-                'required',
-                'string',
-                'max:30',
-                Rule::unique('users', 'username')
-                    ->ignore($userId, 'id_user'),
-            ],
-
-            'role' => [
-                'required',
-                Rule::in([
-                    'Admin',
-                    'Operator',
-                ]),
-            ],
-
-            'password' => $userId
-                ? 'nullable|string|min:6'
-                : 'required|string|min:6',
-
-        ], [
-            'username.required' => 'Username wajib diisi.',
-            'username.max' => 'Username maksimal 30 karakter.',
-            'username.unique' => 'Username sudah digunakan.',
-
-            'role.required' => 'Role pengguna wajib dipilih.',
-            'role.in' => 'Role hanya boleh Admin atau Operator.',
-
-            'password.required' => 'Password wajib diisi.',
-            'password.min' => 'Password minimal 6 karakter.',
-        ]);
-
-        // ==========================================
-        // SIMPAN USERNAME
-        // ==========================================
-        $user->username = $request->username;
-
-        // ==========================================
-        // SIMPAN ROLE
-        // ==========================================
-        $user->role = ucfirst(
-            strtolower($request->role)
+        $validated = $request->validate(
+            $this->rules($user->id_user ?? null),
+            $this->messages()
         );
 
-        // ==========================================
-        // SIMPAN PASSWORD
-        // ==========================================
-        if ($request->filled('password')) {
-            $user->password = Hash::make(
-                $request->password
-            );
+        $user->username = $validated['username'];
+        $user->role     = $validated['role'];
+
+        // Password hanya diubah kalau diisi
+        if (! empty($validated['password'])) {
+            $user->password = $validated['password'];
         }
 
-        // ==========================================
-        // SIMPAN KE DATABASE
-        // ==========================================
         $user->save();
 
         return redirect()
             ->route('admin.users.index')
             ->with(
                 'success',
-                $userId
+                $id
                     ? 'Data pengguna berhasil diperbarui.'
                     : 'Data pengguna berhasil ditambahkan.'
             );
     }
 
     /**
-     * Menampilkan detail pengguna.
+     * Detail pengguna.
      */
     public function show($id)
     {
-        try {
-            $decryptedId = Crypt::decryptString($id);
+        $user = $this->findUser($id);
 
-            $user = User::where(
-                'id_user',
-                $decryptedId
-            )->firstOrFail();
-
-        } catch (\Exception $e) {
-            return redirect()
-                ->route('admin.users.index')
-                ->with(
-                    'error',
-                    'Data pengguna tidak ditemukan.'
-                );
+        if (! $user) {
+            return $this->backWithError('Data pengguna tidak ditemukan.');
         }
 
-        return view(
-            'admin.user.show',
-            compact('user')
-        );
+        return view('admin.users.show', compact('user'));
     }
 
     /**
-     * Menghapus pengguna.
+     * Hapus pengguna.
      */
     public function destroy($id)
     {
-        try {
-            $decryptedId = Crypt::decryptString($id);
+        $user = $this->findUser($id);
 
-            $user = User::where(
-                'id_user',
-                $decryptedId
-            )->firstOrFail();
-
-        } catch (\Exception $e) {
-            return redirect()
-                ->route('admin.users.index')
-                ->with(
-                    'error',
-                    'Data pengguna tidak ditemukan.'
-                );
+        if (! $user) {
+            return $this->backWithError('Data pengguna tidak ditemukan.');
         }
 
-        // ==========================================
-        // JANGAN HAPUS AKUN YANG SEDANG LOGIN
-        // ==========================================
+        // Cegah hapus akun sendiri
         if ((int) $user->id_user === (int) Auth::id()) {
-            return redirect()
-                ->route('admin.users.index')
-                ->with(
-                    'error',
-                    'Anda tidak dapat menghapus akun Anda sendiri.'
-                );
+            return $this->backWithError('Anda tidak dapat menghapus akun Anda sendiri.');
         }
 
-        // ==========================================
-        // HAPUS USER
-        // ==========================================
         $user->delete();
 
         return redirect()
             ->route('admin.users.index')
-            ->with(
-                'success',
-                'Data pengguna berhasil dihapus.'
-            );
+            ->with('success', 'Data pengguna berhasil dihapus.');
+    }
+
+    /* =====================================================
+     |  HELPER
+     ===================================================== */
+
+    /**
+     * Cari user berdasarkan encrypted ID.
+     * Return null kalau gagal.
+     */
+    private function findUser(string $encryptedId): ?User
+    {
+        try {
+            $id = Crypt::decryptString($encryptedId);
+
+            return User::where('id_user', $id)->first();
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Redirect ke index dengan pesan error.
+     */
+    private function backWithError(string $message)
+    {
+        return redirect()
+            ->route('admin.users.index')
+            ->with('error', $message);
+    }
+
+    /**
+     * Aturan validasi.
+     */
+    private function rules(?int $userId): array
+    {
+        return [
+            'username' => [
+                'required',
+                'string',
+                'max:30',
+                Rule::unique('users', 'username')->ignore($userId, 'id_user'),
+            ],
+            'role' => [
+                'required',
+                Rule::in(['Admin', 'Operator']),
+            ],
+            'password' => $userId
+                ? ['nullable', 'string', 'min:6']
+                : ['required', 'string', 'min:6'],
+        ];
+    }
+
+    /**
+     * Pesan validasi custom.
+     */
+    private function messages(): array
+    {
+        return [
+            'username.required' => 'Username wajib diisi.',
+            'username.max'      => 'Username maksimal 30 karakter.',
+            'username.unique'   => 'Username sudah digunakan.',
+
+            'role.required' => 'Role pengguna wajib dipilih.',
+            'role.in'       => 'Role hanya boleh Admin atau Operator.',
+
+            'password.required' => 'Password wajib diisi.',
+            'password.min'      => 'Password minimal 6 karakter.',
+        ];
     }
 }

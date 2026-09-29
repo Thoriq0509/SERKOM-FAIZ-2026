@@ -3,7 +3,7 @@
 @section('content')
 
 @php
-    $encryptedId = \Illuminate\Support\Facades\Crypt::encryptString($teacher->id);
+    $encryptedId = \Illuminate\Support\Facades\Crypt::encryptString($gallery->id);
 @endphp
 
 <style>
@@ -18,7 +18,7 @@
     }
 
     /* =========================
-       HEADER HALAMAN
+       PAGE HEADER
     ========================== */
     .page-title {
         font-family: 'Poppins', sans-serif;
@@ -111,40 +111,24 @@
        HERO HEADER
     ========================== */
     .hero-head {
-        padding: 24px 26px;
+        padding: 22px 26px;
         border-bottom: 1px solid var(--c-border);
         background-color: #fff;
         display: flex;
         align-items: center;
-        gap: 18px;
+        gap: 16px;
+        flex-wrap: wrap;
     }
 
-    .hero-photo,
-    .hero-photo-placeholder {
-        width: 72px;
-        height: 72px;
-        border-radius: 12px;
-        object-fit: cover;
-        flex-shrink: 0;
-        border: 1px solid var(--c-border);
-    }
+    .hero-info { min-width: 0; flex: 1; }
 
-    .hero-photo-placeholder {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background-color: var(--c-soft);
-        color: var(--c-text-soft);
-        font-size: 1.8rem;
-    }
-
-    .hero-info { min-width: 0; }
-
-    .hero-name {
+    .hero-title {
         font-size: 1.15rem;
         font-weight: 600;
         color: var(--c-primary-d);
-        margin: 0 0 6px;
+        margin: 0 0 8px;
+        line-height: 1.4;
+        word-break: break-word;
     }
 
     .hero-badges {
@@ -154,10 +138,36 @@
         align-items: center;
     }
 
-    .badge-mapel {
+    /* =========================
+       BADGE KATEGORI
+    ========================== */
+    .badge-cat {
         font-size: .75rem;
         font-weight: 500;
-        padding: 4px 12px;
+        padding: 5px 12px;
+        border-radius: 20px;
+        border: 1px solid;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .badge-cat.photo {
+        background-color: #ecfeff;
+        border-color: #a5f3fc;
+        color: #0e7490;
+    }
+
+    .badge-cat.video {
+        background-color: #fdf2f8;
+        border-color: #fbcfe8;
+        color: #be185d;
+    }
+
+    .badge-info {
+        font-size: .75rem;
+        font-weight: 500;
+        padding: 5px 12px;
         border-radius: 20px;
         background-color: var(--c-soft);
         border: 1px solid var(--c-border);
@@ -165,12 +175,6 @@
         display: inline-flex;
         align-items: center;
         gap: 5px;
-    }
-
-    .badge-mapel.empty {
-        background-color: #fff;
-        color: var(--c-text-soft);
-        font-style: italic;
     }
 
     /* =========================
@@ -204,6 +208,71 @@
         border: 0;
         border-top: 1px solid var(--c-border);
         margin: 4px 0 20px;
+    }
+
+    /* =========================
+       MEDIA VIEW
+    ========================== */
+    .media-view {
+        border: 1px solid var(--c-border);
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: var(--c-bg);
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 220px;
+        max-height: 480px;
+    }
+
+    .media-view img {
+        max-width: 100%;
+        max-height: 480px;
+        object-fit: contain;
+        display: block;
+    }
+
+    .media-empty {
+        padding: 60px 20px;
+        text-align: center;
+        color: var(--c-text-soft);
+        background-color: var(--c-bg);
+        border: 1px dashed var(--c-border);
+        border-radius: 10px;
+        margin-bottom: 24px;
+    }
+
+    .media-empty i {
+        font-size: 2rem;
+        color: #cbd5e1;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .media-empty span {
+        font-size: .85rem;
+    }
+
+    /* =========================
+       DESCRIPTION
+    ========================== */
+    .gallery-desc {
+        color: var(--c-text);
+        font-size: .95rem;
+        line-height: 1.75;
+        white-space: pre-wrap;
+        word-break: break-word;
+        margin-bottom: 28px;
+        padding: 16px 20px;
+        background-color: var(--c-bg);
+        border: 1px solid var(--c-border);
+        border-radius: 8px;
+    }
+
+    .gallery-desc.empty {
+        color: var(--c-text-soft);
+        font-style: italic;
     }
 
     /* =========================
@@ -260,30 +329,6 @@
         font-weight: 400;
         font-style: italic;
         font-size: .86rem;
-    }
-
-    /* Status foto */
-    .status-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        font-size: .78rem;
-        font-weight: 500;
-        padding: 4px 12px;
-        border-radius: 20px;
-        border: 1px solid;
-    }
-
-    .status-pill.ok {
-        background-color: #f0fdf4;
-        border-color: #bbf7d0;
-        color: #166534;
-    }
-
-    .status-pill.no {
-        background-color: #fff;
-        border-color: var(--c-border);
-        color: var(--c-text-soft);
     }
 
     /* =========================
@@ -373,17 +418,9 @@
     @media (max-width: 576px) {
         .hero-head {
             padding: 18px 16px;
-            gap: 14px;
         }
 
-        .hero-photo,
-        .hero-photo-placeholder {
-            width: 60px;
-            height: 60px;
-            font-size: 1.5rem;
-        }
-
-        .hero-name { font-size: 1rem; }
+        .hero-title { font-size: 1rem; }
 
         .card-body-clean { padding: 20px 16px; }
 
@@ -404,14 +441,14 @@
 
 <div class="container-fluid p-0">
 
-    {{-- HEADER HALAMAN --}}
+    {{-- PAGE HEADER --}}
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
         <div>
-            <h2 class="page-title">Detail Guru</h2>
-            <p class="page-subtitle">Informasi lengkap tenaga pendidik.</p>
+            <h2 class="page-title">Detail Media Galeri</h2>
+            <p class="page-subtitle">Informasi lengkap media galeri sekolah.</p>
         </div>
 
-        <a href="{{ route('admin.guru') }}" class="btn btn-back">
+        <a href="{{ route('admin.gallery.index') }}" class="btn btn-back">
             <i class="fas fa-arrow-left me-2"></i>Kembali
         </a>
     </div>
@@ -438,39 +475,33 @@
         </div>
     @endif
 
-    {{-- CARD DETAIL --}}
+    {{-- DETAIL CARD --}}
     <div class="card-clean mb-5">
 
         {{-- HERO HEADER --}}
         <div class="hero-head">
-            @if ($teacher->foto)
-                <img src="{{ asset('storage/' . $teacher->foto) }}"
-                     alt="Foto {{ $teacher->nama_guru }}"
-                     class="hero-photo">
-            @else
-                <div class="hero-photo-placeholder">
-                    <i class="fas fa-user-tie"></i>
-                </div>
-            @endif
-
             <div class="hero-info">
-                <h4 class="hero-name">{{ $teacher->nama_guru }}</h4>
+                <h4 class="hero-title">{{ $gallery->judul }}</h4>
                 <div class="hero-badges">
-                    @if ($teacher->mapel)
-                        <span class="badge-mapel">
-                            <i class="fas fa-book-open"></i>{{ $teacher->mapel }}
+                    @if ($gallery->kategori === 'Foto')
+                        <span class="badge-cat photo">
+                            <i class="fas fa-camera"></i>Foto
+                        </span>
+                    @elseif ($gallery->kategori === 'Video')
+                        <span class="badge-cat video">
+                            <i class="fas fa-video"></i>Video
                         </span>
                     @else
-                        <span class="badge-mapel empty">
-                            <i class="fas fa-book-open"></i>Mata pelajaran belum diisi
-                        </span>
+                        <span class="badge-info">{{ $gallery->kategori ?: 'Lainnya' }}</span>
                     @endif
 
-                    @if ($teacher->nip)
-                        <span class="badge-mapel">
-                            <i class="fas fa-id-badge"></i>NIP: {{ $teacher->nip }}
-                        </span>
-                    @endif
+                    <span class="badge-info">
+                        <i class="far fa-calendar"></i>
+                        {{ $gallery->tanggal
+                            ? $gallery->tanggal->translatedFormat('d F Y')
+                            : '-'
+                        }}
+                    </span>
                 </div>
             </div>
         </div>
@@ -478,57 +509,32 @@
         {{-- BODY --}}
         <div class="card-body-clean">
 
-            {{-- SECTION: DATA GURU --}}
+            {{-- MEDIA --}}
+            @if ($gallery->gambar)
+                <div class="media-view">
+                    <img src="{{ asset('storage/' . $gallery->gambar) }}"
+                         alt="{{ $gallery->judul }}">
+                </div>
+            @else
+                <div class="media-empty">
+                    <i class="fas fa-image"></i>
+                    <span>Belum ada file media untuk galeri ini.</span>
+                </div>
+            @endif
+
+            {{-- KETERANGAN --}}
             <div class="section-title">
-                <i class="fas fa-id-card"></i>Data Guru
+                <i class="fas fa-align-left"></i>Keterangan
             </div>
             <hr class="section-divider">
 
-            <div class="detail-grid">
-                <div class="detail-item">
-                    <div class="detail-label">Nama Guru</div>
-                    <div class="detail-value">{{ $teacher->nama_guru }}</div>
-                </div>
+            @if ($gallery->keterangan)
+                <div class="gallery-desc">{{ $gallery->keterangan }}</div>
+            @else
+                <div class="gallery-desc empty">Belum ada keterangan untuk media ini.</div>
+            @endif
 
-                <div class="detail-item">
-                    <div class="detail-label">NIP</div>
-                    <div class="detail-value mono">
-                        @if ($teacher->nip)
-                            {{ $teacher->nip }}
-                        @else
-                            <span class="empty-value">NIP belum diisi</span>
-                        @endif
-                    </div>
-                </div>
-
-                <div class="detail-item">
-                    <div class="detail-label">Mata Pelajaran</div>
-                    <div class="detail-value">
-                        @if ($teacher->mapel)
-                            {{ $teacher->mapel }}
-                        @else
-                            <span class="empty-value">Mata pelajaran belum diisi</span>
-                        @endif
-                    </div>
-                </div>
-
-                <div class="detail-item">
-                    <div class="detail-label">Foto Guru</div>
-                    <div class="detail-value">
-                        @if ($teacher->foto)
-                            <span class="status-pill ok">
-                                <i class="fas fa-check-circle"></i>Sudah tersedia
-                            </span>
-                        @else
-                            <span class="status-pill no">
-                                <i class="fas fa-circle-minus"></i>Belum ada foto
-                            </span>
-                        @endif
-                    </div>
-                </div>
-            </div>
-
-            {{-- SECTION: INFORMASI DATA --}}
+            {{-- INFORMASI DATA --}}
             <div class="section-title">
                 <i class="fas fa-database"></i>Informasi Data
             </div>
@@ -537,45 +543,69 @@
             <div class="detail-grid">
                 <div class="detail-item">
                     <div class="detail-label">ID Data</div>
-                    <div class="detail-value mono">#{{ $teacher->id }}</div>
+                    <div class="detail-value mono">#{{ $gallery->id }}</div>
                 </div>
 
                 <div class="detail-item">
-                    <div class="detail-label">Tanggal Ditambahkan</div>
+                    <div class="detail-label">Judul</div>
+                    <div class="detail-value">{{ $gallery->judul }}</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Kategori</div>
                     <div class="detail-value">
-                        {{ $teacher->created_at
-                            ? $teacher->created_at->translatedFormat('d F Y, H:i')
-                            : '-' }}
+                        {{ $gallery->kategori ?: 'Lainnya' }}
                     </div>
                 </div>
 
-                <div class="detail-item" style="grid-column: 1 / -1;">
+                <div class="detail-item">
+                    <div class="detail-label">Tanggal</div>
+                    <div class="detail-value">
+                        {{ $gallery->tanggal
+                            ? $gallery->tanggal->translatedFormat('d F Y')
+                            : '-'
+                        }}
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Ditambahkan</div>
+                    <div class="detail-value">
+                        {{ $gallery->created_at
+                            ? $gallery->created_at->translatedFormat('d F Y, H:i')
+                            : '-'
+                        }}
+                    </div>
+                </div>
+
+                <div class="detail-item">
                     <div class="detail-label">Terakhir Diperbarui</div>
                     <div class="detail-value">
-                        {{ $teacher->updated_at
-                            ? $teacher->updated_at->translatedFormat('d F Y, H:i')
-                            : '-' }}
+                        {{ $gallery->updated_at
+                            ? $gallery->updated_at->translatedFormat('d F Y, H:i')
+                            : '-'
+                        }}
                     </div>
                 </div>
             </div>
 
             {{-- ACTION BAR --}}
             <div class="action-bar">
-                <a href="{{ route('admin.guru') }}" class="btn btn-cancel">
+                <a href="{{ route('admin.gallery.index') }}" class="btn btn-cancel">
                     <i class="fas fa-arrow-left me-2"></i>Kembali
                 </a>
 
-                <a href="{{ route('admin.guru.edit', $encryptedId) }}" class="btn btn-primary-soft">
-                    <i class="fas fa-edit me-2"></i>Edit Data
+                <a href="{{ route('admin.gallery.edit', $encryptedId) }}" class="btn btn-primary-soft">
+                    <i class="fas fa-edit me-2"></i>Edit Media
                 </a>
 
-                <form action="{{ route('admin.guru.destroy', $encryptedId) }}"
+                <form action="{{ route('admin.gallery.destroy', $encryptedId) }}"
                       method="POST"
-                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus data {{ $teacher->nama_guru }}? Data yang sudah dihapus tidak dapat dikembalikan.');">
+                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus media galeri {{ $gallery->judul }}? Data yang sudah dihapus tidak dapat dikembalikan.');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger-soft">
-                        <i class="fas fa-trash-alt me-2"></i>Hapus Data
+                        <i class="fas fa-trash-alt me-2"></i>Hapus Media
                     </button>
                 </form>
             </div>

@@ -3,537 +3,383 @@
 @section('content')
 
 <style>
-    /* ================================
-       DASHBOARD
-    ================================ */
+    :root {
+        --c-primary:   #334155;
+        --c-primary-d: #1e293b;
+        --c-soft:      #f1f5f9;
+        --c-border:    #e2e8f0;
+        --c-text:      #334155;
+        --c-text-soft: #64748b;
+        --c-bg:        #f8fafc;
+    }
 
+    /* =========================
+       PROFILE CARD
+    ========================== */
     .dashboard-profile {
-        background-color: #273b69;
-        border-radius: 20px;
-        color: #ffffff;
-        padding: 35px 30px;
-        box-shadow: 0 10px 25px rgba(39, 59, 105, 0.15);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .dashboard-profile::before {
-        content: "";
-        position: absolute;
-        width: 180px;
-        height: 180px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.04);
-        right: -60px;
-        top: -70px;
-    }
-
-    .dashboard-profile::after {
-        content: "";
-        position: absolute;
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.03);
-        right: 80px;
-        bottom: -60px;
-    }
-
-    .dashboard-profile-content {
-        position: relative;
-        z-index: 2;
+        background: #fff;
+        border: 1px solid var(--c-border);
+        border-left: 4px solid var(--c-primary);
+        border-radius: 10px;
+        padding: 26px 28px;
+        box-shadow: 0 1px 2px rgba(15,23,42,.04);
     }
 
     .dashboard-profile h2 {
         font-family: 'Poppins', sans-serif;
-        font-weight: 700;
-        margin-bottom: 10px;
+        font-size: 1.35rem;
+        font-weight: 600;
+        color: var(--c-primary-d);
+        margin-bottom: 8px;
     }
 
     .dashboard-profile p {
-        margin-bottom: 0;
-        line-height: 1.7;
+        color: var(--c-text-soft);
+        font-size: .875rem;
+        line-height: 1.6;
+        margin: 0;
     }
 
-    .dashboard-profile-button {
-        background-color: #ffffff;
-        color: #273b69;
-        border: none;
-        border-radius: 50px;
-        padding: 11px 20px;
-        font-weight: 600;
-        text-decoration: none;
+    .npsn-badge {
         display: inline-flex;
         align-items: center;
-        transition: all 0.2s ease;
+        gap: 6px;
+        background-color: var(--c-soft);
+        border: 1px solid var(--c-border);
+        color: var(--c-text);
+        font-size: .78rem;
+        font-weight: 500;
+        padding: 5px 12px;
+        border-radius: 20px;
+        margin-top: 12px;
     }
 
-    .dashboard-profile-button:hover {
-        background-color: #f1f5f9;
-        color: #273b69;
-        transform: translateY(-2px);
+    .btn-edit-profile {
+        background-color: var(--c-primary);
+        border: 1px solid var(--c-primary);
+        color: #fff;
+        font-size: .875rem;
+        font-weight: 500;
+        padding: 9px 22px;
+        border-radius: 8px;
+        transition: all .15s ease;
     }
 
-    /* ================================
-       STAT CARD
-    ================================ */
+    .btn-edit-profile:hover {
+        background-color: var(--c-primary-d);
+        border-color: var(--c-primary-d);
+        color: #fff;
+    }
 
+    /* =========================
+       STAT BOX
+    ========================== */
     .stat-box {
-        border-radius: 18px;
-        padding: 25px 20px;
-        color: #ffffff;
+        position: relative;
+        background: #fff;
+        border: 1px solid var(--c-border);
+        border-radius: 10px;
+        padding: 22px 15px;
         text-align: center;
-        min-height: 185px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
-        transition: all 0.25s ease;
+        min-height: 130px;
+        box-shadow: 0 1px 2px rgba(15,23,42,.04);
+        transition: transform .15s ease, box-shadow .15s ease;
     }
 
     .stat-box:hover {
-        transform: translateY(-5px);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(15,23,42,.08);
     }
 
-    .stat-icon {
-        width: 55px;
-        height: 55px;
-        border-radius: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(255, 255, 255, 0.15);
-        margin-bottom: 12px;
+    .stat-box::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .stat-box .stat-icon {
         font-size: 1.4rem;
+        margin-bottom: 6px;
+        display: block;
     }
 
     .stat-box h3 {
-        font-size: 2.5rem;
+        margin: 8px 0 4px;
+        font-size: 1.9rem;
         font-weight: 700;
-        margin-bottom: 4px;
-        font-family: 'Poppins', sans-serif;
+        color: var(--c-primary-d);
+        line-height: 1;
     }
 
     .stat-box p {
-        font-size: 0.9rem;
-        font-weight: 600;
         margin: 0;
+        color: var(--c-text-soft);
+        font-size: .72rem;
+        font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.7px;
+        letter-spacing: .5px;
     }
 
-    .box-blue {
-        background-color: #2563eb;
-    }
+    /* Warna aksen per stat */
+    .stat-users::before   { background: #334155; }
+    .stat-users .stat-icon   { color: #334155; }
 
-    .box-red {
-        background-color: #dc2626;
-    }
+    .stat-teachers::before { background: #2f6b5f; }
+    .stat-teachers .stat-icon { color: #2f6b5f; }
 
-    .box-yellow {
-        background-color: #eab308;
-        color: #1e293b;
-    }
+    .stat-students::before { background: #8a6d1d; }
+    .stat-students .stat-icon { color: #8a6d1d; }
 
-    .box-green {
-        background-color: #16a34a;
-    }
+    .stat-ekskul::before   { background: #527047; }
+    .stat-ekskul .stat-icon   { color: #527047; }
 
-    .box-purple {
-        background-color: #7c3aed;
-    }
+    .stat-news::before     { background: #75434d; }
+    .stat-news .stat-icon     { color: #75434d; }
 
-    .box-orange {
-        background-color: #ea580c;
-    }
+    .stat-gallery::before  { background: #49677f; }
+    .stat-gallery .stat-icon  { color: #49677f; }
 
-    /* ================================
-       TABLE CARD
-    ================================ */
-
-    .table-card {
-        background-color: #ffffff;
-        border-radius: 20px;
-        border: none;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    /* =========================
+       CARD UMUM
+    ========================== */
+    .card-clean {
+        background-color: #fff;
+        border: 1px solid var(--c-border);
+        border-radius: 10px;
+        box-shadow: 0 1px 2px rgba(15,23,42,.04);
         overflow: hidden;
     }
 
-    .table-card .card-header {
-        background-color: #273b69;
-        color: #ffffff;
-        padding: 18px 22px;
-        border: none;
-        font-family: 'Poppins', sans-serif;
+    .card-clean .card-head {
+        padding: 14px 22px;
+        border-bottom: 1px solid var(--c-border);
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        gap: 10px;
     }
 
-    /* ================================
+    .card-clean .card-head h6 {
+        margin: 0;
+        font-size: .92rem;
+        font-weight: 600;
+        color: var(--c-primary-d);
+    }
+
+    .card-clean .card-head i {
+        color: var(--c-primary);
+        font-size: .9rem;
+    }
+
+    /* =========================
+       QUICK ACCESS
+    ========================== */
+    .quick-access-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        min-height: 90px;
+        padding: 14px 10px;
+        background: #fff;
+        border: 1px solid var(--c-border);
+        border-radius: 8px;
+        color: var(--c-text);
+        font-size: .82rem;
+        font-weight: 500;
+        text-decoration: none;
+        text-align: center;
+        transition: all .15s ease;
+    }
+
+    .quick-access-item i {
+        font-size: 1.3rem;
+        color: var(--c-primary);
+        transition: color .15s ease;
+    }
+
+    .quick-access-item:hover {
+        background: var(--c-bg);
+        border-color: #cbd5e1;
+        color: var(--c-primary-d);
+        transform: translateY(-2px);
+    }
+
+    .quick-access-item:hover i {
+        color: var(--c-primary-d);
+    }
+
+    /* =========================
        RESPONSIVE
-    ================================ */
-
+    ========================== */
     @media (max-width: 767.98px) {
-
         .dashboard-profile {
-            padding: 25px 20px;
+            padding: 20px 18px;
         }
 
         .dashboard-profile h2 {
-            font-size: 1.5rem;
+            font-size: 1.15rem;
+        }
+
+        .btn-edit-profile {
+            width: 100%;
         }
 
         .stat-box {
-            min-height: 160px;
+            min-height: 115px;
+            padding: 18px 12px;
         }
 
         .stat-box h3 {
-            font-size: 2.2rem;
-        }
-
-        .table-card .card-header {
-            padding: 15px;
+            font-size: 1.6rem;
         }
     }
 </style>
 
-
 <div class="container-fluid p-0">
 
-    <!-- ================================
-         HEADER / PROFIL SEKOLAH
-    ================================ -->
+    {{-- PROFILE HEADER --}}
     <div class="dashboard-profile mb-4">
+        <div class="row align-items-center g-3">
+            <div class="col-lg-8">
+                <h2>{{ $profilSekolah->nama_sekolah ?? 'Nama Sekolah' }}</h2>
 
-        <div class="dashboard-profile-content">
+                <p>
+                    Selamat datang di halaman dashboard admin.
+                    Pantau data sekolah, pengelola, guru, siswa,
+                    ekstrakurikuler, berita, dan galeri dari satu tempat.
+                </p>
 
-            <div class="row align-items-center">
-
-                <div class="col-lg-8">
-
-                    <h2>
-                        {{ $profilSekolah->nama_sekolah ?? 'Nama Sekolah' }}
-                    </h2>
-
-                    <p class="text-white opacity-75">
-                        Selamat datang di halaman dashboard admin.
-                        Pantau data sekolah, pengelola, guru, siswa,
-                        ekstrakurikuler, berita, dan galeri dari satu tempat.
-                    </p>
-
-                    @if($profilSekolah && $profilSekolah->npsn)
-
-                        <div class="mt-3">
-
-                            <span class="badge bg-light text-dark rounded-pill px-3 py-2">
-                                <i class="fas fa-id-card me-1"></i>
-                                NPSN: {{ $profilSekolah->npsn }}
-                            </span>
-
-                        </div>
-
-                    @endif
-
-                </div>
-
-
-                <div class="col-lg-4 text-lg-end text-start mt-4 mt-lg-0">
-
-                    <a
-                        href="{{ route('admin.school_profile.edit') }}"
-                        class="dashboard-profile-button"
-                    >
-
-                        <i class="fas fa-edit me-2"></i>
-                        Edit Profil
-
-                    </a>
-
-                </div>
-
+                @if ($profilSekolah && $profilSekolah->npsn)
+                    <div class="npsn-badge">
+                        <i class="fas fa-id-card"></i>NPSN: {{ $profilSekolah->npsn }}
+                    </div>
+                @endif
             </div>
 
+            <div class="col-lg-4 text-lg-end">
+                <a href="{{ route('admin.school_profile.edit') }}" class="btn btn-edit-profile">
+                    <i class="fas fa-edit me-2"></i>Edit Profil
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {{-- STATISTIK --}}
+    <div class="row g-3 mb-4">
+
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="stat-box stat-users">
+                <i class="fas fa-user-gear stat-icon"></i>
+                <h3>{{ $totalPengelola }}</h3>
+                <p>Pengelola</p>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="stat-box stat-teachers">
+                <i class="fas fa-chalkboard stat-icon"></i>
+                <h3>{{ $totalGuru }}</h3>
+                <p>Guru</p>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="stat-box stat-students">
+                <i class="fas fa-user-graduate stat-icon"></i>
+                <h3>{{ $totalSiswa }}</h3>
+                <p>Siswa</p>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="stat-box stat-ekskul">
+                <i class="fas fa-people-group stat-icon"></i>
+                <h3>{{ $totalEkstrakurikuler }}</h3>
+                <p>Ekskul</p>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="stat-box stat-news">
+                <i class="fas fa-newspaper stat-icon"></i>
+                <h3>{{ $totalBerita }}</h3>
+                <p>News</p>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="stat-box stat-gallery">
+                <i class="fas fa-images stat-icon"></i>
+                <h3>{{ $totalGaleri }}</h3>
+                <p>Galeri</p>
+            </div>
         </div>
 
     </div>
 
+    {{-- AKSES CEPAT --}}
+    <div class="card-clean mb-5">
 
-    <!-- ================================
-         STATISTIK DATA
-    ================================ -->
-    <div class="row g-4 mb-4">
-
-        <!-- Pengelola -->
-        <div class="col-12 col-sm-6 col-xl-2">
-
-            <div class="stat-box box-blue">
-
-                <div class="stat-icon">
-                    <i class="fas fa-users-cog"></i>
-                </div>
-
-                <h3>
-                    {{ $totalPengelola }}
-                </h3>
-
-                <p>
-                    Pengelola
-                </p>
-
-            </div>
-
+        <div class="card-head">
+            <i class="fas fa-bolt"></i>
+            <h6>Akses Cepat</h6>
         </div>
 
-
-        <!-- Guru -->
-        <div class="col-12 col-sm-6 col-xl-2">
-
-            <div class="stat-box box-red">
-
-                <div class="stat-icon">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                </div>
-
-                <h3>
-                    {{ $totalGuru }}
-                </h3>
-
-                <p>
-                    Guru
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <!-- Siswa -->
-        <div class="col-12 col-sm-6 col-xl-2">
-
-            <div class="stat-box box-yellow">
-
-                <div class="stat-icon">
-                    <i class="fas fa-user-graduate"></i>
-                </div>
-
-                <h3>
-                    {{ $totalSiswa }}
-                </h3>
-
-                <p>
-                    Siswa
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <!-- Ekstrakurikuler -->
-        <div class="col-12 col-sm-6 col-xl-2">
-
-            <div class="stat-box box-green">
-
-                <div class="stat-icon">
-                    <i class="fas fa-basketball-ball"></i>
-                </div>
-
-                <h3>
-                    {{ $totalEkstrakurikuler }}
-                </h3>
-
-                <p>
-                    Ekskul
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <!-- Berita -->
-        <div class="col-12 col-sm-6 col-xl-2">
-
-            <div class="stat-box box-purple">
-
-                <div class="stat-icon">
-                    <i class="fas fa-newspaper"></i>
-                </div>
-
-                <h3>
-                    {{ $totalBerita }}
-                </h3>
-
-                <p>
-                    Berita
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <!-- Galeri -->
-        <div class="col-12 col-sm-6 col-xl-2">
-
-            <div class="stat-box box-orange">
-
-                <div class="stat-icon">
-                    <i class="fas fa-images"></i>
-                </div>
-
-                <h3>
-                    {{ $totalGaleri }}
-                </h3>
-
-                <p>
-                    Galeri
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- ================================
-         AKSES CEPAT
-    ================================ -->
-    <div class="card table-card mb-5">
-
-        <div class="card-header">
-
-            <i class="fas fa-bolt me-2"></i>
-            Akses Cepat
-
-        </div>
-
-
-        <div class="card-body">
-
+        <div class="card-body p-3">
             <div class="row g-3">
 
-                <!-- Profil -->
-                <div class="col-12 col-md-4 col-xl-2">
-
-                    <a
-                        href="{{ route('admin.school_profile') }}"
-                        class="btn btn-light border w-100 py-3"
-                    >
-
-                        <i
-                            class="fas fa-school d-block mb-2"
-                            style="font-size: 1.4rem; color: #273b69;"
-                        ></i>
-
-                        Profil Sekolah
-
+                <div class="col-6 col-md-4 col-xl-2">
+                    <a href="{{ route('admin.school_profile') }}" class="quick-access-item">
+                        <i class="fas fa-school"></i>
+                        <span>Profil Sekolah</span>
                     </a>
-
                 </div>
 
-
-                <!-- Pengelola -->
-                <div class="col-12 col-md-4 col-xl-2">
-
-                    <a
-                        href="{{ route('admin.users.index') }}"
-                        class="btn btn-light border w-100 py-3"
-                    >
-
-                        <i
-                            class="fas fa-users-cog d-block mb-2"
-                            style="font-size: 1.4rem; color: #273b69;"
-                        ></i>
-
-                        Pengelola
-
+                <div class="col-6 col-md-4 col-xl-2">
+                    <a href="{{ route('admin.users.index') }}" class="quick-access-item">
+                        <i class="fas fa-user-gear"></i>
+                        <span>Pengelola</span>
                     </a>
-
                 </div>
 
-
-                <!-- Berita -->
-                <div class="col-12 col-md-4 col-xl-2">
-
-                    <a
-                        href="{{ route('admin.berita') }}"
-                        class="btn btn-light border w-100 py-3"
-                    >
-
-                        <i
-                            class="fas fa-newspaper d-block mb-2"
-                            style="font-size: 1.4rem; color: #273b69;"
-                        ></i>
-
-                        Berita
-
+                {{-- ✅ NEWS --}}
+                <div class="col-6 col-md-4 col-xl-2">
+                    <a href="{{ route('admin.news.index') }}" class="quick-access-item">
+                        <i class="fas fa-newspaper"></i>
+                        <span>News</span>
                     </a>
-
                 </div>
 
-
-                <!-- Ekstrakurikuler -->
-                <div class="col-12 col-md-4 col-xl-2">
-
-                    <a
-                        href="{{ route('admin.ekstrakulikuler') }}"
-                        class="btn btn-light border w-100 py-3"
-                    >
-
-                        <i
-                            class="fas fa-basketball-ball d-block mb-2"
-                            style="font-size: 1.4rem; color: #273b69;"
-                        ></i>
-
-                        Ekskul
-
+                {{-- ✅ EXTRACURRICULAR --}}
+                <div class="col-6 col-md-4 col-xl-2">
+                    <a href="{{ route('admin.extracurricular.index') }}" class="quick-access-item">
+                        <i class="fas fa-people-group"></i>
+                        <span>Ekstrakurikuler</span>
                     </a>
-
                 </div>
 
-
-                <!-- Guru -->
-                <div class="col-12 col-md-4 col-xl-2">
-
-                    <a
-                        href="{{ route('admin.guru') }}"
-                        class="btn btn-light border w-100 py-3"
-                    >
-
-                        <i
-                            class="fas fa-chalkboard-teacher d-block mb-2"
-                            style="font-size: 1.4rem; color: #273b69;"
-                        ></i>
-
-                        Guru
-
+                <div class="col-6 col-md-4 col-xl-2">
+                    <a href="{{ route('admin.guru') }}" class="quick-access-item">
+                        <i class="fas fa-chalkboard"></i>
+                        <span>Guru</span>
                     </a>
-
                 </div>
 
-
-                <!-- Siswa -->
-                <div class="col-12 col-md-4 col-xl-2">
-
-                    <a
-                        href="{{ route('admin.siswa') }}"
-                        class="btn btn-light border w-100 py-3"
-                    >
-
-                        <i
-                            class="fas fa-user-graduate d-block mb-2"
-                            style="font-size: 1.4rem; color: #273b69;"
-                        ></i>
-
-                        Siswa
-
+                <div class="col-6 col-md-4 col-xl-2">
+                    <a href="{{ route('admin.siswa') }}" class="quick-access-item">
+                        <i class="fas fa-user-graduate"></i>
+                        <span>Siswa</span>
                     </a>
-
                 </div>
 
             </div>
-
         </div>
 
     </div>

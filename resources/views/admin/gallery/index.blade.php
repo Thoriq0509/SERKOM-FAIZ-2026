@@ -14,7 +14,7 @@
     }
 
     /* =========================
-       HEADER HALAMAN
+       PAGE HEADER
     ========================== */
     .page-title {
         font-family: 'Poppins', sans-serif;
@@ -130,7 +130,7 @@
     }
 
     /* =========================
-       TABEL
+       TABLE
     ========================== */
     .table-clean {
         margin: 0;
@@ -159,57 +159,93 @@
     .table-clean tbody tr:last-child td { border-bottom: none; }
     .table-clean tbody tr:hover { background-color: var(--c-bg); }
 
-    .cell-nip {
-        font-family: 'Courier New', monospace;
-        color: var(--c-text-soft);
-        font-size: .82rem;
-    }
-
-    .cell-name {
-        font-weight: 600;
-        color: var(--c-primary-d);
-    }
-
     /* =========================
-       FOTO GURU
+       THUMBNAIL
     ========================== */
-    .teacher-photo {
-        width: 46px;
-        height: 46px;
-        border-radius: 50%;
+    .gallery-thumb {
+        width: 100px;
+        height: 62px;
         object-fit: cover;
+        border-radius: 6px;
         border: 1px solid var(--c-border);
+        display: block;
+        margin: 0 auto;
     }
 
-    .teacher-photo-placeholder {
-        width: 46px;
-        height: 46px;
-        border-radius: 50%;
+    .gallery-thumb-placeholder {
+        width: 100px;
+        height: 62px;
+        border-radius: 6px;
+        background-color: var(--c-soft);
+        border: 1px solid var(--c-border);
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        background-color: var(--c-soft);
         color: var(--c-text-soft);
-        border: 1px solid var(--c-border);
         font-size: 1rem;
+        margin: 0 auto;
     }
 
     /* =========================
-       BADGE MAPEL
+       TEXT CELLS
     ========================== */
-    .badge-mapel {
+    .cell-title {
+        font-weight: 600;
+        color: var(--c-primary-d);
+        margin-bottom: 4px;
+    }
+
+    .cell-desc {
+        font-size: .82rem;
+        color: var(--c-text-soft);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.4;
+    }
+
+    .cell-date {
+        font-size: .82rem;
+        color: var(--c-text-soft);
+        font-family: 'Courier New', monospace;
+        font-weight: 500;
+    }
+
+    /* =========================
+       BADGE KATEGORI
+    ========================== */
+    .badge-cat {
         font-size: .75rem;
         font-weight: 500;
         padding: 5px 12px;
         border-radius: 20px;
+        border: 1px solid;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .badge-cat.photo {
+        background-color: #ecfeff;
+        border-color: #a5f3fc;
+        color: #0e7490;
+    }
+
+    .badge-cat.video {
+        background-color: #fdf2f8;
+        border-color: #fbcfe8;
+        color: #be185d;
+    }
+
+    .badge-cat.other {
         background-color: var(--c-soft);
-        border: 1px solid var(--c-border);
-        color: var(--c-text);
-        display: inline-block;
+        border-color: var(--c-border);
+        color: var(--c-text-soft);
     }
 
     /* =========================
-       TOMBOL AKSI
+       ACTION BUTTONS
     ========================== */
     .btn-icon {
         width: 32px;
@@ -269,33 +305,33 @@
         padding: 14px 22px;
         border-top: 1px solid var(--c-border);
         background-color: var(--c-bg);
+        font-size: .8rem;
+        color: var(--c-text-soft);
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
         gap: 12px;
-        font-size: .8rem;
-        color: var(--c-text-soft);
     }
 </style>
 
 <div class="container-fluid p-0">
 
-    {{-- HEADER --}}
+    {{-- PAGE HEADER --}}
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
         <div>
-            <h2 class="page-title">Data Guru</h2>
-            <p class="page-subtitle">Kelola data tenaga pendidik sekolah.</p>
+            <h2 class="page-title">Kelola Galeri</h2>
+            <p class="page-subtitle">Kelola album dan dokumentasi kegiatan sekolah.</p>
         </div>
 
-        <a href="{{ route('admin.guru.create') }}" class="btn btn-primary-soft">
-            <i class="fas fa-plus me-2"></i>Tambah Data
+        <a href="{{ route('admin.gallery.create') }}" class="btn btn-primary-soft">
+            <i class="fas fa-plus me-2"></i>Tambah Media
         </a>
     </div>
 
     {{-- ALERT SUCCESS --}}
     @if (session('success'))
-        <div class="alert alert-success alert-soft alert-dismissible fade show" role="alert" data-alert>
+        <div class="alert alert-success alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-check-circle"></i>
             <span class="alert-text">{{ session('success') }}</span>
             <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
@@ -306,7 +342,7 @@
 
     {{-- ALERT ERROR --}}
     @if (session('error'))
-        <div class="alert alert-danger alert-soft alert-dismissible fade show" role="alert" data-alert>
+        <div class="alert alert-danger alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-exclamation-circle"></i>
             <span class="alert-text">{{ session('error') }}</span>
             <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
@@ -315,12 +351,12 @@
         </div>
     @endif
 
-    {{-- CARD TABEL --}}
+    {{-- TABLE CARD --}}
     <div class="card-clean">
 
         <div class="card-head">
-            <h6><i class="fas fa-chalkboard-teacher me-2"></i>Daftar Tenaga Pendidik</h6>
-            <span class="count">Total: {{ $teachers->total() }} guru</span>
+            <h6><i class="fas fa-images me-2"></i>Daftar Galeri Sekolah</h6>
+            <span class="count">Total: {{ $galleries->total() ?? 0 }} media</span>
         </div>
 
         <div class="table-responsive">
@@ -329,63 +365,88 @@
                 <thead>
                     <tr>
                         <th width="5%">No</th>
-                        <th width="12%" class="text-center">Foto</th>
-                        <th width="28%">Nama Guru</th>
-                        <th width="20%">NIP</th>
-                        <th width="20%">Mata Pelajaran</th>
-                        <th width="15%" class="text-center">Aksi</th>
+                        <th width="13%" class="text-center">Preview</th>
+                        <th width="35%">Judul & Keterangan</th>
+                        <th width="13%" class="text-center">Kategori</th>
+                        <th width="14%" class="text-center">Tanggal</th>
+                        <th width="20%" class="text-center">Aksi</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @forelse ($teachers as $teacher)
+                    @forelse ($galleries as $index => $item)
                         @php
-                            $encryptedId = \Illuminate\Support\Facades\Crypt::encryptString($teacher->id);
+                            $encryptedId = \Illuminate\Support\Facades\Crypt::encryptString($item->id);
                         @endphp
 
                         <tr>
-                            <td>{{ $teachers->firstItem() + $loop->index }}</td>
+                            <td>{{ $galleries->firstItem() + $index }}</td>
 
+                            {{-- Thumbnail --}}
                             <td class="text-center">
-                                @if ($teacher->foto)
-                                    <img src="{{ asset('storage/' . $teacher->foto) }}"
-                                         alt="Foto {{ $teacher->nama_guru }}"
-                                         class="teacher-photo">
+                                @if ($item->gambar)
+                                    <img src="{{ asset('storage/' . $item->gambar) }}"
+                                         alt="{{ $item->judul }}"
+                                         class="gallery-thumb">
                                 @else
-                                    <div class="teacher-photo-placeholder">
-                                        <i class="fas fa-user"></i>
+                                    <div class="gallery-thumb-placeholder">
+                                        <i class="fas fa-image"></i>
                                     </div>
                                 @endif
                             </td>
 
-                            <td class="cell-name">{{ $teacher->nama_guru }}</td>
-
-                            <td class="cell-nip">
-                                {{ $teacher->nip ?: '-' }}
-                            </td>
-
+                            {{-- Judul + Keterangan --}}
                             <td>
-                                @if ($teacher->mapel)
-                                    <span class="badge-mapel">{{ $teacher->mapel }}</span>
+                                <div class="cell-title">{{ $item->judul }}</div>
+                                @if ($item->keterangan)
+                                    <div class="cell-desc">{{ $item->keterangan }}</div>
                                 @else
-                                    <span class="text-muted">-</span>
+                                    <div class="cell-desc" style="font-style: italic;">Belum ada keterangan</div>
                                 @endif
                             </td>
 
+                            {{-- Kategori --}}
+                            <td class="text-center">
+                                @if ($item->kategori === 'Foto')
+                                    <span class="badge-cat photo">
+                                        <i class="fas fa-camera"></i>Foto
+                                    </span>
+                                @elseif ($item->kategori === 'Video')
+                                    <span class="badge-cat video">
+                                        <i class="fas fa-video"></i>Video
+                                    </span>
+                                @else
+                                    <span class="badge-cat other">
+                                        {{ $item->kategori ?: 'Lainnya' }}
+                                    </span>
+                                @endif
+                            </td>
+
+                            {{-- Tanggal --}}
+                            <td class="text-center">
+                                <span class="cell-date">
+                                    {{ $item->tanggal
+                                        ? \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y')
+                                        : '-'
+                                    }}
+                                </span>
+                            </td>
+
+                            {{-- Aksi --}}
                             <td class="text-center text-nowrap">
-                                <a href="{{ route('admin.guru.show', $encryptedId) }}"
+                                <a href="{{ route('admin.gallery.show', $encryptedId) }}"
                                    class="btn-icon view me-1" title="Lihat Detail">
                                     <i class="fas fa-eye"></i>
                                 </a>
 
-                                <a href="{{ route('admin.guru.edit', $encryptedId) }}"
+                                <a href="{{ route('admin.gallery.edit', $encryptedId) }}"
                                    class="btn-icon edit me-1" title="Edit Data">
                                     <i class="fas fa-edit"></i>
                                 </a>
 
-                                <form action="{{ route('admin.guru.destroy', $encryptedId) }}"
+                                <form action="{{ route('admin.gallery.destroy', $encryptedId) }}"
                                       method="POST" class="d-inline"
-                                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus data guru {{ $teacher->nama_guru }}?');">
+                                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus media galeri {{ $item->judul }}?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn-icon delete" title="Hapus Data">
@@ -398,9 +459,9 @@
                         <tr>
                             <td colspan="6">
                                 <div class="empty-state">
-                                    <i class="fas fa-chalkboard-teacher"></i>
-                                    <h6>Belum Ada Data Guru</h6>
-                                    <p>Data tenaga pendidik belum tersedia.</p>
+                                    <i class="fas fa-images"></i>
+                                    <h6>Belum Ada Media Galeri</h6>
+                                    <p>Belum terdapat foto atau video yang diunggah.</p>
                                 </div>
                             </td>
                         </tr>
@@ -410,14 +471,15 @@
             </table>
         </div>
 
-        @if ($teachers->hasPages())
+        {{-- PAGINATION --}}
+        @if (isset($galleries) && $galleries->hasPages())
             <div class="table-foot">
                 <small>
-                    Menampilkan <strong>{{ $teachers->firstItem() }}</strong>
-                    sampai <strong>{{ $teachers->lastItem() }}</strong>
-                    dari <strong>{{ $teachers->total() }}</strong> data guru
+                    Menampilkan <strong>{{ $galleries->firstItem() }}</strong>
+                    sampai <strong>{{ $galleries->lastItem() }}</strong>
+                    dari <strong>{{ $galleries->total() }}</strong> media
                 </small>
-                <div>{{ $teachers->links() }}</div>
+                <div>{{ $galleries->links() }}</div>
             </div>
         @endif
 

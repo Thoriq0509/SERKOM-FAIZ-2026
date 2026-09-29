@@ -9,125 +9,76 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    /**
-     * Menampilkan halaman login.
-     */
+    /* =====================================================
+     |  SHOW LOGIN PAGE
+     ===================================================== */
     public function index()
     {
         return view('auth.login');
     }
 
-    /**
-     * Memproses login.
-     */
+    /* =====================================================
+     |  PROCESS LOGIN
+     ===================================================== */
     public function login(Request $request)
     {
-        // ==========================================
-        // VALIDASI
-        // ==========================================
+        // Validate input
         $request->validate([
-            'username' => [
-                'required',
-                'string',
-            ],
-
-            'password' => [
-                'required',
-                'string',
-            ],
+            'username' => ['required', 'string'],
+            'password' => ['required', 'string'],
         ], [
             'username.required' => 'Username wajib diisi.',
             'password.required' => 'Password wajib diisi.',
         ]);
 
-        // ==========================================
-        // CARI USER BERDASARKAN USERNAME
-        // ==========================================
-        $user = User::where(
-            'username',
-            $request->username
-        )->first();
+        // Find user by username
+        $user = User::where('username', $request->username)->first();
 
-        // Username tidak ditemukan.
-        if (!$user) {
-            return back()
-                ->withErrors([
-                    'username' => 'Username atau password salah.',
-                ])
-                ->withInput(
-                    $request->only('username')
-                );
+        // Username not found OR password mismatch
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            return $this->loginFailed($request, 'Username atau password salah.');
         }
 
-        // ==========================================
-        // CEK PASSWORD
-        // ==========================================
-        if (!Hash::check(
-            $request->password,
-            $user->password
-        )) {
-            return back()
-                ->withErrors([
-                    'username' => 'Username atau password salah.',
-                ])
-                ->withInput(
-                    $request->only('username')
-                );
+        // Check role access
+        $role = strtolower(trim((string) $user->role));
+
+        if (! in_array($role, ['admin', 'operator'], true)) {
+            return $this->loginFailed($request, 'Role akun tidak memiliki akses.');
         }
 
-        // ==========================================
-        // CEK ROLE
-        // ==========================================
-        $role = strtolower(
-            trim(
-                (string) $user->role
-            )
-        );
-
-        if (!in_array(
-            $role,
-            [
-                'admin',
-                'operator',
-            ],
-            true
-        )) {
-            return back()
-                ->withErrors([
-                    'username' => 'Role akun tidak memiliki akses.',
-                ])
-                ->withInput(
-                    $request->only('username')
-                );
-        }
-
-        // ==========================================
-        // LOGIN MANUAL
-        // ==========================================
+        // Manual login
         Auth::login($user);
 
-        // Regenerasi session.
+        // Regenerate session
         $request->session()->regenerate();
 
-        // ==========================================
-        // REDIRECT DASHBOARD
-        // ==========================================
-        return redirect()
-            ->route('dashboard');
+        return redirect()->route('dashboard');
     }
 
-    /**
-     * Logout.
-     */
+    /* =====================================================
+     |  LOGOUT
+     ===================================================== */
     public function logout(Request $request)
     {
         Auth::logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
-        return redirect()
-            ->route('login');
+        return redirect()->route('login');
+    }
+
+    /* =====================================================
+     |  HELPER
+     ===================================================== */
+
+    /**
+     * Redirect back to login with error message.
+     */
+    private function loginFailed(Request $request, string $message)
+    {
+        return back()
+            ->withErrors(['username' => $message])
+            ->withInput($request->only('username'));
     }
 }

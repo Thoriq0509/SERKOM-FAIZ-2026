@@ -8,210 +8,113 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\SchoolProfileController;
+use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\ExtracurricularController;
+use App\Http\Controllers\Admin\GalleryController;
 
 
 // ==========================================
-// 0. ROUTE PUBLIC
+// PUBLIC
 // ==========================================
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+Route::get('/', fn () => redirect()->route('login'));
 
 
 // ==========================================
-// 1. ROUTE GUEST
+// GUEST
 // ==========================================
 Route::middleware('guest')->group(function () {
-
-    // ------------------------------------------
-    // LOGIN
-    // ------------------------------------------
-    Route::get('/login', [AuthController::class, 'index'])
-        ->name('login');
-
-    Route::post('/login', [AuthController::class, 'login'])
-        ->name('login.proses');
+    Route::get ('/login', [AuthController::class, 'index'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.proses');
 });
 
 
 // ==========================================
-// 2. ROUTE AUTHENTICATED
+// AUTHENTICATED
 // ==========================================
 Route::middleware('auth')->group(function () {
 
-    // ==========================================
-    // LOGOUT
-    // ==========================================
-    Route::post('/logout', [AuthController::class, 'logout'])
-        ->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-
-    // ==========================================
-    // ADMIN AREA
-    // ==========================================
     Route::prefix('admin')->group(function () {
 
-        // ==========================================
         // DASHBOARD
-        // Admin & Operator
-        // ==========================================
         Route::get('/dashboard', [DashboardController::class, 'index'])
             ->middleware('role:Admin,Operator')
             ->name('dashboard');
 
+        // PROFIL SEKOLAH (Admin)
+        Route::prefix('profil')->middleware('role:Admin')->group(function () {
+            Route::get   ('/',       [SchoolProfileController::class, 'index'])  ->name('admin.school_profile');
+            Route::get   ('/edit',   [SchoolProfileController::class, 'edit'])   ->name('admin.school_profile.edit');
+            Route::put   ('/update', [SchoolProfileController::class, 'update']) ->name('admin.school_profile.update');
+            Route::delete('/delete', [SchoolProfileController::class, 'destroy'])->name('admin.school_profile.destroy');
+        });
 
-        // ==========================================
-        // PROFIL SEKOLAH
-        // Hanya Admin
-        // ==========================================
-        Route::get('/profil', [SchoolProfileController::class, 'index'])
-            ->middleware('role:Admin')
-            ->name('admin.school_profile');
+        // DATA PENGELOLA (Admin)
+        Route::prefix('users')->middleware('role:Admin')->group(function () {
+            Route::get   ('/',           [UserController::class, 'index'])  ->name('admin.users.index');
+            Route::get   ('/create',     [UserController::class, 'addEdit'])->name('admin.users.create');
+            Route::post  ('/',           [UserController::class, 'save'])   ->name('admin.users.store');
+            Route::get   ('/{id}',       [UserController::class, 'show'])   ->name('admin.users.show');
+            Route::get   ('/{id}/edit',  [UserController::class, 'addEdit'])->name('admin.users.edit');
+            Route::put   ('/{id}',       [UserController::class, 'save'])   ->name('admin.users.update');
+            Route::delete('/{id}',       [UserController::class, 'destroy'])->name('admin.users.destroy');
+        });
 
-        Route::get('/profil/edit', [SchoolProfileController::class, 'edit'])
-            ->middleware('role:Admin')
-            ->name('admin.school_profile.edit');
+        // GURU (Admin & Operator)
+        Route::prefix('guru')->middleware('role:Admin,Operator')->group(function () {
+            Route::get   ('/',          [TeacherController::class, 'index'])  ->name('admin.guru');
+            Route::get   ('/create',    [TeacherController::class, 'create']) ->name('admin.guru.create');
+            Route::post  ('/',          [TeacherController::class, 'store'])  ->name('admin.guru.store');
+            Route::get   ('/{id}',      [TeacherController::class, 'show'])   ->name('admin.guru.show');
+            Route::get   ('/{id}/edit', [TeacherController::class, 'edit'])   ->name('admin.guru.edit');
+            Route::put   ('/{id}',      [TeacherController::class, 'update']) ->name('admin.guru.update');
+            Route::delete('/{id}',      [TeacherController::class, 'destroy'])->name('admin.guru.destroy');
+        });
 
-        Route::put('/profil/update', [SchoolProfileController::class, 'update'])
-            ->middleware('role:Admin')
-            ->name('admin.school_profile.update');
+        // SISWA (Admin & Operator)
+        Route::prefix('siswa')->middleware('role:Admin,Operator')->group(function () {
+            Route::get   ('/',          [StudentController::class, 'index'])  ->name('admin.siswa');
+            Route::get   ('/create',    [StudentController::class, 'create']) ->name('admin.siswa.create');
+            Route::post  ('/',          [StudentController::class, 'store'])  ->name('admin.siswa.store');
+            Route::get   ('/{id}',      [StudentController::class, 'show'])   ->name('admin.siswa.show');
+            Route::get   ('/{id}/edit', [StudentController::class, 'edit'])   ->name('admin.siswa.edit');
+            Route::put   ('/{id}',      [StudentController::class, 'update']) ->name('admin.siswa.update');
+            Route::delete('/{id}',      [StudentController::class, 'destroy'])->name('admin.siswa.destroy');
+        });
 
-        Route::delete('/profil/delete', [SchoolProfileController::class, 'destroy'])
-            ->middleware('role:Admin')
-            ->name('admin.school_profile.destroy');
+        // NEWS (Admin & Operator)
+        Route::prefix('news')->middleware('role:Admin,Operator')->group(function () {
+            Route::get   ('/',          [NewsController::class, 'index'])  ->name('admin.news.index');
+            Route::get   ('/create',    [NewsController::class, 'create']) ->name('admin.news.create');
+            Route::post  ('/',          [NewsController::class, 'store'])  ->name('admin.news.store');
+            Route::get   ('/{id}',      [NewsController::class, 'show'])   ->name('admin.news.show');
+            Route::get   ('/{id}/edit', [NewsController::class, 'edit'])   ->name('admin.news.edit');
+            Route::put   ('/{id}',      [NewsController::class, 'update']) ->name('admin.news.update');
+            Route::delete('/{id}',      [NewsController::class, 'destroy'])->name('admin.news.destroy');
+        });
 
+        // EXTRACURRICULAR (Admin & Operator)
+        Route::prefix('extracurricular')->middleware('role:Admin,Operator')->group(function () {
+            Route::get   ('/',          [ExtracurricularController::class, 'index'])  ->name('admin.extracurricular.index');
+            Route::get   ('/create',    [ExtracurricularController::class, 'create']) ->name('admin.extracurricular.create');
+            Route::post  ('/',          [ExtracurricularController::class, 'store'])  ->name('admin.extracurricular.store');
+            Route::get   ('/{id}',      [ExtracurricularController::class, 'show'])   ->name('admin.extracurricular.show');
+            Route::get   ('/{id}/edit', [ExtracurricularController::class, 'edit'])   ->name('admin.extracurricular.edit');
+            Route::put   ('/{id}',      [ExtracurricularController::class, 'update']) ->name('admin.extracurricular.update');
+            Route::delete('/{id}',      [ExtracurricularController::class, 'destroy'])->name('admin.extracurricular.destroy');
+        });
 
-        // ==========================================
-        // DATA PENGELOLA / USER
-        // Hanya Admin
-        // ==========================================
-        Route::get('/users', [UserController::class, 'index'])
-            ->middleware('role:Admin')
-            ->name('admin.users.index');
-
-        Route::get('/users/create', [UserController::class, 'addEdit'])
-            ->middleware('role:Admin')
-            ->name('admin.users.create');
-
-        Route::post('/users', [UserController::class, 'save'])
-            ->middleware('role:Admin')
-            ->name('admin.users.store');
-
-        Route::get('/users/{id}', [UserController::class, 'show'])
-            ->middleware('role:Admin')
-            ->name('admin.users.show');
-
-        Route::get('/users/{id}/edit', [UserController::class, 'addEdit'])
-            ->middleware('role:Admin')
-            ->name('admin.users.edit');
-
-        Route::put('/users/{id}', [UserController::class, 'save'])
-            ->middleware('role:Admin')
-            ->name('admin.users.update');
-
-        Route::delete('/users/{id}', [UserController::class, 'destroy'])
-            ->middleware('role:Admin')
-            ->name('admin.users.destroy');
-
-
-        // ==========================================
-        // BERITA
-        // Admin & Operator
-        // ==========================================
-        Route::get('/berita', function () {
-            return view('admin.news.news');
-        })
-            ->middleware('role:Admin,Operator')
-            ->name('admin.berita');
-
-
-        // ==========================================
-        // EKSTRAKURIKULER
-        // Admin & Operator
-        // ==========================================
-        Route::get('/ekstrakulikuler', function () {
-            return view('admin.Extracurricular.extracurricular');
-        })
-            ->middleware('role:Admin,Operator')
-            ->name('admin.ekstrakulikuler');
-
-
-        // ==========================================
-        // GURU
-        // Admin & Operator
-        // ==========================================
-        Route::get('/guru', [TeacherController::class, 'index'])
-            ->middleware('role:Admin,Operator')
-            ->name('admin.guru');
-
-        Route::get('/guru/create', [TeacherController::class, 'create'])
-            ->middleware('role:Admin,Operator')
-            ->name('admin.guru.create');
-
-        Route::post('/guru', [TeacherController::class, 'store'])
-            ->middleware('role:Admin,Operator')
-            ->name('admin.guru.store');
-
-        Route::get('/guru/{id}', [TeacherController::class, 'show'])
-            ->middleware('role:Admin,Operator')
-            ->name('admin.guru.show');
-
-        Route::get('/guru/{id}/edit', [TeacherController::class, 'edit'])
-            ->middleware('role:Admin,Operator')
-            ->name('admin.guru.edit');
-
-        Route::put('/guru/{id}', [TeacherController::class, 'update'])
-            ->middleware('role:Admin,Operator')
-            ->name('admin.guru.update');
-
-        Route::delete('/guru/{id}', [TeacherController::class, 'destroy'])
-            ->middleware('role:Admin,Operator')
-            ->name('admin.guru.destroy');
-
-
-        // ==========================================
-        // SISWA
-        // Admin & Operator
-        // ==========================================
-        Route::get('/siswa', [StudentController::class, 'index'])
-            ->middleware('role:Admin,Operator')
-            ->name('admin.siswa');
-
-        Route::get('/siswa/create', [StudentController::class, 'create'])
-            ->middleware('role:Admin,Operator')
-            ->name('admin.siswa.create');
-
-        Route::post('/siswa', [StudentController::class, 'store'])
-            ->middleware('role:Admin,Operator')
-            ->name('admin.siswa.store');
-
-        Route::get('/siswa/{id}', [StudentController::class, 'show'])
-            ->middleware('role:Admin,Operator')
-            ->name('admin.siswa.show');
-
-        Route::get('/siswa/{id}/edit', [StudentController::class, 'edit'])
-            ->middleware('role:Admin,Operator')
-            ->name('admin.siswa.edit');
-
-        Route::put('/siswa/{id}', [StudentController::class, 'update'])
-            ->middleware('role:Admin,Operator')
-            ->name('admin.siswa.update');
-
-        Route::delete('/siswa/{id}', [StudentController::class, 'destroy'])
-            ->middleware('role:Admin,Operator')
-            ->name('admin.siswa.destroy');
-
-
-        // ==========================================
-        // GALERI
-        // Admin & Operator
-        // ==========================================
-        Route::get('/galeri', function () {
-            return view('admin.galeries.galeries');
-        })
-            ->middleware('role:Admin,Operator')
-            ->name('admin.galeri');
+        // GALLERY (Admin & Operator)
+        Route::prefix('gallery')->middleware('role:Admin,Operator')->group(function () {
+            Route::get   ('/',          [GalleryController::class, 'index'])  ->name('admin.gallery.index');
+            Route::get   ('/create',    [GalleryController::class, 'create']) ->name('admin.gallery.create');
+            Route::post  ('/',          [GalleryController::class, 'store'])  ->name('admin.gallery.store');
+            Route::get   ('/{id}',      [GalleryController::class, 'show'])   ->name('admin.gallery.show');
+            Route::get   ('/{id}/edit', [GalleryController::class, 'edit'])   ->name('admin.gallery.edit');
+            Route::put   ('/{id}',      [GalleryController::class, 'update']) ->name('admin.gallery.update');
+            Route::delete('/{id}',      [GalleryController::class, 'destroy'])->name('admin.gallery.destroy');
+        });
 
     });
-
 });

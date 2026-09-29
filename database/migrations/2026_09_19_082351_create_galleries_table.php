@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('judul', 50);
             $table->text('keterangan')->nullable();
-            $table->string('file', 100);
+            $table->string('gambar', 100);
             $table->enum('kategori', ['Foto', 'Video']);
             $table->date('tanggal');
             $table->timestamps();

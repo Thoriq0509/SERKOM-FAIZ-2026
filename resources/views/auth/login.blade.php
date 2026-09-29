@@ -2,212 +2,393 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Login - Sistem Manajemen Sekolah</title>
+
     <link rel="icon" type="image/png" href="{{ asset('assets/admin/img/logosuzuran.png') }}">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome & Bootstrap 5 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/all.min.css') }}">
 
     <style>
+        * { box-sizing: border-box; }
+
+        html, body { width: 100%; min-height: 100%; }
+
         body {
-            background-color: #f1f5f9;
-            font-family: 'Inter', sans-serif;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background-color: #f8fafc;
+            color: #212529;
+            font-family: "Segoe UI", Arial, sans-serif;
+            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
         }
 
-        .login-card {
-            background: #ffffff;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(39, 59, 105, 0.1);
-            overflow: hidden;
+        /* ===== WRAPPER ===== */
+        .login-wrapper {
             width: 100%;
-            max-width: 900px;
-        }
-
-        .login-left {
-            background-color: #273b69;
-            color: #ffffff;
-            padding: 50px 40px;
+            min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            padding: 30px 15px;
+            background:
+                radial-gradient(circle at top left, #eef2f7 0%, transparent 50%),
+                radial-gradient(circle at bottom right, #e2e8f0 0%, transparent 50%),
+                #f8fafc;
+        }
+
+        /* ===== CARD ===== */
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            background-color: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(15,23,42,.08);
+            overflow: hidden;
+        }
+
+        .login-body { padding: 38px 34px; }
+
+        /* ===== LOGO & JUDUL ===== */
+        .school-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .school-logo img {
+            width: 76px;
+            height: 76px;
+            object-fit: contain;
+        }
+
+        .school-title {
+            color: #1e293b;
             text-align: center;
-        }
-
-        .login-left i {
-            font-size: 4rem;
-            color: #60a5fa;
-            margin-bottom: 20px;
-        }
-
-        .login-left h2 {
             font-family: 'Poppins', sans-serif;
+            font-size: 1.15rem;
             font-weight: 700;
-            margin-bottom: 15px;
+            margin-bottom: 4px;
+            letter-spacing: -.2px;
         }
 
-        .login-right {
-            padding: 50px 40px;
+        .school-subtitle {
+            color: #64748b;
+            text-align: center;
+            font-size: .82rem;
+            margin-bottom: 26px;
+        }
+
+        /* ===== ALERT ===== */
+        .login-alert {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            border: 1px solid #fecaca;
+            background-color: #fef2f2;
+            color: #991b1b;
+            font-size: .82rem;
+            padding: 12px 14px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .login-alert i {
+            color: #dc2626;
+            font-size: .9rem;
+            margin-top: 1px;
+            flex-shrink: 0;
+        }
+
+        .login-alert .alert-body { flex: 1; }
+
+        .login-alert .alert-close {
+            background: transparent;
+            border: none;
+            color: inherit;
+            font-size: .85rem;
+            opacity: .6;
+            padding: 2px 6px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: opacity .15s ease, background .15s ease;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .login-alert .alert-close:hover {
+            opacity: 1;
+            background: rgba(0,0,0,.06);
+        }
+
+        /* ===== FORM ===== */
+        .form-label {
+            color: #334155;
+            font-size: .82rem;
+            font-weight: 600;
+            margin-bottom: 8px;
         }
 
         .form-control {
-            padding: 12px 20px;
-            border-radius: 10px;
+            min-height: 44px;
+            padding: 10px 14px;
+            background-color: #fff;
             border: 1px solid #e2e8f0;
-            background-color: #f8fafc;
-            transition: all 0.3s;
+            border-radius: 6px;
+            color: #212529;
+            font-size: .875rem;
+            box-shadow: none;
+            transition: border-color .15s ease, box-shadow .15s ease;
         }
 
-        /* Perbaikan fokus border agar menyatu dengan icon mata */
-        .input-group:focus-within .form-control,
-        .input-group:focus-within .input-group-text {
-            border-color: #273b69;
-            background-color: #ffffff;
-        }
-
-        .input-group:focus-within {
-            box-shadow: 0 0 0 3px rgba(39, 59, 105, 0.1);
-            border-radius: 10px;
-        }
+        .form-control::placeholder { color: #94a3b8; }
 
         .form-control:focus {
-            box-shadow: none;
-            border-color: #273b69;
+            background-color: #fff;
+            border-color: #334155;
+            color: #212529;
+            box-shadow: 0 0 0 .15rem rgba(51,65,85,.10);
         }
 
-        .btn-login {
-            background-color: #273b69;
-            color: #ffffff;
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-family: 'Poppins', sans-serif;
-            letter-spacing: 0.5px;
-            transition: all 0.3s;
+        /* ===== INPUT GROUP ===== */
+        .input-group-text {
+            min-width: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: #64748b;
+            border-radius: 6px;
         }
 
-        .btn-login:hover {
-            background-color: #1a2849;
-            color: #ffffff;
-            transform: translateY(-2px);
+        .input-group .form-control,
+        .input-group .form-control:focus {
+            border-left: 0;
         }
 
-        /* Cursor pointer untuk icon mata */
+        .input-group:focus-within .input-group-text,
+        .input-group:focus-within .form-control {
+            background-color: #fff;
+            border-color: #334155;
+        }
+
+        /* ===== TOGGLE PASSWORD ===== */
         #togglePassword {
+            min-width: 46px;
             cursor: pointer;
+            user-select: none;
         }
 
-        /* Responsif untuk HP */
-        @media (max-width: 767.98px) {
-            .login-left {
-                padding: 40px 20px;
+        #togglePassword:hover { background-color: #f1f5f9; }
+        #togglePassword i { color: #64748b; }
+
+        /* ===== BUTTON ===== */
+        .btn-login {
+            width: 100%;
+            min-height: 46px;
+            padding: 11px 15px;
+            background-color: #334155;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            color: #fff;
+            font-size: .875rem;
+            font-weight: 600;
+            letter-spacing: .3px;
+            transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
+        }
+
+        .btn-login:hover,
+        .btn-login:focus {
+            background-color: #1e293b;
+            border-color: #1e293b;
+            color: #fff;
+        }
+
+        .btn-login:focus {
+            box-shadow: 0 0 0 .15rem rgba(51,65,85,.15);
+        }
+
+        .btn-login:active {
+            background-color: #0f172a !important;
+            border-color: #0f172a !important;
+            color: #fff !important;
+        }
+
+        /* ===== FOOTER ===== */
+        .login-footer {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #f1f5f9;
+            color: #94a3b8;
+            text-align: center;
+            font-size: .72rem;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 575.98px) {
+            .login-wrapper { padding: 20px 12px; }
+
+            .login-card { max-width: 100%; }
+
+            .login-body { padding: 28px 22px; }
+
+            .school-logo { margin-bottom: 12px; }
+
+            .school-logo img {
+                width: 68px;
+                height: 68px;
             }
-            .login-right {
-                padding: 30px 20px;
-            }
+
+            .school-title { font-size: 1.05rem; }
+
+            .school-subtitle { margin-bottom: 22px; }
         }
     </style>
 </head>
+
 <body>
 
-    <div class="container px-4">
-        <div class="row justify-content-center">
-            <div class="col-12">
-                
-                <div class="login-card row g-0 mx-auto">
-                    <div class="col-md-5 login-left d-none d-md-flex">
-                        <img
-                            src="{{ asset('assets/admin/img/logosuzuran.png') }}"
-                        alt="">
-                        <h2>Sistem Manajemen Sekolah</h2>
-                        <p class="text-light opacity-75 mb-0">Kelola data akademik, guru, dan siswa dengan lebih mudah dan efisien.</p>
+<div class="login-wrapper">
+    <div class="login-card">
+        <div class="login-body">
+
+            {{-- LOGO --}}
+            <div class="school-logo">
+                <img src="{{ asset('assets/admin/img/logosuzuran.png') }}" alt="Logo Sekolah">
+            </div>
+
+            {{-- JUDUL --}}
+            <div class="school-title">Sistem Manajemen Sekolah</div>
+            <div class="school-subtitle">Silakan login untuk melanjutkan</div>
+
+            {{-- ALERT ERROR LOGIN --}}
+            @if (session('error'))
+                <div class="login-alert" role="alert" data-alert>
+                    <i class="fas fa-exclamation-circle"></i>
+                    <div class="alert-body">
+                        {{ session('error') }}
                     </div>
+                    <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
+                        <i class="fas fa-xmark"></i>
+                    </button>
+                </div>
+            @endif
 
-                    <div class="col-md-7 login-right">
-                        <div class="d-md-none text-center mb-4">
-                            <i class="fas fa-school text-primary" style="font-size: 3rem; color: #273b69 !important;"></i>
-                            <h3 class="fw-bold mt-2" style="font-family: 'Poppins', sans-serif;">Login Portal</h3>
-                        </div>
-                        
-                        <h4 class="fw-bold text-dark mb-1" style="font-family: 'Poppins', sans-serif;">Selamat Datang Kembali!</h4>
-                        <p class="text-muted mb-4">Silakan login menggunakan username dan password Anda.</p>
+            {{-- ALERT VALIDATION ERROR --}}
+            @if ($errors->any())
+                <div class="login-alert" role="alert" data-alert>
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div class="alert-body">
+                        <strong>Login gagal.</strong>
+                        <ul style="margin:6px 0 0; padding-left:16px; font-size:.78rem;">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
+                        <i class="fas fa-xmark"></i>
+                    </button>
+                </div>
+            @endif
 
-                        <!-- Alert Jika Login Gagal -->
-                        @if(session('error'))
-                            <div class="alert alert-danger alert-dismissible fade show rounded-3" role="alert">
-                                <i class="fas fa-exclamation-circle me-2"></i> {{ session('error') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        @endif
+            {{-- FORM LOGIN --}}
+            <form action="{{ route('login.proses') }}" method="POST">
+                @csrf
 
-                        <form action="{{ route('login.proses') }}" method="POST">
-                            @csrf
-                            
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold text-secondary small">Username</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-user text-muted"></i></span>
-                                    <input type="text" name="username" class="form-control border-start-0 ps-0" placeholder="Masukkan username..." required autofocus>
-                                </div>
-                            </div>
-
-                            <div class="mb-4">
-                                <label class="form-label fw-semibold text-secondary small">Password</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-lock text-muted"></i></span>
-                                    
-                                    <!-- Input Password (ditambahkan ID dan dihapus border-end nya) -->
-                                    <input type="password" name="password" id="passwordField" class="form-control border-start-0 border-end-0 ps-0" placeholder="Masukkan password..." required>
-                                    
-                                    <!-- Icon Mata Toggle -->
-                                    <span class="input-group-text bg-light border-start-0" id="togglePassword">
-                                        <i class="fas fa-eye text-muted" id="eyeIcon"></i>
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div class="d-grid mt-4">
-                                <button type="submit" class="btn btn-login btn-block">
-                                    <i class="fas fa-sign-in-alt me-2"></i> MASUK KE DASHBOARD
-                                </button>
-                            </div>
-                        </form>
+                {{-- USERNAME --}}
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        <input type="text"
+                               name="username"
+                               id="username"
+                               class="form-control @error('username') is-invalid @enderror"
+                               value="{{ old('username') }}"
+                               placeholder="Masukkan username..."
+                               autocomplete="username"
+                               required
+                               autofocus>
                     </div>
                 </div>
 
+                {{-- PASSWORD --}}
+                <div class="mb-4">
+                    <label for="passwordField" class="form-label">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password"
+                               name="password"
+                               id="passwordField"
+                               class="form-control @error('password') is-invalid @enderror"
+                               placeholder="Masukkan password..."
+                               autocomplete="current-password"
+                               required>
+                        <span class="input-group-text" id="togglePassword" title="Tampilkan password">
+                            <i class="fas fa-eye" id="eyeIcon"></i>
+                        </span>
+                    </div>
+                </div>
+
+                {{-- TOMBOL --}}
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-login">
+                        <i class="fas fa-right-to-bracket me-2"></i>MASUK KE DASHBOARD
+                    </button>
+                </div>
+            </form>
+
+            {{-- FOOTER --}}
+            <div class="login-footer">
+                &copy; {{ date('Y') }} Sistem Manajemen Sekolah
             </div>
+
         </div>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Script untuk Toggle Password -->
-    <script>
-        const togglePassword = document.querySelector('#togglePassword');
-        const passwordField = document.querySelector('#passwordField');
-        const eyeIcon = document.querySelector('#eyeIcon');
+<script src="{{ asset('assets/admin/js/bootstrap.bundle.min.js') }}"></script>
 
-        togglePassword.addEventListener('click', function () {
-            // Ubah tipe input antara password dan text
-            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordField.setAttribute('type', type);
-            
-            // Ubah icon mata (terbuka/tertutup)
-            eyeIcon.classList.toggle('fa-eye');
-            eyeIcon.classList.toggle('fa-eye-slash');
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    /* ============ TOGGLE PASSWORD ============ */
+    const togglePassword = document.getElementById("togglePassword");
+    const passwordField  = document.getElementById("passwordField");
+    const eyeIcon        = document.getElementById("eyeIcon");
+
+    if (togglePassword && passwordField && eyeIcon) {
+        togglePassword.addEventListener("click", function () {
+            const isPassword = passwordField.getAttribute("type") === "password";
+
+            passwordField.setAttribute("type", isPassword ? "text" : "password");
+            eyeIcon.classList.toggle("fa-eye", !isPassword);
+            eyeIcon.classList.toggle("fa-eye-slash", isPassword);
+            togglePassword.setAttribute("title", isPassword ? "Sembunyikan password" : "Tampilkan password");
         });
-    </script>
+    }
+
+    /* ============ FALLBACK CLOSE ALERT ============ */
+    document.querySelectorAll("[data-alert-close]").forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+            e.preventDefault();
+            const box = btn.closest("[data-alert]");
+            if (!box) return;
+            box.style.transition = "opacity .2s ease";
+            box.style.opacity = "0";
+            setTimeout(() => box.remove(), 200);
+        });
+    });
+
+});
+</script>
+
 </body>
 </html>
