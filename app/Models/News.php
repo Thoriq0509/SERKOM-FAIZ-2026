@@ -20,13 +20,12 @@ class News extends Model
         'id_user',
     ];
 
+    // Cast tipe data
     protected $casts = [
         'tanggal' => 'date',
     ];
 
-    /**
-     * Relasi ke User (pembuat berita).
-     */
+    // Relasi ke User (pembuat berita)
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user', 'id_user');

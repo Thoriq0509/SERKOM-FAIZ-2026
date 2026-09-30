@@ -12,9 +12,7 @@ use Illuminate\Validation\Rule;
 
 class NewsController extends Controller
 {
-    /* =====================================================
-     |  INDEX
-     ===================================================== */
+    // Daftar berita
     public function index()
     {
         $news = News::with('user')
@@ -25,9 +23,7 @@ class NewsController extends Controller
         return view('admin.news.index', compact('news'));
     }
 
-    /* =====================================================
-     |  CREATE
-     ===================================================== */
+    // Form tambah berita
     public function create()
     {
         return view('admin.news.form', [
@@ -36,12 +32,13 @@ class NewsController extends Controller
         ]);
     }
 
-    /* =====================================================
-     |  STORE
-     ===================================================== */
+    // Simpan berita baru
     public function store(Request $request)
     {
-        $validated = $request->validate($this->rules(), $this->messages());
+        $validated = $request->validate(
+            $this->rules(),
+            $this->messages()
+        );
 
         if ($request->hasFile('gambar')) {
             $validated['gambar'] = $request->file('gambar')->store('news', 'public');
@@ -56,9 +53,7 @@ class NewsController extends Controller
             ->with('success', 'Berita berhasil ditambahkan.');
     }
 
-    /* =====================================================
-     |  SHOW
-     ===================================================== */
+    // Detail berita
     public function show($id)
     {
         $news = $this->findNews($id);
@@ -70,9 +65,7 @@ class NewsController extends Controller
         return view('admin.news.show', compact('news'));
     }
 
-    /* =====================================================
-     |  EDIT
-     ===================================================== */
+    // Form edit berita
     public function edit($id)
     {
         $news = $this->findNews($id);
@@ -87,9 +80,7 @@ class NewsController extends Controller
         ]);
     }
 
-    /* =====================================================
-     |  UPDATE
-     ===================================================== */
+    // Update berita
     public function update(Request $request, $id)
     {
         $news = $this->findNews($id);
@@ -98,7 +89,10 @@ class NewsController extends Controller
             return $this->backWithError('Data berita tidak ditemukan.');
         }
 
-        $validated = $request->validate($this->rules(), $this->messages());
+        $validated = $request->validate(
+            $this->rules(),
+            $this->messages()
+        );
 
         if ($request->hasFile('gambar')) {
             // Hapus gambar lama
@@ -116,9 +110,7 @@ class NewsController extends Controller
             ->with('success', 'Berita berhasil diperbarui.');
     }
 
-    /* =====================================================
-     |  DESTROY
-     ===================================================== */
+    // Hapus berita
     public function destroy($id)
     {
         $news = $this->findNews($id);
@@ -127,6 +119,7 @@ class NewsController extends Controller
             return $this->backWithError('Data berita tidak ditemukan.');
         }
 
+        // Hapus gambar
         if ($news->gambar && Storage::disk('public')->exists($news->gambar)) {
             Storage::disk('public')->delete($news->gambar);
         }
@@ -138,13 +131,7 @@ class NewsController extends Controller
             ->with('success', 'Berita berhasil dihapus.');
     }
 
-    /* =====================================================
-     |  HELPER
-     ===================================================== */
-
-    /**
-     * Find news by encrypted ID.
-     */
+    // Cari berita berdasarkan encrypted ID
     private function findNews(string $encryptedId): ?News
     {
         try {
@@ -154,9 +141,7 @@ class NewsController extends Controller
         }
     }
 
-    /**
-     * Redirect to index with error message.
-     */
+    // Redirect ke index dengan pesan error
     private function backWithError(string $message)
     {
         return redirect()
@@ -164,9 +149,7 @@ class NewsController extends Controller
             ->with('error', $message);
     }
 
-    /**
-     * Validation rules.
-     */
+    // Aturan validasi
     private function rules(): array
     {
         return [
@@ -178,9 +161,7 @@ class NewsController extends Controller
         ];
     }
 
-    /**
-     * Validation messages.
-     */
+    // Pesan validasi
     private function messages(): array
     {
         return [

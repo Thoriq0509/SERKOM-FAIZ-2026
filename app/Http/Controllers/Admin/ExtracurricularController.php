@@ -10,9 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ExtracurricularController extends Controller
 {
-    /* =====================================================
-     |  INDEX
-     ===================================================== */
+    // Daftar ekstrakurikuler
     public function index()
     {
         $extracurriculars = Extracurricular::orderByDesc('id')->paginate(10);
@@ -20,9 +18,7 @@ class ExtracurricularController extends Controller
         return view('admin.extracurricular.index', compact('extracurriculars'));
     }
 
-    /* =====================================================
-     |  CREATE
-     ===================================================== */
+    // Form tambah ekstrakurikuler
     public function create()
     {
         return view('admin.extracurricular.form', [
@@ -31,12 +27,13 @@ class ExtracurricularController extends Controller
         ]);
     }
 
-    /* =====================================================
-     |  STORE
-     ===================================================== */
+    // Simpan ekstrakurikuler baru
     public function store(Request $request)
     {
-        $validated = $request->validate($this->rules(), $this->messages());
+        $validated = $request->validate(
+            $this->rules(),
+            $this->messages()
+        );
 
         if ($request->hasFile('gambar')) {
             $validated['gambar'] = $request->file('gambar')->store('extracurricular', 'public');
@@ -49,9 +46,7 @@ class ExtracurricularController extends Controller
             ->with('success', 'Data ekstrakurikuler berhasil ditambahkan.');
     }
 
-    /* =====================================================
-     |  SHOW
-     ===================================================== */
+    // Detail ekstrakurikuler
     public function show($id)
     {
         $extracurricular = $this->findExtracurricular($id);
@@ -63,9 +58,7 @@ class ExtracurricularController extends Controller
         return view('admin.extracurricular.show', compact('extracurricular'));
     }
 
-    /* =====================================================
-     |  EDIT
-     ===================================================== */
+    // Form edit ekstrakurikuler
     public function edit($id)
     {
         $extracurricular = $this->findExtracurricular($id);
@@ -80,9 +73,7 @@ class ExtracurricularController extends Controller
         ]);
     }
 
-    /* =====================================================
-     |  UPDATE
-     ===================================================== */
+    // Update ekstrakurikuler
     public function update(Request $request, $id)
     {
         $extracurricular = $this->findExtracurricular($id);
@@ -91,7 +82,10 @@ class ExtracurricularController extends Controller
             return $this->backWithError('Data ekstrakurikuler tidak ditemukan.');
         }
 
-        $validated = $request->validate($this->rules(), $this->messages());
+        $validated = $request->validate(
+            $this->rules(),
+            $this->messages()
+        );
 
         if ($request->hasFile('gambar')) {
             // Hapus gambar lama
@@ -109,9 +103,7 @@ class ExtracurricularController extends Controller
             ->with('success', 'Data ekstrakurikuler berhasil diperbarui.');
     }
 
-    /* =====================================================
-     |  DESTROY
-     ===================================================== */
+    // Hapus ekstrakurikuler
     public function destroy($id)
     {
         $extracurricular = $this->findExtracurricular($id);
@@ -120,6 +112,7 @@ class ExtracurricularController extends Controller
             return $this->backWithError('Data ekstrakurikuler tidak ditemukan.');
         }
 
+        // Hapus gambar
         if ($extracurricular->gambar && Storage::disk('public')->exists($extracurricular->gambar)) {
             Storage::disk('public')->delete($extracurricular->gambar);
         }
@@ -131,13 +124,7 @@ class ExtracurricularController extends Controller
             ->with('success', 'Data ekstrakurikuler berhasil dihapus.');
     }
 
-    /* =====================================================
-     |  HELPER
-     ===================================================== */
-
-    /**
-     * Find extracurricular by encrypted ID.
-     */
+    // Cari ekstrakurikuler berdasarkan encrypted ID
     private function findExtracurricular(string $encryptedId): ?Extracurricular
     {
         try {
@@ -147,9 +134,7 @@ class ExtracurricularController extends Controller
         }
     }
 
-    /**
-     * Redirect to index with error message.
-     */
+    // Redirect ke index dengan pesan error
     private function backWithError(string $message)
     {
         return redirect()
@@ -157,9 +142,7 @@ class ExtracurricularController extends Controller
             ->with('error', $message);
     }
 
-    /**
-     * Validation rules.
-     */
+    // Aturan validasi
     private function rules(): array
     {
         return [
@@ -171,21 +154,19 @@ class ExtracurricularController extends Controller
         ];
     }
 
-    /**
-     * Validation messages.
-     */
+    // Pesan validasi
     private function messages(): array
     {
         return [
             'nama_ekskul.required' => 'Nama ekstrakurikuler wajib diisi.',
             'nama_ekskul.max'      => 'Nama ekstrakurikuler maksimal 40 karakter.',
 
-            'pembina.max'          => 'Nama pembina maksimal 40 karakter.',
-            'jadwal_latihan.max'   => 'Jadwal latihan maksimal 40 karakter.',
+            'pembina.max'        => 'Nama pembina maksimal 40 karakter.',
+            'jadwal_latihan.max' => 'Jadwal latihan maksimal 40 karakter.',
 
-            'gambar.image'         => 'File harus berupa gambar.',
-            'gambar.mimes'         => 'Format gambar harus JPG, JPEG, PNG, atau WEBP.',
-            'gambar.max'           => 'Ukuran gambar maksimal 2 MB.',
+            'gambar.image' => 'File harus berupa gambar.',
+            'gambar.mimes' => 'Format gambar harus JPG, JPEG, PNG, atau WEBP.',
+            'gambar.max'   => 'Ukuran gambar maksimal 2 MB.',
         ];
     }
 }

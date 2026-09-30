@@ -1,0 +1,206 @@
+/* =====================================================
+   STUDENTS — Style khusus halaman Data Siswa
+   ===================================================== */
+
+/* ===== INDEX ===== */
+.cell-nisn {
+    font-family: 'Courier New', monospace;
+    color: var(--c-text-soft);
+    font-size: .82rem;
+}
+
+.cell-name {
+    font-weight: 600;
+    color: var(--c-primary-d);
+}
+
+/* ===== BADGE JENIS KELAMIN ===== */
+.badge-jk {
+    font-size: .75rem;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.badge-jk.lk {
+    background-color: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1d4ed8;
+}
+
+.badge-jk.pr {
+    background-color: #fdf2f8;
+    border-color: #fbcfe8;
+    color: #be185d;
+}
+
+/* ===== HEAD ICON (form) ===== */
+.card-clean .card-head .head-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background-color: var(--c-soft);
+    color: var(--c-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.card-clean .card-head small {
+    color: var(--c-text-soft);
+    font-size: .78rem;
+}
+
+/* ===== HERO HEADER (show) ===== */
+.hero-head {
+    padding: 24px 26px;
+    border-bottom: 1px solid var(--c-border);
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.hero-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    background-color: var(--c-soft);
+    color: var(--c-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    flex-shrink: 0;
+}
+
+.hero-name {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--c-primary-d);
+    margin: 0 0 4px;
+}
+
+.hero-meta {
+    font-size: .82rem;
+    color: var(--c-text-soft);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.hero-meta .dot {
+    width: 3px;
+    height: 3px;
+    background-color: #cbd5e1;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* ===== BODY CLEAN (show) ===== */
+.card-body-clean {
+    padding: 28px 26px;
+}
+
+/* ===== DETAIL GRID (show) ===== */
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 24px;
+    border: 1px solid var(--c-border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 28px;
+}
+
+.detail-item {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--c-border);
+}
+
+.detail-item:nth-last-child(-n+2) {
+    border-bottom: none;
+}
+
+.detail-item:nth-child(odd) {
+    border-right: 1px solid var(--c-border);
+}
+
+.detail-label {
+    color: var(--c-text-soft);
+    font-size: .75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    margin-bottom: 6px;
+}
+
+.detail-value {
+    color: var(--c-primary-d);
+    font-size: .92rem;
+    font-weight: 600;
+    word-break: break-word;
+}
+
+.detail-value.mono {
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+    font-size: .86rem;
+    color: var(--c-text);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 767.98px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-item {
+        border-right: none !important;
+    }
+
+    .detail-item:nth-last-child(-n+2) {
+        border-bottom: 1px solid var(--c-border);
+    }
+
+    .detail-item:last-child {
+        border-bottom: none;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-head {
+        padding: 18px 16px;
+        gap: 14px;
+    }
+
+    .hero-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 1.3rem;
+    }
+
+    .hero-name { font-size: 1rem; }
+
+    .card-body-clean { padding: 20px 16px; }
+
+    .action-bar {
+        flex-direction: column-reverse;
+    }
+
+    .action-bar .btn,
+    .action-bar form {
+        width: 100%;
+    }
+
+    .action-bar form button {
+        width: 100%;
+    }
+}

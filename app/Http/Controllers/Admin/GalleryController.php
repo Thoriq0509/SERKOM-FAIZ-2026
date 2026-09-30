@@ -11,9 +11,7 @@ use Illuminate\Validation\Rule;
 
 class GalleryController extends Controller
 {
-    /* =====================================================
-     |  INDEX
-     ===================================================== */
+    // Daftar galeri
     public function index()
     {
         $galleries = Gallery::orderByDesc('tanggal')
@@ -23,9 +21,7 @@ class GalleryController extends Controller
         return view('admin.gallery.index', compact('galleries'));
     }
 
-    /* =====================================================
-     |  CREATE
-     ===================================================== */
+    // Form tambah galeri
     public function create()
     {
         return view('admin.gallery.form', [
@@ -34,12 +30,13 @@ class GalleryController extends Controller
         ]);
     }
 
-    /* =====================================================
-     |  STORE
-     ===================================================== */
+    // Simpan galeri baru
     public function store(Request $request)
     {
-        $validated = $request->validate($this->rules(), $this->messages());
+        $validated = $request->validate(
+            $this->rules(),
+            $this->messages()
+        );
 
         if ($request->hasFile('gambar')) {
             $validated['gambar'] = $request->file('gambar')->store('galleries', 'public');
@@ -52,9 +49,7 @@ class GalleryController extends Controller
             ->with('success', 'Media galeri berhasil ditambahkan.');
     }
 
-    /* =====================================================
-     |  SHOW
-     ===================================================== */
+    // Detail galeri
     public function show($id)
     {
         $gallery = $this->findGallery($id);
@@ -66,9 +61,7 @@ class GalleryController extends Controller
         return view('admin.gallery.show', compact('gallery'));
     }
 
-    /* =====================================================
-     |  EDIT
-     ===================================================== */
+    // Form edit galeri
     public function edit($id)
     {
         $gallery = $this->findGallery($id);
@@ -83,9 +76,7 @@ class GalleryController extends Controller
         ]);
     }
 
-    /* =====================================================
-     |  UPDATE
-     ===================================================== */
+    // Update galeri
     public function update(Request $request, $id)
     {
         $gallery = $this->findGallery($id);
@@ -94,7 +85,10 @@ class GalleryController extends Controller
             return $this->backWithError('Data galeri tidak ditemukan.');
         }
 
-        $validated = $request->validate($this->rules(), $this->messages());
+        $validated = $request->validate(
+            $this->rules(),
+            $this->messages()
+        );
 
         if ($request->hasFile('gambar')) {
             // Hapus gambar lama
@@ -112,9 +106,7 @@ class GalleryController extends Controller
             ->with('success', 'Media galeri berhasil diperbarui.');
     }
 
-    /* =====================================================
-     |  DESTROY
-     ===================================================== */
+    // Hapus galeri
     public function destroy($id)
     {
         $gallery = $this->findGallery($id);
@@ -123,6 +115,7 @@ class GalleryController extends Controller
             return $this->backWithError('Data galeri tidak ditemukan.');
         }
 
+        // Hapus gambar
         if ($gallery->gambar && Storage::disk('public')->exists($gallery->gambar)) {
             Storage::disk('public')->delete($gallery->gambar);
         }
@@ -134,13 +127,7 @@ class GalleryController extends Controller
             ->with('success', 'Media galeri berhasil dihapus.');
     }
 
-    /* =====================================================
-     |  HELPER
-     ===================================================== */
-
-    /**
-     * Find gallery by encrypted ID.
-     */
+    // Cari galeri berdasarkan encrypted ID
     private function findGallery(string $encryptedId): ?Gallery
     {
         try {
@@ -150,9 +137,7 @@ class GalleryController extends Controller
         }
     }
 
-    /**
-     * Redirect to index with error message.
-     */
+    // Redirect ke index dengan pesan error
     private function backWithError(string $message)
     {
         return redirect()
@@ -160,9 +145,7 @@ class GalleryController extends Controller
             ->with('error', $message);
     }
 
-    /**
-     * Validation rules.
-     */
+    // Aturan validasi
     private function rules(): array
     {
         return [
@@ -174,24 +157,22 @@ class GalleryController extends Controller
         ];
     }
 
-    /**
-     * Validation messages.
-     */
+    // Pesan validasi
     private function messages(): array
     {
         return [
-            'judul.required'    => 'Judul wajib diisi.',
-            'judul.max'         => 'Judul maksimal 50 karakter.',
+            'judul.required' => 'Judul wajib diisi.',
+            'judul.max'      => 'Judul maksimal 50 karakter.',
 
             'kategori.required' => 'Kategori wajib dipilih.',
             'kategori.in'       => 'Kategori hanya boleh Foto atau Video.',
 
-            'tanggal.required'  => 'Tanggal wajib diisi.',
-            'tanggal.date'      => 'Format tanggal tidak valid.',
+            'tanggal.required' => 'Tanggal wajib diisi.',
+            'tanggal.date'     => 'Format tanggal tidak valid.',
 
-            'gambar.image'      => 'File harus berupa gambar.',
-            'gambar.mimes'      => 'Format gambar harus JPG, JPEG, PNG, atau WEBP.',
-            'gambar.max'        => 'Ukuran gambar maksimal 2 MB.',
+            'gambar.image' => 'File harus berupa gambar.',
+            'gambar.mimes' => 'Format gambar harus JPG, JPEG, PNG, atau WEBP.',
+            'gambar.max'   => 'Ukuran gambar maksimal 2 MB.',
         ];
     }
 }

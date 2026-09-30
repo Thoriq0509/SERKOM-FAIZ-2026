@@ -9,20 +9,16 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    /* =====================================================
-     |  SHOW LOGIN PAGE
-     ===================================================== */
+    // tampilkan login page
     public function index()
     {
         return view('auth.login');
     }
 
-    /* =====================================================
-     |  PROCESS LOGIN
-     ===================================================== */
+    // login
     public function login(Request $request)
     {
-        // Validate input
+        // Validasi input
         $request->validate([
             'username' => ['required', 'string'],
             'password' => ['required', 'string'],
@@ -31,7 +27,7 @@ class AuthController extends Controller
             'password.required' => 'Password wajib diisi.',
         ]);
 
-        // Find user by username
+        // cari berdasar username
         $user = User::where('username', $request->username)->first();
 
         // Username not found OR password mismatch
@@ -39,7 +35,7 @@ class AuthController extends Controller
             return $this->loginFailed($request, 'Username atau password salah.');
         }
 
-        // Check role access
+        // cek role
         $role = strtolower(trim((string) $user->role));
 
         if (! in_array($role, ['admin', 'operator'], true)) {
@@ -55,9 +51,6 @@ class AuthController extends Controller
         return redirect()->route('dashboard');
     }
 
-    /* =====================================================
-     |  LOGOUT
-     ===================================================== */
     public function logout(Request $request)
     {
         Auth::logout();
@@ -68,13 +61,6 @@ class AuthController extends Controller
         return redirect()->route('login');
     }
 
-    /* =====================================================
-     |  HELPER
-     ===================================================== */
-
-    /**
-     * Redirect back to login with error message.
-     */
     private function loginFailed(Request $request, string $message)
     {
         return back()

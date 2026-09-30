@@ -9,19 +9,9 @@ class SchoolProfile extends Model
 {
     use HasFactory;
 
-    /**
-     * Nama tabel database.
-     */
     protected $table = 'school_profiles';
-
-    /**
-     * Primary key tabel.
-     */
     protected $primaryKey = 'id';
 
-    /**
-     * Kolom yang diizinkan untuk mass assignment.
-     */
     protected $fillable = [
         'nama_sekolah',
         'kepala_sekolah',

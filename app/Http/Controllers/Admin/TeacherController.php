@@ -12,341 +12,172 @@ use Throwable;
 
 class TeacherController extends Controller
 {
-    /**
-     * Menampilkan seluruh data guru.
-     */
+    // Daftar guru
     public function index()
     {
         $teachers = Teacher::latest()->paginate(10);
 
-        return view(
-            'admin.teachers.index',
-            compact('teachers')
-        );
+        return view('admin.teachers.index', compact('teachers'));
     }
 
-
-    /**
-     * Menampilkan form tambah guru.
-     */
+    // Form tambah guru
     public function create()
     {
         return view('admin.teachers.form');
     }
 
-
-    /**
-     * Menyimpan data guru baru.
-     */
+    // Simpan guru baru
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama_guru' => [
-                'required',
-                'string',
-                'max:40',
-            ],
-
-            'nip' => [
-                'nullable',
-                'string',
-                'max:15',
-                Rule::unique('teachers', 'nip'),
-            ],
-
-            'mapel' => [
-                'nullable',
-                'string',
-                'max:40',
-            ],
-
-            'foto' => [
-                'nullable',
-                'image',
-                'mimes:jpg,jpeg,png',
-                'max:2048',
-            ],
-
+            'nama_guru' => ['required', 'string', 'max:40'],
+            'nip'       => ['nullable', 'string', 'max:15', Rule::unique('teachers', 'nip')],
+            'mapel'     => ['nullable', 'string', 'max:40'],
+            'foto'      => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ], [
             'nama_guru.required' => 'Nama guru wajib diisi.',
-            'nama_guru.max' => 'Nama guru maksimal 40 karakter.',
+            'nama_guru.max'      => 'Nama guru maksimal 40 karakter.',
 
             'nip.unique' => 'NIP sudah digunakan oleh guru lain.',
-            'nip.max' => 'NIP maksimal 15 karakter.',
+            'nip.max'    => 'NIP maksimal 15 karakter.',
 
             'mapel.max' => 'Mata pelajaran maksimal 40 karakter.',
 
             'foto.image' => 'File foto harus berupa gambar.',
             'foto.mimes' => 'Foto harus berformat JPG, JPEG, atau PNG.',
-            'foto.max' => 'Ukuran foto maksimal 2 MB.',
+            'foto.max'   => 'Ukuran foto maksimal 2 MB.',
         ]);
 
-
         $teacher = new Teacher();
-
         $teacher->nama_guru = $validated['nama_guru'];
-        $teacher->nip = $validated['nip'] ?? null;
-        $teacher->mapel = $validated['mapel'] ?? null;
+        $teacher->nip       = $validated['nip'] ?? null;
+        $teacher->mapel     = $validated['mapel'] ?? null;
 
-
-        /**
-         * Upload foto guru.
-         */
+        // Upload foto
         if ($request->hasFile('foto')) {
-
-            $teacher->foto = $request
-                ->file('foto')
-                ->store('teachers', 'public');
+            $teacher->foto = $request->file('foto')->store('teachers', 'public');
         }
-
 
         $teacher->save();
 
-
         return redirect()
             ->route('admin.guru')
-            ->with(
-                'success',
-                'Data guru berhasil ditambahkan.'
-            );
+            ->with('success', 'Data guru berhasil ditambahkan.');
     }
 
-
-    /**
-     * Menampilkan detail guru.
-     */
+    // Detail guru
     public function show($encryptedId)
     {
         $teacher = $this->findTeacherByEncryptedId($encryptedId);
 
-
-        if (!$teacher) {
-
-            return redirect()
-                ->route('admin.guru')
-                ->with(
-                    'error',
-                    'Data guru tidak ditemukan.'
-                );
+        if (! $teacher) {
+            return $this->backWithError('Data guru tidak ditemukan.');
         }
 
-
-        return view(
-            'admin.teachers.show',
-            compact('teacher')
-        );
+        return view('admin.teachers.show', compact('teacher'));
     }
 
-
-    /**
-     * Menampilkan form edit guru.
-     */
+    // Form edit guru
     public function edit($encryptedId)
     {
         $teacher = $this->findTeacherByEncryptedId($encryptedId);
 
-
-        if (!$teacher) {
-
-            return redirect()
-                ->route('admin.guru')
-                ->with(
-                    'error',
-                    'Data guru tidak ditemukan.'
-                );
+        if (! $teacher) {
+            return $this->backWithError('Data guru tidak ditemukan.');
         }
 
-
-        return view(
-            'admin.teachers.form',
-            compact('teacher')
-        );
+        return view('admin.teachers.form', compact('teacher'));
     }
 
-
-    /**
-     * Memperbarui data guru.
-     */
+    // Update data guru
     public function update(Request $request, $encryptedId)
     {
         $teacher = $this->findTeacherByEncryptedId($encryptedId);
 
-
-        if (!$teacher) {
-
-            return redirect()
-                ->route('admin.guru')
-                ->with(
-                    'error',
-                    'Data guru tidak ditemukan.'
-                );
+        if (! $teacher) {
+            return $this->backWithError('Data guru tidak ditemukan.');
         }
 
-
         $validated = $request->validate([
-            'nama_guru' => [
-                'required',
-                'string',
-                'max:40',
+            'nama_guru' => ['required', 'string', 'max:40'],
+            'nip'       => [
+                'nullable', 'string', 'max:15',
+                Rule::unique('teachers', 'nip')->ignore($teacher->getKey(), $teacher->getKeyName()),
             ],
-
-            'nip' => [
-                'nullable',
-                'string',
-                'max:15',
-                Rule::unique('teachers', 'nip')
-                    ->ignore(
-                        $teacher->getKey(),
-                        $teacher->getKeyName()
-                    ),
-            ],
-
-            'mapel' => [
-                'nullable',
-                'string',
-                'max:40',
-            ],
-
-            'foto' => [
-                'nullable',
-                'image',
-                'mimes:jpg,jpeg,png',
-                'max:2048',
-            ],
-
+            'mapel' => ['nullable', 'string', 'max:40'],
+            'foto'  => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ], [
             'nama_guru.required' => 'Nama guru wajib diisi.',
-            'nama_guru.max' => 'Nama guru maksimal 40 karakter.',
+            'nama_guru.max'      => 'Nama guru maksimal 40 karakter.',
 
             'nip.unique' => 'NIP sudah digunakan oleh guru lain.',
-            'nip.max' => 'NIP maksimal 15 karakter.',
+            'nip.max'    => 'NIP maksimal 15 karakter.',
 
             'mapel.max' => 'Mata pelajaran maksimal 40 karakter.',
 
             'foto.image' => 'File foto harus berupa gambar.',
             'foto.mimes' => 'Foto harus berformat JPG, JPEG, atau PNG.',
-            'foto.max' => 'Ukuran foto maksimal 2 MB.',
+            'foto.max'   => 'Ukuran foto maksimal 2 MB.',
         ]);
 
-
         $teacher->nama_guru = $validated['nama_guru'];
-        $teacher->nip = $validated['nip'] ?? null;
-        $teacher->mapel = $validated['mapel'] ?? null;
+        $teacher->nip       = $validated['nip'] ?? null;
+        $teacher->mapel     = $validated['mapel'] ?? null;
 
-
-        /**
-         * Upload foto baru.
-         */
+        // Upload foto baru + hapus yang lama
         if ($request->hasFile('foto')) {
-
-            if (
-                $teacher->foto &&
-                Storage::disk('public')->exists($teacher->foto)
-            ) {
-
-                Storage::disk('public')->delete(
-                    $teacher->foto
-                );
+            if ($teacher->foto && Storage::disk('public')->exists($teacher->foto)) {
+                Storage::disk('public')->delete($teacher->foto);
             }
 
-
-            $teacher->foto = $request
-                ->file('foto')
-                ->store('teachers', 'public');
+            $teacher->foto = $request->file('foto')->store('teachers', 'public');
         }
-
 
         $teacher->save();
 
-
         return redirect()
             ->route('admin.guru')
-            ->with(
-                'success',
-                'Data guru berhasil diperbarui.'
-            );
+            ->with('success', 'Data guru berhasil diperbarui.');
     }
 
-
-    /**
-     * Menghapus data guru.
-     */
+    // Hapus data guru
     public function destroy($encryptedId)
     {
         $teacher = $this->findTeacherByEncryptedId($encryptedId);
 
-
-        if (!$teacher) {
-
-            return redirect()
-                ->route('admin.guru')
-                ->with(
-                    'error',
-                    'Data guru tidak ditemukan.'
-                );
+        if (! $teacher) {
+            return $this->backWithError('Data guru tidak ditemukan.');
         }
 
-
-        /**
-         * Hapus foto guru.
-         */
-        if (
-            $teacher->foto &&
-            Storage::disk('public')->exists($teacher->foto)
-        ) {
-
-            Storage::disk('public')->delete(
-                $teacher->foto
-            );
+        // Hapus foto
+        if ($teacher->foto && Storage::disk('public')->exists($teacher->foto)) {
+            Storage::disk('public')->delete($teacher->foto);
         }
 
-
-        /**
-         * Hapus data guru.
-         */
         $teacher->delete();
-
 
         return redirect()
             ->route('admin.guru')
-            ->with(
-                'success',
-                'Data guru berhasil dihapus.'
-            );
+            ->with('success', 'Data guru berhasil dihapus.');
     }
 
-
-    /**
-     * Mencari guru berdasarkan ID terenkripsi.
-     */
+    // Cari guru berdasarkan encrypted ID
     private function findTeacherByEncryptedId($encryptedId)
     {
         try {
-
-            /**
-             * ID dibuat menggunakan:
-             *
-             * Crypt::encryptString($teacher->id)
-             *
-             * Maka decrypt menggunakan:
-             *
-             * Crypt::decryptString($encryptedId)
-             */
             $teacherId = Crypt::decryptString($encryptedId);
 
-
-            /**
-             * Cari berdasarkan primary key model.
-             */
             return Teacher::find($teacherId);
-
         } catch (Throwable $e) {
-
-            /**
-             * Jika decrypt gagal,
-             * anggap data tidak valid.
-             */
             return null;
         }
+    }
+
+    // Redirect ke index dengan pesan error
+    private function backWithError(string $message)
+    {
+        return redirect()
+            ->route('admin.guru')
+            ->with('error', $message);
     }
 }

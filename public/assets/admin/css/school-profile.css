@@ -1,0 +1,191 @@
+/* =====================================================
+   SCHOOL PROFILE — Style khusus halaman Profil Sekolah
+   (index + form)
+   ===================================================== */
+
+/* ===== IDENTITY SECTION (index) ===== */
+.identity-section {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.school-logo {
+    width: 130px;
+    height: 130px;
+    border-radius: 10px;
+    background-color: var(--c-bg);
+    border: 1px solid var(--c-border);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    flex-shrink: 0;
+}
+
+.school-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.school-logo .logo-empty {
+    color: var(--c-text-soft);
+    font-size: .75rem;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.identity-info { min-width: 0; flex: 1; }
+
+.school-name {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--c-primary-d);
+    margin: 0 0 14px;
+}
+
+.identity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px 24px;
+}
+
+.identity-item .label {
+    color: var(--c-text-soft);
+    font-size: .72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    margin-bottom: 4px;
+}
+
+.identity-item .value {
+    color: var(--c-primary-d);
+    font-size: .9rem;
+    font-weight: 600;
+    word-break: break-word;
+}
+
+/* ===== INFO GRID (index) ===== */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px 32px;
+}
+
+.info-item .label {
+    color: var(--c-text-soft);
+    font-size: .72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    margin-bottom: 4px;
+}
+
+.info-item .value {
+    color: var(--c-primary-d);
+    font-size: .9rem;
+    font-weight: 600;
+    word-break: break-word;
+}
+
+.info-item.full {
+    grid-column: 1 / -1;
+}
+
+/* ===== TEXT CONTENT (index) ===== */
+.text-content {
+    color: var(--c-text);
+    font-size: .9rem;
+    line-height: 1.8;
+    white-space: pre-line;
+    word-break: break-word;
+    margin: 0;
+}
+
+.text-content.empty {
+    color: var(--c-text-soft);
+    font-style: italic;
+}
+
+/* ===== BUILDING PHOTO (index) ===== */
+.building-photo {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    display: block;
+}
+
+.building-empty {
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--c-text-soft);
+    background-color: var(--c-bg);
+    font-size: .85rem;
+}
+
+/* ===== MEDIA PREVIEW (form) ===== */
+.media-preview {
+    padding: 12px;
+    background-color: var(--c-bg);
+    border: 1px solid var(--c-border);
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 12px;
+}
+
+.media-preview img {
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;
+}
+
+.media-preview.logo img {
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
+}
+
+.media-preview.photo img {
+    width: 100%;
+    max-height: 260px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.media-empty {
+    padding: 40px 20px;
+    background-color: var(--c-bg);
+    border: 1px dashed var(--c-border);
+    border-radius: 8px;
+    text-align: center;
+    color: var(--c-text-soft);
+    font-size: .82rem;
+    margin-top: 12px;
+}
+
+.media-label {
+    display: block;
+    font-size: .75rem;
+    color: var(--c-text-soft);
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 576px) {
+    .identity-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .school-logo {
+        width: 100px;
+        height: 100px;
+    }
+
+    .school-name { font-size: 1rem; }
+}

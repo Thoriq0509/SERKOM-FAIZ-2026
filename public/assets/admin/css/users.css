@@ -1,0 +1,120 @@
+/* =====================================================
+   USERS — Style khusus halaman Data Pengelola
+   (index + form)
+   ===================================================== */
+
+/* ===== INDEX ===== */
+.user-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: var(--c-soft);
+    color: var(--c-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .9rem;
+    border: 1px solid var(--c-border);
+    flex-shrink: 0;
+}
+
+.user-name {
+    font-weight: 600;
+    color: var(--c-primary-d);
+    font-size: .875rem;
+    line-height: 1.2;
+}
+
+.user-id {
+    font-family: 'Courier New', monospace;
+    font-size: .75rem;
+    color: var(--c-text-soft);
+    margin-top: 2px;
+}
+
+/* ===== BADGE ROLE ===== */
+.badge-role {
+    font-size: .75rem;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.badge-role.admin {
+    background-color: #fef2f2;
+    border-color: #fecaca;
+    color: #b91c1c;
+}
+
+.badge-role.operator {
+    background-color: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1d4ed8;
+}
+
+/* ===== HEAD ICON (form) ===== */
+.card-clean .card-head .head-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background-color: var(--c-soft);
+    color: var(--c-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.card-clean .card-head small {
+    color: var(--c-text-soft);
+    font-size: .78rem;
+}
+
+/* ===== PASSWORD TOGGLE (form) ===== */
+.input-group-clean {
+    position: relative;
+}
+
+.input-group-clean .form-control {
+    padding-right: 44px;
+}
+
+.toggle-pass {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: var(--c-text-soft);
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background .15s ease, color .15s ease;
+}
+
+.toggle-pass:hover {
+    background-color: var(--c-soft);
+    color: var(--c-primary);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 576px) {
+    .card-clean .card-body { padding: 20px 16px; }
+    .card-clean .card-head { padding: 14px 16px; }
+}
