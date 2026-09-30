@@ -1,7 +1,11 @@
 @extends('layouts.template')
 
-@section('styles')
+@push('styles')
     <link rel="stylesheet" href="{{ asset('assets/admin/css/teachers.css') }}">
+@endpush
+
+@section('breadcrumb')
+    <li>Data Guru</li>
 @endsection
 
 @section('content')
@@ -47,31 +51,31 @@
 
         <div class="card-head">
             <h6><i class="fas fa-chalkboard-teacher me-2"></i>Daftar Tenaga Pendidik</h6>
-            <span class="count">Total: {{ $teachers->total() }} guru</span>
+            <span class="count">Total: {{ $teachers->count() }} guru</span>
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-clean">
+        <div class="p-3">
+            <table id="tableTeachers" class="table table-clean align-middle" data-datatable style="width:100%">
 
                 <thead>
                     <tr>
                         <th width="5%">No</th>
-                        <th width="12%" class="text-center">Foto</th>
+                        <th width="12%" class="text-center" data-orderable="false">Foto</th>
                         <th width="28%">Nama Guru</th>
                         <th width="20%">NIP</th>
                         <th width="20%">Mata Pelajaran</th>
-                        <th width="15%" class="text-center">Aksi</th>
+                        <th width="15%" class="text-center" data-orderable="false">Aksi</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @forelse ($teachers as $teacher)
+                    @foreach ($teachers as $teacher)
                         @php
                             $encryptedId = \Illuminate\Support\Facades\Crypt::encryptString($teacher->id);
                         @endphp
 
                         <tr>
-                            <td>{{ $teachers->firstItem() + $loop->index }}</td>
+                            <td>{{ $loop->iteration }}</td>
 
                             <!-- Foto -->
                             <td class="text-center">
@@ -122,33 +126,11 @@
                                 </form>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6">
-                                <div class="empty-state">
-                                    <i class="fas fa-chalkboard-teacher"></i>
-                                    <h6>Belum Ada Data Guru</h6>
-                                    <p>Data tenaga pendidik belum tersedia.</p>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
 
             </table>
         </div>
-
-        <!-- Pagination -->
-        @if ($teachers->hasPages())
-            <div class="table-foot">
-                <small>
-                    Menampilkan <strong>{{ $teachers->firstItem() }}</strong>
-                    sampai <strong>{{ $teachers->lastItem() }}</strong>
-                    dari <strong>{{ $teachers->total() }}</strong> data guru
-                </small>
-                <div>{{ $teachers->links() }}</div>
-            </div>
-        @endif
 
     </div>
 

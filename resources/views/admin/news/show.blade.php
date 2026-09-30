@@ -4,6 +4,11 @@
     <link rel="stylesheet" href="{{ asset('assets/admin/css/news.css') }}">
 @endpush
 
+@section('breadcrumb')
+    <li><a href="{{ route('admin.news.index') }}">Kelola Berita</a></li>
+    <li>Detail Berita</li>
+@endsection
+
 @section('content')
 
 @php

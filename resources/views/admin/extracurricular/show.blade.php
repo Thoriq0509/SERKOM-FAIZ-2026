@@ -4,6 +4,11 @@
     <link rel="stylesheet" href="{{ asset('assets/admin/css/extracurricular.css') }}">
 @endpush
 
+@section('breadcrumb')
+    <li><a href="{{ route('admin.extracurricular.index') }}">Kelola Ekstrakurikuler</a></li>
+    <li>Detail Ekstrakurikuler</li>
+@endsection
+
 @section('content')
 
 @php

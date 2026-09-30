@@ -4,6 +4,11 @@
     <link rel="stylesheet" href="{{ asset('assets/admin/css/students.css') }}">
 @endpush
 
+@section('breadcrumb')
+    <li><a href="{{ route('admin.siswa') }}">Data Siswa</a></li>
+    <li>Detail Siswa</li>
+@endsection
+
 @section('content')
 
 @php

@@ -12,11 +12,15 @@
     <link rel="stylesheet" href="{{ asset('assets/admin/css/teachers.css') }}">
 @endpush
 
+@section('breadcrumb')
+    <li><a href="{{ route('admin.guru') }}">Data Guru</a></li>
+    <li>{{ $isEdit ? 'Edit Guru' : 'Tambah Guru' }}</li>
+@endsection
+
 @section('content')
 
 <div class="container-fluid p-0">
 
-    <!-- Header -->
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
         <div>
             <h2 class="page-title">
@@ -35,7 +39,6 @@
         </a>
     </div>
 
-    <!-- Alert validasi -->
     @if ($errors->any())
         <div class="alert-soft alert-danger mb-4" role="alert" data-alert>
             <i class="fas fa-exclamation-triangle"></i>
@@ -54,7 +57,6 @@
         </div>
     @endif
 
-    <!-- Alert sukses -->
     @if (session('success'))
         <div class="alert-soft alert-success mb-4" role="alert" data-alert>
             <i class="fas fa-check-circle"></i>
@@ -65,7 +67,6 @@
         </div>
     @endif
 
-    <!-- Card form -->
     <div class="card-clean mb-4">
 
         <div class="card-head" style="justify-content: flex-start;">
@@ -89,7 +90,6 @@
                 @csrf
                 @if ($isEdit) @method('PUT') @endif
 
-                <!-- Section: Data utama -->
                 <div class="section-title">
                     <i class="fas fa-id-badge"></i>Data Utama
                 </div>
@@ -97,7 +97,6 @@
 
                 <div class="row">
 
-                    <!-- Nama guru -->
                     <div class="col-md-6 mb-4">
                         <label for="nama_guru" class="form-label">
                             Nama Lengkap Guru <span class="req">*</span>
@@ -115,7 +114,6 @@
                         @enderror
                     </div>
 
-                    <!-- NIP -->
                     <div class="col-md-6 mb-4">
                         <label for="nip" class="form-label">
                             NIP <span class="opt">(Opsional)</span>
@@ -134,7 +132,6 @@
 
                 </div>
 
-                <!-- Section: Mata pelajaran -->
                 <div class="section-title">
                     <i class="fas fa-book"></i>Mata Pelajaran
                 </div>
@@ -156,7 +153,6 @@
                     @enderror
                 </div>
 
-                <!-- Section: Foto -->
                 <div class="section-title">
                     <i class="fas fa-image"></i>Foto Guru
                 </div>
@@ -181,7 +177,6 @@
                         @endif
                     </small>
 
-                    <!-- Foto saat ini -->
                     @if ($isEdit && $teacher->foto)
                         <div class="photo-wrapper">
                             <span class="photo-label">Foto saat ini:</span>
@@ -191,17 +186,12 @@
                         </div>
                     @endif
 
-                    <!-- Preview foto baru -->
                     <div id="previewWrapper" class="preview-wrapper">
                         <span class="photo-label">Preview foto baru:</span>
-                        <img id="previewPhoto"
-                             src=""
-                             alt="Preview foto"
-                             class="photo-preview-box new">
+                        <img id="previewPhoto" src="" alt="Preview foto" class="photo-preview-box new">
                     </div>
                 </div>
 
-                <!-- Action bar -->
                 <div class="action-bar">
                     <a href="{{ route('admin.guru') }}" class="btn btn-cancel">
                         <i class="fas fa-times me-2"></i>Batal
@@ -218,7 +208,6 @@
 
     </div>
 
-    <!-- Danger zone -->
     @if ($isEdit)
         <div class="danger-card mb-5">
             <div class="danger-head">
@@ -227,10 +216,7 @@
             <div class="danger-body">
                 <div>
                     <h6>Hapus Data Guru</h6>
-                    <p>
-                        Data guru <strong>{{ $teacher->nama_guru }}</strong>
-                        akan dihapus secara permanen.
-                    </p>
+                    <p>Data guru <strong>{{ $teacher->nama_guru }}</strong> akan dihapus secara permanen.</p>
                 </div>
 
                 <form action="{{ route('admin.guru.destroy', $encryptedId) }}"
@@ -248,11 +234,9 @@
 
 </div>
 
-<!-- Script preview foto + tutup alert -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    // Preview foto
     const fotoInput      = document.getElementById('foto');
     const previewWrapper = document.getElementById('previewWrapper');
     const previewPhoto   = document.getElementById('previewPhoto');
@@ -276,7 +260,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Tutup alert manual
     document.querySelectorAll('[data-alert-close]').forEach(function (btn) {
         btn.addEventListener('click', function (e) {
             e.preventDefault();

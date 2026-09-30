@@ -1,5 +1,14 @@
 @extends('layouts.template')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/students.css') }}">
+@endpush
+
+@section('breadcrumb')
+    <li><a href="{{ route('admin.siswa') }}">Data Siswa</a></li>
+    <li>{{ $student->exists ? 'Edit Data Siswa' : 'Tambah Data Siswa' }}</li>
+@endsection
+
 @section('content')
 
 @php

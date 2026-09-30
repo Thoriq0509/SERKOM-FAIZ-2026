@@ -4,6 +4,11 @@
     <link rel="stylesheet" href="{{ asset('assets/admin/css/gallery.css') }}">
 @endpush
 
+@section('breadcrumb')
+    <li><a href="{{ route('admin.gallery.index') }}">Kelola Galeri</a></li>
+    <li>Detail Media</li>
+@endsection
+
 @section('content')
 
 @php

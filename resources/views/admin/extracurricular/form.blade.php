@@ -42,6 +42,11 @@
     $menitOptions = ['00', '15', '30', '45'];
 @endphp
 
+@section('breadcrumb')
+    <li><a href="{{ route('admin.extracurricular.index') }}">Kelola Ekstrakurikuler</a></li>
+    <li>{{ $isEdit ? 'Edit Ekstrakurikuler' : 'Tambah Ekstrakurikuler' }}</li>
+@endsection
+
 @section('content')
 
 <div class="container-fluid p-0">

@@ -4,6 +4,10 @@
     <link rel="stylesheet" href="{{ asset('assets/admin/css/students.css') }}">
 @endpush
 
+@section('breadcrumb')
+    <li>Data Siswa</li>
+@endsection
+
 @section('content')
 
 <div class="container-fluid p-0">
@@ -22,7 +26,7 @@
 
     <!-- Alert sukses -->
     @if (session('success'))
-        <div class="alert alert-success alert-soft alert-dismissible fade show" role="alert" data-alert>
+        <div class="alert alert-success alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-check-circle"></i>
             <span class="alert-text">{{ session('success') }}</span>
             <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
@@ -33,7 +37,7 @@
 
     <!-- Alert error -->
     @if (session('error'))
-        <div class="alert alert-danger alert-soft alert-dismissible fade show" role="alert" data-alert>
+        <div class="alert alert-danger alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-exclamation-circle"></i>
             <span class="alert-text">{{ session('error') }}</span>
             <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
@@ -47,12 +51,11 @@
 
         <div class="card-head">
             <h6><i class="fas fa-user-graduate me-2"></i>Daftar Peserta Didik</h6>
-            <span class="count">Total: {{ $students->total() }} siswa</span>
+            <span class="count">Total: {{ $students->count() }} siswa</span>
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-clean">
-
+        <div class="p-3">
+            <table id="tableStudents" class="table table-clean align-middle" data-datatable style="width:100%">
                 <thead>
                     <tr>
                         <th width="5%">No</th>
@@ -60,18 +63,18 @@
                         <th width="30%">Nama Siswa</th>
                         <th width="15%" class="text-center">Jenis Kelamin</th>
                         <th width="15%" class="text-center">Tahun Masuk</th>
-                        <th width="20%" class="text-center">Aksi</th>
+                        <th width="20%" class="text-center" data-orderable="false">Aksi</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @forelse ($students as $student)
+                    @foreach ($students as $student)
                         @php
                             $encryptedId = \Illuminate\Support\Facades\Crypt::encryptString($student->id);
                         @endphp
 
                         <tr>
-                            <td>{{ $students->firstItem() + $loop->index }}</td>
+                            <td>{{ $loop->iteration }}</td>
 
                             <td class="cell-nisn">{{ $student->nisn }}</td>
 
@@ -113,33 +116,11 @@
                                 </form>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6">
-                                <div class="empty-state">
-                                    <i class="fas fa-user-graduate"></i>
-                                    <h6>Belum Ada Data Siswa</h6>
-                                    <p>Data peserta didik belum tersedia.</p>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
 
             </table>
         </div>
-
-        <!-- Pagination -->
-        @if ($students->hasPages())
-            <div class="table-foot">
-                <small>
-                    Menampilkan <strong>{{ $students->firstItem() }}</strong>
-                    sampai <strong>{{ $students->lastItem() }}</strong>
-                    dari <strong>{{ $students->total() }}</strong> data siswa
-                </small>
-                <div>{{ $students->links() }}</div>
-            </div>
-        @endif
 
     </div>
 

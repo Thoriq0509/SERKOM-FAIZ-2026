@@ -12,6 +12,11 @@
         : null;
 @endphp
 
+@section('breadcrumb')
+    <li><a href="{{ route('admin.news.index') }}">Kelola Berita</a></li>
+    <li>{{ $isEdit ? 'Edit Berita' : 'Tambah Berita' }}</li>
+@endsection
+
 @section('content')
 
 <div class="container-fluid p-0">

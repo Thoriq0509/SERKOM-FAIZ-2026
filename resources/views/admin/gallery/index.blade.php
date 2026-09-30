@@ -4,6 +4,10 @@
     <link rel="stylesheet" href="{{ asset('assets/admin/css/gallery.css') }}">
 @endpush
 
+@section('breadcrumb')
+    <li>Kelola Galeri</li>
+@endsection
+
 @section('content')
 
 <div class="container-fluid p-0">
@@ -47,31 +51,31 @@
 
         <div class="card-head">
             <h6><i class="fas fa-images me-2"></i>Daftar Galeri Sekolah</h6>
-            <span class="count">Total: {{ $galleries->total() ?? 0 }} media</span>
+            <span class="count">Total: {{ $galleries->count() ?? 0 }} media</span>
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-clean">
+        <div class="p-3">
+            <table id="tableGallery" class="table table-clean align-middle" data-datatable style="width:100%">
 
                 <thead>
                     <tr>
                         <th width="5%">No</th>
-                        <th width="13%" class="text-center">Preview</th>
+                        <th width="13%" class="text-center" data-orderable="false">Preview</th>
                         <th width="35%">Judul & Keterangan</th>
                         <th width="13%" class="text-center">Kategori</th>
                         <th width="14%" class="text-center">Tanggal</th>
-                        <th width="20%" class="text-center">Aksi</th>
+                        <th width="20%" class="text-center" data-orderable="false">Aksi</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @forelse ($galleries as $index => $item)
+                    @foreach ($galleries as $item)
                         @php
                             $encryptedId = \Illuminate\Support\Facades\Crypt::encryptString($item->id);
                         @endphp
 
                         <tr>
-                            <td>{{ $galleries->firstItem() + $index }}</td>
+                            <td>{{ $loop->iteration }}</td>
 
                             <!-- Thumbnail -->
                             <td class="text-center">
@@ -112,7 +116,7 @@
                             </td>
 
                             <!-- Tanggal -->
-                            <td class="text-center">
+                            <td class="text-center" data-order="{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') : '' }}">
                                 <span class="cell-date">
                                     {{ $item->tanggal
                                         ? \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y')
@@ -144,33 +148,11 @@
                                 </form>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6">
-                                <div class="empty-state">
-                                    <i class="fas fa-images"></i>
-                                    <h6>Belum Ada Media Galeri</h6>
-                                    <p>Belum terdapat foto atau video yang diunggah.</p>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
 
             </table>
         </div>
-
-        <!-- Pagination -->
-        @if (isset($galleries) && $galleries->hasPages())
-            <div class="table-foot">
-                <small>
-                    Menampilkan <strong>{{ $galleries->firstItem() }}</strong>
-                    sampai <strong>{{ $galleries->lastItem() }}</strong>
-                    dari <strong>{{ $galleries->total() }}</strong> media
-                </small>
-                <div>{{ $galleries->links() }}</div>
-            </div>
-        @endif
 
     </div>
 

@@ -4,6 +4,11 @@
     <link rel="stylesheet" href="{{ asset('assets/admin/css/gallery.css') }}">
 @endpush
 
+@section('breadcrumb')
+    <li><a href="{{ route('admin.gallery.index') }}">Kelola Galeri</a></li>
+    <li>{{ (isset($gallery) && $gallery->exists) ? 'Edit Media' : 'Tambah Media' }}</li>
+@endsection
+
 @php
     $isEdit = isset($gallery) && $gallery->exists;
 

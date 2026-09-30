@@ -4,6 +4,10 @@
     <link rel="stylesheet" href="{{ asset('assets/admin/css/news.css') }}">
 @endpush
 
+@section('breadcrumb')
+    <li>Kelola Berita</li>
+@endsection
+
 @section('content')
 
 <div class="container-fluid p-0">
@@ -22,7 +26,7 @@
 
     <!-- Alert sukses -->
     @if (session('success'))
-        <div class="alert alert-success alert-soft alert-dismissible fade show" role="alert" data-alert>
+        <div class="alert alert-success alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-check-circle"></i>
             <span class="alert-text">{{ session('success') }}</span>
             <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
@@ -33,7 +37,7 @@
 
     <!-- Alert error -->
     @if (session('error'))
-        <div class="alert alert-danger alert-soft alert-dismissible fade show" role="alert" data-alert>
+        <div class="alert alert-danger alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-exclamation-circle"></i>
             <span class="alert-text">{{ session('error') }}</span>
             <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
@@ -47,31 +51,31 @@
 
         <div class="card-head">
             <h6><i class="fas fa-newspaper me-2"></i>Daftar Berita Sekolah</h6>
-            <span class="count">Total: {{ $news->total() ?? 0 }} berita</span>
+            <span class="count">Total: {{ $news->count() ?? 0 }} berita</span>
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-clean">
+        <div class="p-3">
+            <table id="tableNews" class="table table-clean align-middle" data-datatable style="width:100%">
 
                 <thead>
                     <tr>
                         <th width="5%">No</th>
-                        <th width="12%">Gambar</th>
+                        <th width="12%" data-orderable="false">Gambar</th>
                         <th width="35%">Judul Berita</th>
                         <th width="15%">Tanggal</th>
                         <th width="13%" class="text-center">Status</th>
-                        <th width="20%" class="text-center">Aksi</th>
+                        <th width="20%" class="text-center" data-orderable="false">Aksi</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @forelse ($news as $index => $item)
+                    @foreach ($news as $item)
                         @php
                             $encryptedId = \Illuminate\Support\Facades\Crypt::encryptString($item->id);
                         @endphp
 
                         <tr>
-                            <td>{{ $news->firstItem() + $index }}</td>
+                            <td>{{ $loop->iteration }}</td>
 
                             <!-- Thumbnail -->
                             <td>
@@ -134,33 +138,11 @@
                                 </form>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6">
-                                <div class="empty-state">
-                                    <i class="fas fa-newspaper"></i>
-                                    <h6>Belum Ada Berita</h6>
-                                    <p>Belum terdapat berita yang dipublikasikan.</p>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
 
             </table>
         </div>
-
-        <!-- Pagination -->
-        @if (isset($news) && $news->hasPages())
-            <div class="table-foot">
-                <small>
-                    Menampilkan <strong>{{ $news->firstItem() }}</strong>
-                    sampai <strong>{{ $news->lastItem() }}</strong>
-                    dari <strong>{{ $news->total() }}</strong> berita
-                </small>
-                <div>{{ $news->links() }}</div>
-            </div>
-        @endif
 
     </div>
 

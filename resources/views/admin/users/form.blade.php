@@ -12,6 +12,11 @@
         : null;
 @endphp
 
+@section('breadcrumb')
+    <li><a href="{{ route('admin.users.index') }}">Data Pengelola</a></li>
+    <li>{{ $isEdit ? 'Edit Pengelola' : 'Tambah Pengelola' }}</li>
+@endsection
+
 @section('content')
 
 <div class="container-fluid p-0">
@@ -221,7 +226,7 @@
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    // ==== Toggle password ====
+    // Toggle password
     document.querySelectorAll("[data-toggle-pass]").forEach(function (btn) {
         btn.addEventListener("click", function () {
             const targetId = btn.getAttribute("data-toggle-pass");
@@ -239,7 +244,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // ==== Tutup alert manual ====
+    // Tutup alert manual
     document.querySelectorAll("[data-alert-close]").forEach(function (btn) {
         btn.addEventListener("click", function (e) {
             e.preventDefault();

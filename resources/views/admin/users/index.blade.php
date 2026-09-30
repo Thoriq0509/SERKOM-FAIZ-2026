@@ -4,6 +4,10 @@
     <link rel="stylesheet" href="{{ asset('assets/admin/css/users.css') }}">
 @endpush
 
+@section('breadcrumb')
+    <li>Data Pengelola</li>
+@endsection
+
 @section('content')
 
 <div class="container-fluid p-0">

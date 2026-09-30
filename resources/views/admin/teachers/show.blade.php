@@ -4,6 +4,11 @@
     <link rel="stylesheet" href="{{ asset('assets/admin/css/teachers.css') }}">
 @endpush
 
+@section('breadcrumb')
+    <li><a href="{{ route('admin.guru') }}">Data Guru</a></li>
+    <li>Detail Guru</li>
+@endsection
+
 @section('content')
 
 @php

@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="{{ asset('assets/admin/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/css/layout.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/css/theme.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/datatables/css/datatables.css' )}}">
+    <link rel="stylesheet" href="{{ asset('assets/datatables/css/datatables.min.css' )}}">
 
     @stack('styles')
 </head>
@@ -20,8 +22,7 @@
 
 <aside class="sidebar" id="sidebar">
     <a href="{{ route('dashboard') }}" class="brand-box">
-        <i class="fas fa-building-columns"></i>
-        <span>SISTEM MANAJEMEN SEKOLAH</span>
+        <span>SISTEM MANAJEMEN SMATN</span>
     </a>
 
     <div class="nav-section-title">Navigasi Utama</div>
@@ -66,7 +67,7 @@
             <a href="{{ route('admin.extracurricular.index') }}"
                class="{{ request()->routeIs('admin.extracurricular.*') ? 'active' : '' }}">
                 <i class="fas fa-people-group"></i>
-                <span>Ekstrakurikuler</span>
+                <span>Kelola Ekstrakurikuler</span>
             </a>
         </li>
 
@@ -100,70 +101,106 @@
 <div class="main-wrapper">
 
     <header class="top-navbar">
-        <div class="d-flex align-items-center gap-2 gap-md-3">
+
+        <!-- Kiri: toggle + nama sekolah -->
+        <div class="d-flex align-items-center gap-2 gap-md-3 flex-grow-1 min-w-0">
             <button class="toggle-btn" id="sidebarToggle" type="button" aria-label="Buka menu">
                 <i class="fas fa-bars"></i>
             </button>
 
-            <form action="#" method="GET" class="search-form">
-                <i class="fas fa-magnifying-glass"></i>
-                <input type="text" name="query" placeholder="Cari data...">
-            </form>
+            <div class="navbar-school-name d-none d-md-flex align-items-center">
+                <img src="{{ asset('assets/admin/img/smatn.png') }}"
+                     alt="Logo Sekolah"
+                     class="navbar-school-logo">
+                <span>SMA TARUNA NUSANTARA</span>
+            </div>
         </div>
 
-        <div class="dropdown" id="adminDropdownWrapper">
-            <button class="admin-profile-btn"
-                    type="button"
-                    id="adminDropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false">
-                <img src="{{ asset('assets/admin/img/user.png') }}"
-                     alt="Foto Profil"
-                     onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->username ?? 'Admin') }}&background=1f2f46&color=fff&rounded=true'">
+        <!-- Kanan: tanggal + jam + profil -->
+        <div class="d-flex align-items-center gap-2 gap-md-3">
 
-                <div class="admin-info">
-                    <span class="admin-name">{{ Auth::user()->username ?? 'Admin' }}</span>
-                    <span class="admin-role">{{ Auth::user()->role ?? 'Administrator' }}</span>
-                </div>
+            <!-- Jam & tanggal -->
+            <div class="navbar-datetime d-none d-md-flex">
+                <i class="far fa-clock navbar-datetime-icon"></i>
+                <span class="navbar-datetime-text">
+                    <span id="liveDate"></span>
+                    <span class="navbar-datetime-sep">•</span>
+                    <span id="liveClock">--:--:--</span>
+                </span>
+            </div>
 
-                <i class="fas fa-chevron-down" style="font-size:.7rem;color:#6c757d;"></i>
-            </button>
+            <!-- Dropdown profil -->
+            <div class="dropdown" id="adminDropdownWrapper">
+                <button class="admin-profile-btn"
+                        type="button"
+                        id="adminDropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                    <img src="{{ asset('assets/admin/img/user.png') }}"
+                         alt="Foto Profil"
+                         onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->username ?? 'Admin') }}&background=1f2f46&color=fff&rounded=true'">
 
-            <ul class="admin-dropdown" id="adminDropdownMenu" role="menu">
-                <li>
-                    <div class="dropdown-header text-center">
-                        <img src="{{ asset('assets/admin/img/user.png') }}"
-                             alt="User"
-                             onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->username ?? 'Admin') }}&background=1f2f46&color=fff&size=100'">
-
-                        <h6>{{ Auth::user()->username ?? 'Admin' }}</h6>
-                        <small class="text-muted d-block">
-                            ID: {{ Auth::user()->id_user ?? '10293' }}
-                        </small>
-                        <div class="mt-1">
-                            <small class="fw-semibold" style="color:#1f3b5b;">
-                                {{ Auth::user()->role ?? 'Administrator' }}
-                            </small>
-                        </div>
+                    <div class="admin-info">
+                        <span class="admin-name">{{ Auth::user()->username ?? 'Admin' }}</span>
+                        <span class="admin-role">{{ Auth::user()->role ?? 'Administrator' }}</span>
                     </div>
-                </li>
 
-                <li><hr class="dropdown-divider"></li>
+                    <i class="fas fa-chevron-down" style="font-size:.7rem;color:#6c757d;"></i>
+                </button>
 
-                <li>
-                    <form action="{{ route('logout') }}" method="POST" class="m-0">
-                        @csrf
-                        <button type="submit" class="admin-dropdown-item text-danger">
-                            <i class="fas fa-right-from-bracket"></i>
-                            Keluar Aplikasi
-                        </button>
-                    </form>
-                </li>
-            </ul>
+                <ul class="admin-dropdown" id="adminDropdownMenu" role="menu">
+                    <li>
+                        <div class="dropdown-header text-center">
+                            <img src="{{ asset('assets/admin/img/user.png') }}"
+                                 alt="User"
+                                 onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->username ?? 'Admin') }}&background=1f2f46&color=fff&size=100'">
+
+                            <h6>{{ Auth::user()->username ?? 'Admin' }}</h6>
+                            <small class="text-muted d-block">
+                                ID: {{ Auth::user()->id_user ?? '10293' }}
+                            </small>
+                            <div class="mt-1">
+                                <small class="fw-semibold" style="color:#1f3b5b;">
+                                    {{ Auth::user()->role ?? 'Administrator' }}
+                                </small>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li><hr class="dropdown-divider"></li>
+
+                    <li>
+                        <form action="{{ route('logout') }}" method="POST" class="m-0">
+                            @csrf
+                            <button type="submit" class="admin-dropdown-item text-danger">
+                                <i class="fas fa-right-from-bracket"></i>
+                                Keluar Aplikasi
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+
         </div>
     </header>
 
     <main class="content-area">
+
+        <!-- Breadcrumb -->
+        @hasSection('breadcrumb')
+            <nav class="breadcrumb-clean" aria-label="breadcrumb">
+                <ol>
+                    <li>
+                        <a href="{{ route('dashboard') }}">
+                            <i class="fas fa-house"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    @yield('breadcrumb')
+                </ol>
+            </nav>
+        @endif
+
         @yield('content')
     </main>
 
@@ -173,10 +210,42 @@
 
 </div>
 
-<script src="{{ asset('assets/admin/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('assets/datatables/js/jquery-4.0.0.min.js')}}"></script>
+<!-- <script src="{{ asset('assets/admin/js/bootstrap.bundle.min.js') }}"></script> -->
+<script src="{{ asset('assets/datatables/js/datatables.js')}}"></script>
+<script src="{{ asset('assets/datatables/js/datatables.min.js')}}"></script>
+
+
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+
+    // ===== Live clock & date =====
+    const hariIndo  = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+    const bulanIndo = ['Januari','Februari','Maret','April','Mei','Juni',
+                       'Juli','Agustus','September','Oktober','November','Desember'];
+
+    function updateLiveClock() {
+        const now = new Date();
+
+        const hari   = hariIndo[now.getDay()];
+        const tgl    = String(now.getDate()).padStart(2, '0');
+        const bulan  = bulanIndo[now.getMonth()];
+        const tahun  = now.getFullYear();
+
+        const jam    = String(now.getHours()).padStart(2, '0');
+        const menit  = String(now.getMinutes()).padStart(2, '0');
+        const detik  = String(now.getSeconds()).padStart(2, '0');
+
+        const dateEl  = document.getElementById('liveDate');
+        const clockEl = document.getElementById('liveClock');
+
+        if (dateEl)  dateEl.textContent  = hari + ', ' + tgl + ' ' + bulan + ' ' + tahun;
+        if (clockEl) clockEl.textContent = jam + ':' + menit + ':' + detik;
+    }
+
+    updateLiveClock();
+    setInterval(updateLiveClock, 1000);
 
     // ===== Sidebar toggle =====
     const sidebarToggle  = document.getElementById("sidebarToggle");
@@ -211,7 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // ===== Admin dropdown (fixed position) =====
+    // ===== Admin dropdown =====
     const adminBtn   = document.getElementById("adminDropdown");
     const adminMenu  = document.getElementById("adminDropdownMenu");
     const adminWrap  = document.getElementById("adminDropdownWrapper");
@@ -288,6 +357,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
+</script>
+
+<script>
+    $(function () {
+        $('.table').DataTable();
+    });
 </script>
 
 </body>

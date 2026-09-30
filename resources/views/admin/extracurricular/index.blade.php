@@ -4,6 +4,10 @@
     <link rel="stylesheet" href="{{ asset('assets/admin/css/extracurricular.css') }}">
 @endpush
 
+@section('breadcrumb')
+    <li>Kelola Ekstrakurikuler</li>
+@endsection
+
 @section('content')
 
 <div class="container-fluid p-0">
@@ -22,7 +26,7 @@
 
     <!-- Alert sukses -->
     @if (session('success'))
-        <div class="alert alert-success alert-soft alert-dismissible fade show" role="alert" data-alert>
+        <div class="alert alert-success alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-check-circle"></i>
             <span class="alert-text">{{ session('success') }}</span>
             <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
@@ -33,7 +37,7 @@
 
     <!-- Alert error -->
     @if (session('error'))
-        <div class="alert alert-danger alert-soft alert-dismissible fade show" role="alert" data-alert>
+        <div class="alert alert-danger alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-exclamation-circle"></i>
             <span class="alert-text">{{ session('error') }}</span>
             <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
@@ -47,32 +51,32 @@
 
         <div class="card-head">
             <h6><i class="fas fa-basketball me-2"></i>Daftar Ekstrakurikuler</h6>
-            <span class="count">Total: {{ $extracurriculars->total() ?? 0 }} ekstrakurikuler</span>
+            <span class="count">Total: {{ $extracurriculars->count() ?? 0 }} ekstrakurikuler</span>
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-clean">
+        <div class="p-3">
+            <table id="tableExtracurriculars" class="table table-clean align-middle" data-datatable style="width:100%">
 
                 <thead>
                     <tr>
                         <th width="5%">No</th>
-                        <th width="10%" class="text-center">Gambar</th>
+                        <th width="10%" class="text-center" data-orderable="false">Gambar</th>
                         <th width="20%">Nama</th>
                         <th width="18%">Pembina</th>
                         <th width="17%">Jadwal</th>
                         <th width="20%">Deskripsi</th>
-                        <th width="10%" class="text-center">Aksi</th>
+                        <th width="10%" class="text-center" data-orderable="false">Aksi</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @forelse ($extracurriculars as $index => $item)
+                    @foreach ($extracurriculars as $item)
                         @php
                             $encryptedId = \Illuminate\Support\Facades\Crypt::encryptString($item->id);
                         @endphp
 
                         <tr>
-                            <td>{{ $extracurriculars->firstItem() + $index }}</td>
+                            <td>{{ $loop->iteration }}</td>
 
                             <!-- Thumbnail -->
                             <td class="text-center">
@@ -109,7 +113,7 @@
                             </td>
 
                             <!-- Deskripsi -->
-                            <td>
+                            <td data-order="{{ $item->deskripsi ?? '' }}">
                                 <div class="cell-desc">
                                     {{ $item->deskripsi ?: 'Belum ada deskripsi' }}
                                 </div>
@@ -138,33 +142,11 @@
                                 </form>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7">
-                                <div class="empty-state">
-                                    <i class="fas fa-basketball"></i>
-                                    <h6>Belum Ada Data Ekstrakurikuler</h6>
-                                    <p>Belum terdapat kegiatan ekstrakurikuler yang terdaftar.</p>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
 
             </table>
         </div>
-
-        <!-- Pagination -->
-        @if (isset($extracurriculars) && $extracurriculars->hasPages())
-            <div class="table-foot">
-                <small>
-                    Menampilkan <strong>{{ $extracurriculars->firstItem() }}</strong>
-                    sampai <strong>{{ $extracurriculars->lastItem() }}</strong>
-                    dari <strong>{{ $extracurriculars->total() }}</strong> data
-                </small>
-                <div>{{ $extracurriculars->links() }}</div>
-            </div>
-        @endif
 
     </div>
 

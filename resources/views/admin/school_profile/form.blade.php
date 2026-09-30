@@ -4,6 +4,11 @@
     <link rel="stylesheet" href="{{ asset('assets/admin/css/school-profile.css') }}">
 @endpush
 
+@section('breadcrumb')
+    <li><a href="{{ route('admin.school_profile') }}">Profil Sekolah</a></li>
+    <li>Edit Profil</li>
+@endsection
+
 @section('content')
 
 <div class="container-fluid p-0">

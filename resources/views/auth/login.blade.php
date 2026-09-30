@@ -23,7 +23,8 @@
             </div>
 
             <!-- Judul -->
-            <div class="school-title">Sistem Manajemen Sekolah</div>
+            <div class="school-title">Sistem Manajemen</div>
+            <div class="school-title">SMA TARUNA NUSANTARA</div>
             <div class="school-subtitle">Silakan login untuk melanjutkan</div>
 
             <!-- Alert error login -->
