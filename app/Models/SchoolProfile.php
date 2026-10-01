@@ -15,9 +15,12 @@ class SchoolProfile extends Model
     protected $fillable = [
         'nama_sekolah',
         'kepala_sekolah',
+        'foto_kepsek',
+        'sambutan_kepsek',
         'npsn',
         'alamat',
         'kontak',
+        'email',
         'visi_misi',
         'tahun_berdiri',
         'deskripsi',

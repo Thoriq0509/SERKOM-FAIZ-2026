@@ -14,7 +14,6 @@ class SchoolProfileController extends Controller
     {
         $schoolProfile = SchoolProfile::first();
 
-        // Kalau belum ada data, tampilkan objek kosong
         if (! $schoolProfile) {
             $schoolProfile = new SchoolProfile();
         }
@@ -27,7 +26,6 @@ class SchoolProfileController extends Controller
     {
         $schoolProfile = SchoolProfile::first();
 
-        // Kalau belum ada data, buat record kosong dulu
         if (! $schoolProfile) {
             $schoolProfile = SchoolProfile::create([
                 'nama_sekolah'   => '',
@@ -35,11 +33,14 @@ class SchoolProfileController extends Controller
                 'npsn'           => '',
                 'alamat'         => '',
                 'kontak'         => '',
+                'email'          => '',
                 'visi_misi'      => '',
                 'tahun_berdiri'  => null,
                 'deskripsi'      => null,
                 'logo'           => null,
                 'foto'           => null,
+                'foto_kepsek'    => null,
+                'sambutan_kepsek'=> null,
             ]);
         }
 
@@ -57,27 +58,33 @@ class SchoolProfileController extends Controller
         $schoolProfile = SchoolProfile::first() ?? new SchoolProfile();
 
         // Isi data utama
-        $schoolProfile->nama_sekolah   = $validated['nama_sekolah'];
-        $schoolProfile->kepala_sekolah = $validated['kepala_sekolah'];
-        $schoolProfile->npsn           = $validated['npsn'];
-        $schoolProfile->alamat         = $validated['alamat'];
-        $schoolProfile->kontak         = $validated['kontak'];
-        $schoolProfile->visi_misi      = $validated['visi_misi'];
-        $schoolProfile->tahun_berdiri  = $validated['tahun_berdiri'];
-        $schoolProfile->deskripsi      = $validated['deskripsi'] ?? null;
+        $schoolProfile->nama_sekolah    = $validated['nama_sekolah'];
+        $schoolProfile->kepala_sekolah  = $validated['kepala_sekolah'];
+        $schoolProfile->npsn            = $validated['npsn'];
+        $schoolProfile->alamat          = $validated['alamat'];
+        $schoolProfile->kontak          = $validated['kontak'];
+        $schoolProfile->email           = $validated['email'] ?? null;
+        $schoolProfile->visi_misi       = $validated['visi_misi'];
+        $schoolProfile->tahun_berdiri   = $validated['tahun_berdiri'];
+        $schoolProfile->deskripsi       = $validated['deskripsi'] ?? null;
+        $schoolProfile->sambutan_kepsek = $validated['sambutan_kepsek'] ?? null;
 
         // Upload logo baru
         if ($request->hasFile('logo')) {
             $this->deleteFile($schoolProfile->logo);
-
             $schoolProfile->logo = $request->file('logo')->store('profil', 'public');
         }
 
-        // Upload foto baru
+        // Upload foto gedung baru
         if ($request->hasFile('foto')) {
             $this->deleteFile($schoolProfile->foto);
-
             $schoolProfile->foto = $request->file('foto')->store('profil', 'public');
+        }
+
+        // Upload foto kepala sekolah baru
+        if ($request->hasFile('foto_kepsek')) {
+            $this->deleteFile($schoolProfile->foto_kepsek);
+            $schoolProfile->foto_kepsek = $request->file('foto_kepsek')->store('profil', 'public');
         }
 
         $schoolProfile->save();
@@ -98,9 +105,9 @@ class SchoolProfileController extends Controller
                 ->with('error', 'Data profil sekolah tidak ditemukan.');
         }
 
-        // Hapus file
         $this->deleteFile($schoolProfile->logo);
         $this->deleteFile($schoolProfile->foto);
+        $this->deleteFile($schoolProfile->foto_kepsek);
 
         $schoolProfile->delete();
 
@@ -121,16 +128,19 @@ class SchoolProfileController extends Controller
     private function rules(): array
     {
         return [
-            'nama_sekolah'   => ['required', 'string', 'max:40'],
-            'kepala_sekolah' => ['required', 'string', 'max:40'],
-            'npsn'           => ['required', 'string', 'max:10'],
-            'alamat'         => ['required', 'string'],
-            'kontak'         => ['required', 'string', 'max:15'],
-            'visi_misi'      => ['required', 'string'],
-            'tahun_berdiri'  => ['required', 'digits:4', 'integer'],
-            'deskripsi'      => ['nullable', 'string'],
-            'logo'           => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
-            'foto'           => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'nama_sekolah'    => ['required', 'string', 'max:40'],
+            'kepala_sekolah'  => ['required', 'string', 'max:40'],
+            'npsn'            => ['required', 'string', 'max:10'],
+            'alamat'          => ['required', 'string'],
+            'kontak'          => ['required', 'string', 'max:15'],
+            'email'           => ['nullable', 'email', 'max:100'],
+            'visi_misi'       => ['required', 'string'],
+            'tahun_berdiri'   => ['required', 'digits:4', 'integer'],
+            'deskripsi'       => ['nullable', 'string'],
+            'sambutan_kepsek' => ['nullable', 'string'],
+            'logo'            => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'foto'            => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'foto_kepsek'     => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ];
     }
 
@@ -152,6 +162,9 @@ class SchoolProfileController extends Controller
             'kontak.required' => 'Kontak wajib diisi.',
             'kontak.max'      => 'Kontak maksimal 15 karakter.',
 
+            'email.email' => 'Format email tidak valid.',
+            'email.max'   => 'Email maksimal 100 karakter.',
+
             'visi_misi.required' => 'Visi & misi wajib diisi.',
 
             'tahun_berdiri.required' => 'Tahun berdiri wajib diisi.',
@@ -165,6 +178,10 @@ class SchoolProfileController extends Controller
             'foto.image' => 'Foto harus berupa gambar.',
             'foto.mimes' => 'Foto harus berformat JPG, JPEG, atau PNG.',
             'foto.max'   => 'Ukuran foto maksimal 2 MB.',
+
+            'foto_kepsek.image' => 'Foto kepala sekolah harus berupa gambar.',
+            'foto_kepsek.mimes' => 'Foto kepala sekolah harus berformat JPG, JPEG, atau PNG.',
+            'foto_kepsek.max'   => 'Ukuran foto kepala sekolah maksimal 2 MB.',
         ];
     }
 }

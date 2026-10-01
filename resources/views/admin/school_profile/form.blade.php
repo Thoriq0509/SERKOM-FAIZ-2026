@@ -157,6 +157,24 @@
                         @enderror
                     </div>
 
+                    <!-- Email -->
+                    <div class="col-md-6">
+                        <label for="email" class="form-label">
+                            Email <span class="opt">(Opsional)</span>
+                        </label>
+                        <input type="email"
+                               id="email"
+                               name="email"
+                               class="form-control @error('email') is-invalid @enderror"
+                               value="{{ old('email', $schoolProfile->email ?? '') }}"
+                               maxlength="100"
+                               placeholder="Contoh: info@sekolah.sch.id">
+                        @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <small class="form-hint">Maksimal 100 karakter.</small>
+                    </div>
+
                     <!-- Alamat -->
                     <div class="col-12">
                         <label for="alamat" class="form-label">
@@ -200,7 +218,6 @@
                         @enderror
                         <small class="form-hint">JPG, JPEG, PNG. Maksimal 2 MB.</small>
 
-                        <!-- Logo saat ini -->
                         @if (!empty($schoolProfile->logo))
                             <div class="media-preview logo">
                                 <span class="media-label">Logo saat ini:</span>
@@ -212,10 +229,36 @@
                         @endif
                     </div>
 
+                    <!-- Foto kepala sekolah -->
+                    <div class="col-lg-4">
+                        <label for="foto_kepsek" class="form-label">
+                            Foto Kepala Sekolah <span class="opt">(Opsional)</span>
+                        </label>
+                        <input type="file"
+                               id="foto_kepsek"
+                               name="foto_kepsek"
+                               class="form-control @error('foto_kepsek') is-invalid @enderror"
+                               accept=".jpg,.jpeg,.png">
+                        @error('foto_kepsek')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <small class="form-hint">JPG, JPEG, PNG. Maksimal 2 MB.</small>
+
+                        @if (!empty($schoolProfile->foto_kepsek))
+                            <div class="media-preview kepsek">
+                                <span class="media-label">Foto saat ini:</span>
+                                <img src="{{ asset('storage/' . $schoolProfile->foto_kepsek) }}"
+                                     alt="Foto Kepala Sekolah">
+                            </div>
+                        @else
+                            <div class="media-empty">Belum ada foto</div>
+                        @endif
+                    </div>
+
                     <!-- Foto gedung -->
-                    <div class="col-lg-8">
+                    <div class="col-lg-4">
                         <label for="foto" class="form-label">
-                            Foto Gedung / Foto Utama <span class="opt">(Opsional)</span>
+                            Foto Gedung <span class="opt">(Opsional)</span>
                         </label>
                         <input type="file"
                                id="foto"
@@ -227,15 +270,14 @@
                         @enderror
                         <small class="form-hint">JPG, JPEG, PNG. Maksimal 2 MB.</small>
 
-                        <!-- Foto saat ini -->
                         @if (!empty($schoolProfile->foto))
                             <div class="media-preview photo">
                                 <span class="media-label">Foto saat ini:</span>
                                 <img src="{{ asset('storage/' . $schoolProfile->foto) }}"
-                                     alt="Foto {{ $schoolProfile->nama_sekolah ?? 'Sekolah' }}">
+                                     alt="Foto Gedung">
                             </div>
                         @else
-                            <div class="media-empty">Belum ada foto gedung</div>
+                            <div class="media-empty">Belum ada foto</div>
                         @endif
                     </div>
 
@@ -261,6 +303,28 @@
                 @error('visi_misi')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
+            </div>
+        </div>
+
+        <!-- Section: Sambutan kepala sekolah -->
+        <div class="card-clean mb-4">
+            <div class="card-head">
+                <h6><i class="fas fa-quote-left me-2"></i>Sambutan Kepala Sekolah</h6>
+            </div>
+
+            <div class="card-body">
+                <label for="sambutan_kepsek" class="form-label">
+                    Sambutan <span class="opt">(Opsional)</span>
+                </label>
+                <textarea id="sambutan_kepsek"
+                          name="sambutan_kepsek"
+                          rows="8"
+                          class="form-control @error('sambutan_kepsek') is-invalid @enderror"
+                          placeholder="Tulis sambutan kepala sekolah di sini...">{{ old('sambutan_kepsek', $schoolProfile->sambutan_kepsek ?? '') }}</textarea>
+                @error('sambutan_kepsek')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+                <small class="form-hint">Sambutan akan tampil di landing page.</small>
             </div>
         </div>
 

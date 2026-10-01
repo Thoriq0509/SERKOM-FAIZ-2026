@@ -115,7 +115,7 @@
                 <div class="col-6 col-md-4 col-xl-2">
                     <a href="{{ route('admin.news.index') }}" class="quick-access-item">
                         <i class="fas fa-newspaper"></i>
-                        <span>News</span>
+                        <span>Berita</span>
                     </a>
                 </div>
 
@@ -137,6 +137,14 @@
                     <a href="{{ route('admin.siswa') }}" class="quick-access-item">
                         <i class="fas fa-user-graduate"></i>
                         <span>Siswa</span>
+                    </a>
+                </div>
+
+                {{-- Baris kedua --}}
+                <div class="col-6 col-md-4 col-xl-2">
+                    <a href="{{ route('admin.gallery.index') }}" class="quick-access-item">
+                        <i class="fas fa-images"></i>
+                        <span>Galeri</span>
                     </a>
                 </div>
 

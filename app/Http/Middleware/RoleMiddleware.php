@@ -9,29 +9,18 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
 {
-    // Cek role user sebelum akses halaman
-    public function handle(Request $request, Closure $next, ...$roles): Response
+    public function handle(Request $request, Closure $next, string ...$roles): Response
     {
-        // Redirect kalau belum login
         if (! Auth::check()) {
             return redirect()->route('login');
         }
 
         $user = Auth::user();
 
-        // Pastikan user punya role
-        if (! $user || ! $user->role) {
-            abort(403, 'Role user tidak ditemukan.');
+        if (! $user->role || ! in_array(strtolower($user->role), array_map('strtolower', $roles))) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengakses halaman ini.');
         }
 
-        // Cek apakah role user termasuk yang diizinkan (case-insensitive)
-        foreach ($roles as $role) {
-            if (strcasecmp((string) $user->role, (string) $role) === 0) {
-                return $next($request);
-            }
-        }
-
-        // Role tidak diizinkan
-        abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengakses halaman ini.');
+        return $next($request);
     }
 }

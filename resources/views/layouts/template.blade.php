@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="{{ asset('assets/admin/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/css/layout.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/css/theme.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/datatables/css/datatables.css' )}}">
-    <link rel="stylesheet" href="{{ asset('assets/datatables/css/datatables.min.css' )}}">
+    <link rel="stylesheet" href="{{ asset('assets/datatables/css/datatables.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/datatables/css/datatables.min.css') }}">
 
     @stack('styles')
 </head>
@@ -19,6 +19,10 @@
 <body>
 
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+@php
+    $role = Auth::user()->role ?? null;
+@endphp
 
 <aside class="sidebar" id="sidebar">
     <a href="{{ route('dashboard') }}" class="brand-box">
@@ -39,6 +43,7 @@
     <div class="nav-section-title">Manajemen Data</div>
     <ul class="sidebar-menu">
 
+        {{-- Profil Sekolah - Admin & Operator --}}
         <li>
             <a href="{{ route('admin.school_profile') }}"
                class="{{ request()->routeIs('admin.school_profile*') ? 'active' : '' }}">
@@ -47,14 +52,18 @@
             </a>
         </li>
 
-        <li>
-            <a href="{{ route('admin.users.index') }}"
-               class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
-                <i class="fas fa-user-gear"></i>
-                <span>Data Pengelola</span>
-            </a>
-        </li>
+        {{-- Data Pengelola - Admin only --}}
+        @if($role === 'Admin')
+            <li>
+                <a href="{{ route('admin.users.index') }}"
+                   class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                    <i class="fas fa-user-gear"></i>
+                    <span>Data Pengelola</span>
+                </a>
+            </li>
+        @endif
 
+        {{-- Kelola Berita - Admin & Operator --}}
         <li>
             <a href="{{ route('admin.news.index') }}"
                class="{{ request()->routeIs('admin.news.*') ? 'active' : '' }}">
@@ -63,6 +72,7 @@
             </a>
         </li>
 
+        {{-- Kelola Ekstrakurikuler - Admin & Operator --}}
         <li>
             <a href="{{ route('admin.extracurricular.index') }}"
                class="{{ request()->routeIs('admin.extracurricular.*') ? 'active' : '' }}">
@@ -71,22 +81,29 @@
             </a>
         </li>
 
-        <li>
-            <a href="{{ route('admin.guru') }}"
-               class="{{ request()->routeIs('admin.guru*') ? 'active' : '' }}">
-                <i class="fas fa-chalkboard"></i>
-                <span>Kelola Guru</span>
-            </a>
-        </li>
+        {{-- Kelola Guru - Admin only --}}
+        @if($role === 'Admin')
+            <li>
+                <a href="{{ route('admin.guru') }}"
+                   class="{{ request()->routeIs('admin.guru*') ? 'active' : '' }}">
+                    <i class="fas fa-chalkboard"></i>
+                    <span>Kelola Guru</span>
+                </a>
+            </li>
+        @endif
 
-        <li>
-            <a href="{{ route('admin.siswa') }}"
-               class="{{ request()->routeIs('admin.siswa*') ? 'active' : '' }}">
-                <i class="fas fa-user-graduate"></i>
-                <span>Kelola Siswa</span>
-            </a>
-        </li>
+        {{-- Kelola Siswa - Admin only --}}
+        @if($role === 'Admin')
+            <li>
+                <a href="{{ route('admin.siswa') }}"
+                   class="{{ request()->routeIs('admin.siswa*') ? 'active' : '' }}">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>Kelola Siswa</span>
+                </a>
+            </li>
+        @endif
 
+        {{-- Kelola Galeri - Admin & Operator --}}
         <li>
             <a href="{{ route('admin.gallery.index') }}"
                class="{{ request()->routeIs('admin.gallery.*') ? 'active' : '' }}">
@@ -102,7 +119,6 @@
 
     <header class="top-navbar">
 
-        <!-- Kiri: toggle + nama sekolah -->
         <div class="d-flex align-items-center gap-2 gap-md-3 flex-grow-1 min-w-0">
             <button class="toggle-btn" id="sidebarToggle" type="button" aria-label="Buka menu">
                 <i class="fas fa-bars"></i>
@@ -116,10 +132,8 @@
             </div>
         </div>
 
-        <!-- Kanan: tanggal + jam + profil -->
         <div class="d-flex align-items-center gap-2 gap-md-3">
 
-            <!-- Jam & tanggal -->
             <div class="navbar-datetime d-none d-md-flex">
                 <i class="far fa-clock navbar-datetime-icon"></i>
                 <span class="navbar-datetime-text">
@@ -129,7 +143,6 @@
                 </span>
             </div>
 
-            <!-- Dropdown profil -->
             <div class="dropdown" id="adminDropdownWrapper">
                 <button class="admin-profile-btn"
                         type="button"
@@ -186,7 +199,6 @@
 
     <main class="content-area">
 
-        <!-- Breadcrumb -->
         @hasSection('breadcrumb')
             <nav class="breadcrumb-clean" aria-label="breadcrumb">
                 <ol>
@@ -210,17 +222,14 @@
 
 </div>
 
-<script src="{{ asset('assets/datatables/js/jquery-4.0.0.min.js')}}"></script>
-<!-- <script src="{{ asset('assets/admin/js/bootstrap.bundle.min.js') }}"></script> -->
-<script src="{{ asset('assets/datatables/js/datatables.js')}}"></script>
-<script src="{{ asset('assets/datatables/js/datatables.min.js')}}"></script>
-
-
+<script src="{{ asset('assets/datatables/js/jquery-4.0.0.min.js') }}"></script>
+<script src="{{ asset('assets/datatables/js/datatables.js') }}"></script>
+<script src="{{ asset('assets/datatables/js/datatables.min.js') }}"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    // ===== Live clock & date =====
+    // Live clock & date
     const hariIndo  = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
     const bulanIndo = ['Januari','Februari','Maret','April','Mei','Juni',
                        'Juli','Agustus','September','Oktober','November','Desember'];
@@ -247,7 +256,7 @@ document.addEventListener("DOMContentLoaded", function () {
     updateLiveClock();
     setInterval(updateLiveClock, 1000);
 
-    // ===== Sidebar toggle =====
+    // Sidebar toggle
     const sidebarToggle  = document.getElementById("sidebarToggle");
     const sidebarOverlay = document.getElementById("sidebarOverlay");
     const sidebar        = document.getElementById("sidebar");
@@ -280,7 +289,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // ===== Admin dropdown =====
+    // Admin dropdown
     const adminBtn   = document.getElementById("adminDropdown");
     const adminMenu  = document.getElementById("adminDropdownMenu");
     const adminWrap  = document.getElementById("adminDropdownWrapper");
@@ -360,8 +369,24 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 <script>
+    // Auto-init semua tabel yang punya atribut data-datatable
     $(function () {
-        $('.table').DataTable();
+        $('table[data-datatable]').each(function () {
+            if (!$.fn.DataTable.isDataTable(this)) {
+                $(this).DataTable({
+                    pageLength: 10,
+                    responsive: true,
+                    language: {
+                        search: "Cari:",
+                        lengthMenu: "Tampilkan _MENU_ data",
+                        info: "Menampilkan _START_–_END_ dari _TOTAL_ data",
+                        infoEmpty: "Tidak ada data",
+                        zeroRecords: "Data tidak ditemukan",
+                        paginate: { previous: "Sebelumnya", next: "Berikutnya" }
+                    }
+                });
+            }
+        });
     });
 </script>
 

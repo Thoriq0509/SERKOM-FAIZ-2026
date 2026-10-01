@@ -12,45 +12,36 @@ use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\ExtracurricularController;
 use App\Http\Controllers\Admin\GalleryController;
 
-
-// ==========================================
-// PUBLIC
-// ==========================================
+// Public — redirect ke login
 Route::get('/', fn () => redirect()->route('login'));
 
-
-// ==========================================
-// GUEST
-// ==========================================
+// Guest
 Route::middleware('guest')->group(function () {
     Route::get ('/login', [AuthController::class, 'index'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.proses');
 });
 
-
-// ==========================================
-// AUTHENTICATED
-// ==========================================
+// Autekansi
 Route::middleware('auth')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::prefix('admin')->group(function () {
 
-        // DASHBOARD
+        // Dashboard - Admin & Operator
         Route::get('/dashboard', [DashboardController::class, 'index'])
             ->middleware('role:Admin,Operator')
             ->name('dashboard');
 
-        // PROFIL SEKOLAH (Admin)
-        Route::prefix('profil')->middleware('role:Admin')->group(function () {
+        // Profil Sekolah - Admin & Operator
+        Route::prefix('profil')->middleware('role:Admin,Operator')->group(function () {
             Route::get   ('/',       [SchoolProfileController::class, 'index'])  ->name('admin.school_profile');
             Route::get   ('/edit',   [SchoolProfileController::class, 'edit'])   ->name('admin.school_profile.edit');
             Route::put   ('/update', [SchoolProfileController::class, 'update']) ->name('admin.school_profile.update');
             Route::delete('/delete', [SchoolProfileController::class, 'destroy'])->name('admin.school_profile.destroy');
         });
 
-        // DATA PENGELOLA (Admin)
+        // Data Pengelola - Admin only
         Route::prefix('users')->middleware('role:Admin')->group(function () {
             Route::get   ('/',           [UserController::class, 'index'])  ->name('admin.users.index');
             Route::get   ('/create',     [UserController::class, 'addEdit'])->name('admin.users.create');
@@ -61,8 +52,8 @@ Route::middleware('auth')->group(function () {
             Route::delete('/{id}',       [UserController::class, 'destroy'])->name('admin.users.destroy');
         });
 
-        // GURU (Admin & Operator)
-        Route::prefix('guru')->middleware('role:Admin,Operator')->group(function () {
+        // Guru - Admin only
+        Route::prefix('guru')->middleware('role:Admin')->group(function () {
             Route::get   ('/',          [TeacherController::class, 'index'])  ->name('admin.guru');
             Route::get   ('/create',    [TeacherController::class, 'create']) ->name('admin.guru.create');
             Route::post  ('/',          [TeacherController::class, 'store'])  ->name('admin.guru.store');
@@ -72,8 +63,8 @@ Route::middleware('auth')->group(function () {
             Route::delete('/{id}',      [TeacherController::class, 'destroy'])->name('admin.guru.destroy');
         });
 
-        // SISWA (Admin & Operator)
-        Route::prefix('siswa')->middleware('role:Admin,Operator')->group(function () {
+        // Siswa - Admin only
+        Route::prefix('siswa')->middleware('role:Admin')->group(function () {
             Route::get   ('/',          [StudentController::class, 'index'])  ->name('admin.siswa');
             Route::get   ('/create',    [StudentController::class, 'create']) ->name('admin.siswa.create');
             Route::post  ('/',          [StudentController::class, 'store'])  ->name('admin.siswa.store');
@@ -83,7 +74,7 @@ Route::middleware('auth')->group(function () {
             Route::delete('/{id}',      [StudentController::class, 'destroy'])->name('admin.siswa.destroy');
         });
 
-        // NEWS (Admin & Operator)
+        // News - Admin & Operator
         Route::prefix('news')->middleware('role:Admin,Operator')->group(function () {
             Route::get   ('/',          [NewsController::class, 'index'])  ->name('admin.news.index');
             Route::get   ('/create',    [NewsController::class, 'create']) ->name('admin.news.create');
@@ -94,7 +85,7 @@ Route::middleware('auth')->group(function () {
             Route::delete('/{id}',      [NewsController::class, 'destroy'])->name('admin.news.destroy');
         });
 
-        // EXTRACURRICULAR (Admin & Operator)
+        // Extracurricular - Admin & Operator
         Route::prefix('extracurricular')->middleware('role:Admin,Operator')->group(function () {
             Route::get   ('/',          [ExtracurricularController::class, 'index'])  ->name('admin.extracurricular.index');
             Route::get   ('/create',    [ExtracurricularController::class, 'create']) ->name('admin.extracurricular.create');
@@ -105,7 +96,7 @@ Route::middleware('auth')->group(function () {
             Route::delete('/{id}',      [ExtracurricularController::class, 'destroy'])->name('admin.extracurricular.destroy');
         });
 
-        // GALLERY (Admin & Operator)
+        // Gallery - Admin & Operator
         Route::prefix('gallery')->middleware('role:Admin,Operator')->group(function () {
             Route::get   ('/',          [GalleryController::class, 'index'])  ->name('admin.gallery.index');
             Route::get   ('/create',    [GalleryController::class, 'create']) ->name('admin.gallery.create');

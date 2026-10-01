@@ -119,6 +119,11 @@
                     <div class="value">{{ $schoolProfile->kontak ?? '-' }}</div>
                 </div>
 
+                <div class="info-item">
+                    <div class="label">Email</div>
+                    <div class="value">{{ $schoolProfile->email ?? '-' }}</div>
+                </div>
+
                 <div class="info-item full">
                     <div class="label">Alamat Lengkap</div>
                     <div class="value">{{ $schoolProfile->alamat ?? '-' }}</div>
@@ -156,6 +161,60 @@
                         {{ $schoolProfile->deskripsi ?? 'Belum ada deskripsi sekolah.' }}
                     </div>
                 </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Kepala sekolah: foto + sambutan -->
+    <div class="card-clean mb-4">
+
+        <div class="card-head">
+            <h6><i class="fas fa-user-tie me-2"></i>Kepala Sekolah</h6>
+        </div>
+
+        <div class="card-body">
+            <div class="row g-4 align-items-center sambutan-row">
+
+                <!-- Foto kepala sekolah -->
+                <div class="col-lg-4">
+                    <div class="kepsek-photo-box">
+                        @if ($schoolProfile && $schoolProfile->foto_kepsek)
+                            <img src="{{ asset('storage/' . $schoolProfile->foto_kepsek) }}"
+                                 alt="Foto {{ $schoolProfile->kepala_sekolah ?? 'Kepala Sekolah' }}"
+                                 class="kepsek-photo-rect">
+                        @else
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($schoolProfile->kepala_sekolah ?? 'Kepala Sekolah') }}&background=1f2f46&color=fff&size=500"
+                                 alt="Foto Kepala Sekolah"
+                                 class="kepsek-photo-rect">
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Sambutan -->
+                <div class="col-lg-8">
+                    <div class="sambutan-content">
+
+                        <span class="sambutan-label">Sambutan Kepala Sekolah</span>
+
+                        <h2 class="sambutan-title">
+                            {{ $schoolProfile->kepala_sekolah ?? 'Belum diisi' }}
+                        </h2>
+
+                        <div class="sambutan-divider"></div>
+
+                        <div class="sambutan-text">
+                            <p>{{ $schoolProfile->sambutan_kepsek ?? 'Belum ada sambutan kepala sekolah.' }}</p>
+                        </div>
+
+                        <div class="sambutan-author">
+                            <h5>{{ $schoolProfile->kepala_sekolah ?? '-' }}</h5>
+                            <span>Kepala Sekolah</span>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
         </div>
 
