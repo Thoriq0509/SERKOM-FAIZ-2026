@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\SchoolProfileController;
 use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\ExtracurricularController;
 use App\Http\Controllers\Admin\GalleryController;
+use App\Http\Controllers\Landing\LandingController;
 
 // Public — redirect ke login
 Route::get('/', fn () => redirect()->route('login'));
