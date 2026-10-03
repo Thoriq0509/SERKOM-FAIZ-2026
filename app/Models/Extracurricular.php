@@ -13,9 +13,14 @@ class Extracurricular extends Model
 
     protected $fillable = [
         'nama_ekskul',
-        'pembina',
+        'id_guru',       
         'jadwal_latihan',
         'deskripsi',
         'gambar',
     ];
+
+    public function pembina()
+    {
+        return $this->belongsTo(Teacher::class, 'id_guru', 'id');
+    }
 }

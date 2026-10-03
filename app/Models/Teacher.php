@@ -17,4 +17,9 @@ class Teacher extends Model
         'mapel',
         'foto',
     ];
+
+    public function extracurriculars()
+    {
+        return $this->hasMany(Extracurricular::class, 'id_guru', 'id');
+    }
 }

@@ -69,15 +69,19 @@
             <div class="hero-info">
                 <h4 class="hero-name">{{ $extracurricular->nama_ekskul }}</h4>
                 <div class="hero-badges">
+
+                    {{-- ============ PEMBINA — DIREVISI ============ --}}
                     @if ($extracurricular->pembina)
                         <span class="badge-info">
-                            <i class="fas fa-user-tie"></i>Pembina: {{ $extracurricular->pembina }}
+                            <i class="fas fa-user-tie"></i>
+                            Pembina: {{ $extracurricular->pembina->nama_guru }}
                         </span>
                     @else
                         <span class="badge-info empty">
                             <i class="fas fa-user-tie"></i>Pembina belum diisi
                         </span>
                     @endif
+                    {{-- ============================================ --}}
 
                     @if ($extracurricular->jadwal_latihan)
                         <span class="badge-info">
@@ -126,12 +130,6 @@
             </div>
             <hr class="section-divider">
 
-            <div class="detail-grid">
-                <div class="detail-item">
-                    <div class="detail-label">ID Data</div>
-                    <div class="detail-value mono">#{{ $extracurricular->id }}</div>
-                </div>
-
                 <div class="detail-item">
                     <div class="detail-label">Nama Ekstrakurikuler</div>
                     <div class="detail-value">{{ $extracurricular->nama_ekskul }}</div>
@@ -141,7 +139,10 @@
                     <div class="detail-label">Pembina</div>
                     <div class="detail-value">
                         @if ($extracurricular->pembina)
-                            {{ $extracurricular->pembina }}
+                            {{ $extracurricular->pembina->nama_guru }}
+                            @if ($extracurricular->pembina->nip)
+                                <br><small class="text-muted">NIP: {{ $extracurricular->pembina->nip }}</small>
+                            @endif
                         @else
                             <span class="empty-value">Belum diisi</span>
                         @endif

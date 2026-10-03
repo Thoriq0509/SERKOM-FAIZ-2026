@@ -149,11 +149,6 @@
 
             <div class="detail-grid">
                 <div class="detail-item">
-                    <div class="detail-label">ID Data</div>
-                    <div class="detail-value mono">#{{ $teacher->id }}</div>
-                </div>
-
-                <div class="detail-item">
                     <div class="detail-label">Tanggal Ditambahkan</div>
                     <div class="detail-value">
                         {{ $teacher->created_at

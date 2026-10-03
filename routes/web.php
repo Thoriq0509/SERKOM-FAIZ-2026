@@ -3,7 +3,12 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Admin\DashboardController;
+
+// Dashboard publik (root) — pakai alias biar nggak bentrok
+use App\Http\Controllers\DashboardController as PublicDashboardController;
+
+// Controller admin
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\StudentController;
@@ -11,30 +16,41 @@ use App\Http\Controllers\Admin\SchoolProfileController;
 use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\ExtracurricularController;
 use App\Http\Controllers\Admin\GalleryController;
-use App\Http\Controllers\Landing\LandingController;
 
-// Public — redirect ke login
-Route::get('/', fn () => redirect()->route('login'));
+// =========================================================
+// PUBLIC
+// =========================================================
+Route::get('/', [PublicDashboardController::class, 'index'])->name('public.dashboard');
+Route::get('/profile', [PublicDashboardController::class, 'profile'])->name('public.profile');
+Route::get('/extracurricular', [PublicDashboardController::class, 'extracurricular'])->name('public.extracurricular');
+Route::get('/teachers', [PublicDashboardController::class, 'teachers'])->name('public.teachers');
+Route::get('/students', [PublicDashboardController::class, 'students'])->name('public.students');
+Route::get('/news', [PublicDashboardController::class, 'news'])->name('public.news');
+Route::get('/gallery', [PublicDashboardController::class, 'gallery'])->name('public.gallery');
 
-// Guest
+// =========================================================
+// GUEST — Login
+// =========================================================
 Route::middleware('guest')->group(function () {
     Route::get ('/login', [AuthController::class, 'index'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.proses');
 });
 
-// Autekansi
+// =========================================================
+// AUTH — Area admin
+// =========================================================
 Route::middleware('auth')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::prefix('admin')->group(function () {
 
-        // Dashboard - Admin & Operator
-        Route::get('/dashboard', [DashboardController::class, 'index'])
+        // Dashboard admin - Admin & Operator
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])
             ->middleware('role:Admin,Operator')
             ->name('dashboard');
 
-        // Profil Sekolah - Admin & Operator
+        // Profil Sekolah
         Route::prefix('profil')->middleware('role:Admin,Operator')->group(function () {
             Route::get   ('/',       [SchoolProfileController::class, 'index'])  ->name('admin.school_profile');
             Route::get   ('/edit',   [SchoolProfileController::class, 'edit'])   ->name('admin.school_profile.edit');

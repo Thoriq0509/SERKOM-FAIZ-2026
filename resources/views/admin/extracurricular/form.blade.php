@@ -153,23 +153,31 @@
                         <small class="form-hint">Maksimal 40 karakter.</small>
                     </div>
 
-                    <!-- Pembina -->
+                    <!-- ============================================ -->
+                    <!-- PEMBINA — DIUBAH JADI DROPDOWN DARI DATA GURU -->
+                    <!-- ============================================ -->
                     <div class="col-md-6 mb-4">
-                        <label for="pembina" class="form-label">
+                        <label for="id_guru" class="form-label">
                             Pembina <span class="opt">(Opsional)</span>
                         </label>
-                        <input type="text"
-                               id="pembina"
-                               name="pembina"
-                               class="form-control @error('pembina') is-invalid @enderror"
-                               value="{{ old('pembina', $extracurricular->pembina ?? '') }}"
-                               maxlength="40"
-                               placeholder="Contoh: Budi Santoso, S.Pd.">
-                        @error('pembina')
+                        <select id="id_guru"
+                                name="id_guru"
+                                class="form-select @error('id_guru') is-invalid @enderror">
+                            <option value="">-- Pilih Pembina --</option>
+                            @foreach ($teachers as $teacher)
+                                <option value="{{ $teacher->id }}"
+                                    {{ old('id_guru', $extracurricular->id_guru ?? '') == $teacher->id ? 'selected' : '' }}>
+                                    {{ $teacher->nama_guru }}
+                                    @if($teacher->nip) — NIP: {{ $teacher->nip }} @endif
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('id_guru')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <small class="form-hint">Maksimal 40 karakter.</small>
+                        <small class="form-hint">Pilih dari daftar guru yang tersedia.</small>
                     </div>
+                    <!-- ============================================ -->
 
                     <!-- Jadwal latihan -->
                     <div class="col-12 mb-4">

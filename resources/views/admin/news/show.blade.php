@@ -109,12 +109,6 @@
             </div>
             <hr class="section-divider">
 
-            <div class="detail-grid">
-                <div class="detail-item">
-                    <div class="detail-label">ID Berita</div>
-                    <div class="detail-value mono">#{{ $news->id }}</div>
-                </div>
-
                 <div class="detail-item">
                     <div class="detail-label">Tanggal Publikasi</div>
                     <div class="detail-value">

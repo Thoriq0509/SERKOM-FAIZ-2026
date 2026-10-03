@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Extracurricular;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
@@ -13,7 +14,9 @@ class ExtracurricularController extends Controller
     // Daftar ekstrakurikuler
     public function index()
     {
-        $extracurriculars = Extracurricular::orderByDesc('id')->paginate(10);
+        $extracurriculars = Extracurricular::with('pembina')
+            ->orderByDesc('id')
+            ->paginate(10);
 
         return view('admin.extracurricular.index', compact('extracurriculars'));
     }
@@ -24,6 +27,7 @@ class ExtracurricularController extends Controller
         return view('admin.extracurricular.form', [
             'extracurricular' => new Extracurricular(),
             'isEdit'          => false,
+            'teachers'        => Teacher::orderBy('nama_guru')->get(),  // ← TAMBAH
         ]);
     }
 
@@ -70,6 +74,7 @@ class ExtracurricularController extends Controller
         return view('admin.extracurricular.form', [
             'extracurricular' => $extracurricular,
             'isEdit'          => true,
+            'teachers'        => Teacher::orderBy('nama_guru')->get(),  // ← TAMBAH
         ]);
     }
 
@@ -124,6 +129,10 @@ class ExtracurricularController extends Controller
             ->with('success', 'Data ekstrakurikuler berhasil dihapus.');
     }
 
+    // =========================================================
+    // HELPERS
+    // =========================================================
+
     // Cari ekstrakurikuler berdasarkan encrypted ID
     private function findExtracurricular(string $encryptedId): ?Extracurricular
     {
@@ -147,7 +156,7 @@ class ExtracurricularController extends Controller
     {
         return [
             'nama_ekskul'    => ['required', 'string', 'max:40'],
-            'pembina'        => ['nullable', 'string', 'max:40'],
+            'id_guru'        => ['nullable', 'exists:teachers,id'],  // ← DIUBAH
             'jadwal_latihan' => ['nullable', 'string', 'max:40'],
             'deskripsi'      => ['nullable', 'string'],
             'gambar'         => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
@@ -161,7 +170,7 @@ class ExtracurricularController extends Controller
             'nama_ekskul.required' => 'Nama ekstrakurikuler wajib diisi.',
             'nama_ekskul.max'      => 'Nama ekstrakurikuler maksimal 40 karakter.',
 
-            'pembina.max'        => 'Nama pembina maksimal 40 karakter.',
+            'id_guru.exists'     => 'Pembina yang dipilih tidak valid.',  // ← DIUBAH
             'jadwal_latihan.max' => 'Jadwal latihan maksimal 40 karakter.',
 
             'gambar.image' => 'File harus berupa gambar.',

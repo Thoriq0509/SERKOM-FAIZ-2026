@@ -94,12 +94,6 @@
             </div>
             <hr class="section-divider">
 
-            <div class="detail-grid">
-                <div class="detail-item">
-                    <div class="detail-label">ID Data</div>
-                    <div class="detail-value mono">#{{ $student->id }}</div>
-                </div>
-
                 <div class="detail-item">
                     <div class="detail-label">Data Dibuat</div>
                     <div class="detail-value">

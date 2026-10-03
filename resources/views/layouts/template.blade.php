@@ -3,9 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Dashboard Admin - Sistem Sekolah</title>
 
-    <link rel="icon" type="image/png" href="{{ asset('assets/admin/img/smatn.png') }}">
+    @php
+        $role = Auth::user()->role ?? null;
+        $schoolProfile = \App\Models\SchoolProfile::first();
+    @endphp
+
+    <title>Dashboard Admin - {{ $schoolProfile->nama_sekolah ?? 'Sistem Sekolah' }}</title>
+
+    {{-- Favicon: pakai logo sekolah kalau ada, fallback ke default --}}
+    <link rel="icon" type="image/png"
+          href="{{ $schoolProfile?->logo ? asset('storage/'.$schoolProfile->logo) : asset('assets/admin/img/smatn.png') }}">
+
     <link rel="stylesheet" href="{{ asset('assets/admin/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/css/layout.css') }}">
@@ -20,13 +29,9 @@
 
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-@php
-    $role = Auth::user()->role ?? null;
-@endphp
-
 <aside class="sidebar" id="sidebar">
     <a href="{{ route('dashboard') }}" class="brand-box">
-        <span>SISTEM MANAJEMEN SMATN</span>
+        <span>SISTEM MANAJEMEN</span>
     </a>
 
     <div class="nav-section-title">Navigasi Utama</div>
@@ -52,7 +57,6 @@
             </a>
         </li>
 
-        {{-- Data Pengelola - Admin only --}}
         @if($role === 'Admin')
             <li>
                 <a href="{{ route('admin.users.index') }}"
@@ -63,7 +67,6 @@
             </li>
         @endif
 
-        {{-- Kelola Berita - Admin & Operator --}}
         <li>
             <a href="{{ route('admin.news.index') }}"
                class="{{ request()->routeIs('admin.news.*') ? 'active' : '' }}">
@@ -72,7 +75,6 @@
             </a>
         </li>
 
-        {{-- Kelola Ekstrakurikuler - Admin & Operator --}}
         <li>
             <a href="{{ route('admin.extracurricular.index') }}"
                class="{{ request()->routeIs('admin.extracurricular.*') ? 'active' : '' }}">
@@ -81,7 +83,6 @@
             </a>
         </li>
 
-        {{-- Kelola Guru - Admin only --}}
         @if($role === 'Admin')
             <li>
                 <a href="{{ route('admin.guru') }}"
@@ -92,7 +93,6 @@
             </li>
         @endif
 
-        {{-- Kelola Siswa - Admin only --}}
         @if($role === 'Admin')
             <li>
                 <a href="{{ route('admin.siswa') }}"
@@ -103,7 +103,6 @@
             </li>
         @endif
 
-        {{-- Kelola Galeri - Admin & Operator --}}
         <li>
             <a href="{{ route('admin.gallery.index') }}"
                class="{{ request()->routeIs('admin.gallery.*') ? 'active' : '' }}">
@@ -125,10 +124,17 @@
             </button>
 
             <div class="navbar-school-name d-none d-md-flex align-items-center">
-                <img src="{{ asset('assets/admin/img/smatn.png') }}"
-                     alt="Logo Sekolah"
-                     class="navbar-school-logo">
-                <span>SMA TARUNA NUSANTARA</span>
+                @if($schoolProfile?->logo)
+                    <img src="{{ asset('storage/'.$schoolProfile->logo) }}"
+                         alt="Logo {{ $schoolProfile->nama_sekolah }}"
+                         class="navbar-school-logo">
+                @else
+                    <img src="{{ asset('') }}"
+                         alt="Logo Sekolah"
+                         class="navbar-school-logo">
+                @endif
+
+                <span>{{ $schoolProfile->nama_sekolah ?? 'Nama Sekolah' }}</span>
             </div>
         </div>
 
@@ -217,7 +223,7 @@
     </main>
 
     <footer class="footer-box">
-        &copy; 2026 Sistem Manajemen Sekolah. Hak cipta dilindungi.
+        &copy; {{ date('Y') }} {{ $schoolProfile->nama_sekolah ?? 'Sistem Manajemen Sekolah' }}. Hak cipta dilindungi.
     </footer>
 
 </div>

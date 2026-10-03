@@ -115,13 +115,6 @@
                 <i class="fas fa-database"></i>Informasi Data
             </div>
             <hr class="section-divider">
-
-            <div class="detail-grid">
-                <div class="detail-item">
-                    <div class="detail-label">ID Data</div>
-                    <div class="detail-value mono">#{{ $gallery->id }}</div>
-                </div>
-
                 <div class="detail-item">
                     <div class="detail-label">Judul</div>
                     <div class="detail-value">{{ $gallery->judul }}</div>

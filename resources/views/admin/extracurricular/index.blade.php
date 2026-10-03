@@ -96,10 +96,18 @@
                                 <div class="cell-name">{{ $item->nama_ekskul }}</div>
                             </td>
 
-                            <!-- Pembina -->
+                            <!-- ======== PEMBINA — DIREVISI ======== -->
                             <td>
-                                {{ $item->pembina ?: '-' }}
+                                @if ($item->pembina)
+                                    <div class="cell-name">{{ $item->pembina->nama_guru }}</div>
+                                    @if ($item->pembina->nip)
+                                        <small class="text-muted">NIP: {{ $item->pembina->nip }}</small>
+                                    @endif
+                                @else
+                                    <span class="empty-val">Belum ada pembina</span>
+                                @endif
                             </td>
+                            <!-- ==================================== -->
 
                             <!-- Jadwal -->
                             <td>
