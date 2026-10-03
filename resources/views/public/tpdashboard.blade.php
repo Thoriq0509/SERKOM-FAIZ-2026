@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ asset('assets/landing/css/bootstrap.min.css') }}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-primary navbar-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
         <div class="container">
             <a class="navbar-brand" href="#">Nama sekolah</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -23,8 +23,9 @@
                         $menu = [
                             "public.dashboard" => "Beranda",
                             "public.profile"         => "Profil Sekolah",
-                            "public.extracurricular" => "Ekstrakurikuler",
                             "public.teachers"        => "Guru",
+                            "public.students"        => "Siswa",
+                            "public.extracurricular" => "Ekstrakurikuler",
                             "public.students"        => "Siswa",
                             "public.news"            => "Berita",
                             "public.gallery"         => "Galeri",
