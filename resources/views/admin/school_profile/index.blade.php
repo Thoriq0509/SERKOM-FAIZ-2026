@@ -29,9 +29,6 @@
         <div class="alert alert-success alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-check-circle"></i>
             <span class="alert-text">{{ session('success') }}</span>
-            <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
-                <i class="fas fa-xmark"></i>
-            </button>
         </div>
     @endif
 
@@ -40,9 +37,6 @@
         <div class="alert alert-danger alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-exclamation-circle"></i>
             <span class="alert-text">{{ session('error') }}</span>
-            <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
-                <i class="fas fa-xmark"></i>
-            </button>
         </div>
     @endif
 
@@ -133,25 +127,39 @@
         </div>
     </div>
 
-    <!-- Visi misi & deskripsi -->
+    <!-- Visi, Misi & Deskripsi -->
     <div class="row g-4 mb-4">
 
-        <!-- Visi & misi -->
-        <div class="col-lg-6">
+        <!-- Visi -->
+        <div class="col-lg-4">
             <div class="card-clean h-100">
                 <div class="card-head">
-                    <h6><i class="fas fa-bullseye me-2"></i>Visi & Misi</h6>
+                    <h6><i class="fas fa-eye me-2"></i>Visi</h6>
                 </div>
                 <div class="card-body">
-                    <div class="text-content {{ $schoolProfile->visi_misi ? '' : 'empty' }}">
-                        {{ $schoolProfile->visi_misi ?? 'Belum ada data visi dan misi.' }}
+                    <div class="text-content {{ $schoolProfile->visi ? '' : 'empty' }}">
+                        {{ $schoolProfile->visi ?? 'Belum ada data visi.' }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Misi -->
+        <div class="col-lg-4">
+            <div class="card-clean h-100">
+                <div class="card-head">
+                    <h6><i class="fas fa-bullseye me-2"></i>Misi</h6>
+                </div>
+                <div class="card-body">
+                    <div class="text-content {{ $schoolProfile->misi ? '' : 'empty' }}">
+                        {{ $schoolProfile->misi ?? 'Belum ada data misi.' }}
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Sejarah / deskripsi -->
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <div class="card-clean h-100">
                 <div class="card-head">
                     <h6><i class="fas fa-book-open me-2"></i>Sejarah / Deskripsi</h6>
@@ -242,21 +250,5 @@
     </div>
 
 </div>
-
-<!-- Script tutup alert manual -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll("[data-alert-close]").forEach(function (btn) {
-        btn.addEventListener("click", function (e) {
-            e.preventDefault();
-            const box = btn.closest("[data-alert]");
-            if (!box) return;
-            box.style.transition = "opacity .2s ease";
-            box.style.opacity = "0";
-            setTimeout(() => box.remove(), 200);
-        });
-    });
-});
-</script>
 
 @endsection

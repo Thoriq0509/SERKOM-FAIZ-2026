@@ -1,0 +1,354 @@
+/* Base */
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: #1f2f46;
+    background: #ffffff;
+    margin: 0;
+    line-height: 1.6;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+
+main {
+    flex: 1 0 auto;
+}
+
+
+/* Navbar */
+.navbar-custom {
+    background-color: #1f2f46;
+    padding: 12px 0;
+    transition: box-shadow .3s ease, padding .3s ease;
+}
+
+.navbar-custom.scrolled {
+    padding: 8px 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .15);
+}
+
+/* Brand: logo + nama */
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-brand-custom {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0;
+    margin-right: 16px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: .3px;
+}
+
+.navbar-custom .brand-logo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .15));
+}
+
+.navbar-custom .brand-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+/* Menu */
+.navbar-custom .navbar-nav {
+    gap: 4px;
+}
+
+.navbar-custom .nav-link {
+    color: rgba(255, 255, 255, .85);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 14px !important;
+    border-radius: 8px;
+    transition: all .2s ease;
+}
+
+.navbar-custom .nav-link:hover,
+.navbar-custom .nav-link.active {
+    color: #fff;
+    background: rgba(255, 255, 255, .15);
+}
+
+/* Toggler */
+.navbar-custom .navbar-toggler {
+    border-color: rgba(255, 255, 255, .4);
+}
+
+.navbar-custom .navbar-toggler:focus {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+}
+
+/* Navbar desktop */
+@media (min-width: 992px) {
+    .navbar-custom .navbar-collapse {
+        display: flex !important;
+        justify-content: center;
+        flex-grow: 1;
+    }
+
+    .navbar-custom .navbar-nav {
+        flex-direction: row;
+        margin: 0 auto;
+    }
+
+    .navbar-custom .navbar-spacer {
+        width: 180px;
+        flex-shrink: 0;
+    }
+}
+
+/* Navbar tablet & mobile */
+@media (max-width: 991.98px) {
+    .navbar-custom .navbar-nav {
+        padding-top: 10px;
+    }
+
+    .navbar-custom .nav-link {
+        padding: 10px 14px !important;
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .navbar-custom .brand-logo {
+        width: 34px;
+        height: 34px;
+    }
+
+    .navbar-custom .brand-name {
+        font-size: 14px;
+        max-width: 180px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+
+/* Footer */
+.landing-footer {
+    background: #1f2f46;
+    color: rgba(255, 255, 255, .75);
+    padding: 60px 0 0;
+    margin-top: 60px;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+/* Brand footer */
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.footer-logo {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .2));
+}
+
+.footer-brand h5 {
+    color: #fff;
+    font-weight: 700;
+    margin: 0;
+    font-size: 17px;
+    letter-spacing: .3px;
+}
+
+.footer-desc {
+    color: rgba(255, 255, 255, .65);
+    font-size: 13.5px;
+    line-height: 1.7;
+    margin: 0 0 20px;
+    max-width: 340px;
+}
+
+/* Sosial media */
+.footer-social {
+    display: flex;
+    gap: 10px;
+}
+
+.footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .08);
+    color: #fff;
+    font-size: 15px;
+    transition: all .25s ease;
+}
+
+.footer-social a:hover {
+    background: #3b82f6;
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(59, 130, 246, .4);
+}
+
+/* Judul kolom footer */
+.footer-title {
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    margin: 0 0 20px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.footer-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 32px;
+    height: 3px;
+    background: #3b82f6;
+    border-radius: 2px;
+}
+
+/* Kontak */
+.footer-contact {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.footer-contact li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, .75);
+}
+
+.footer-contact i {
+    color: #3b82f6;
+    font-size: 15px;
+    margin-top: 3px;
+    flex-shrink: 0;
+}
+
+/* Tautan */
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, .7);
+    font-size: 13.5px;
+    transition: all .2s ease;
+    display: inline-block;
+}
+
+.footer-links a:hover {
+    color: #3b82f6;
+    padding-left: 5px;
+}
+
+/* Copyright */
+.footer-bottom {
+    text-align: center;
+    padding: 22px 0;
+    margin-top: 50px;
+    border-top: 1px solid rgba(255, 255, 255, .1);
+    font-size: 13px;
+    color: rgba(255, 255, 255, .55);
+}
+
+.footer-bottom strong {
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Footer tablet */
+@media (max-width: 991.98px) {
+    .landing-footer {
+        padding: 50px 0 0;
+        margin-top: 40px;
+    }
+
+    .footer-desc {
+        max-width: 100%;
+    }
+}
+
+/* Footer mobile */
+@media (max-width: 767.98px) {
+    .landing-footer {
+        padding: 40px 0 0;
+        margin-top: 30px;
+        font-size: 13px;
+    }
+
+    .footer-brand {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .footer-desc {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .footer-social {
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+
+    .footer-title {
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .footer-title::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .footer-contact li {
+        justify-content: flex-start;
+    }
+
+    .footer-links {
+        text-align: center;
+    }
+
+    .footer-bottom {
+        margin-top: 30px;
+        font-size: 12.5px;
+    }
+}

@@ -29,9 +29,6 @@
         <div class="alert alert-success alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-check-circle"></i>
             <span class="alert-text">{{ session('success') }}</span>
-            <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
-                <i class="fas fa-xmark"></i>
-            </button>
         </div>
     @endif
 
@@ -40,9 +37,6 @@
         <div class="alert alert-danger alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-exclamation-circle"></i>
             <span class="alert-text">{{ session('error') }}</span>
-            <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
-                <i class="fas fa-xmark"></i>
-            </button>
         </div>
     @endif
 
@@ -59,7 +53,7 @@
 
                 <thead>
                     <tr>
-                        <th width="5%">No</th>
+                        <th width="5%" data-orderable="false">No</th>
                         <th width="10%" class="text-center" data-orderable="false">Gambar</th>
                         <th width="20%">Nama</th>
                         <th width="18%">Pembina</th>
@@ -96,7 +90,7 @@
                                 <div class="cell-name">{{ $item->nama_ekskul }}</div>
                             </td>
 
-                            <!-- ======== PEMBINA — DIREVISI ======== -->
+                            <!-- Pembina -->
                             <td>
                                 @if ($item->pembina)
                                     <div class="cell-name">{{ $item->pembina->nama_guru }}</div>
@@ -107,7 +101,6 @@
                                     <span class="empty-val">Belum ada pembina</span>
                                 @endif
                             </td>
-                            <!-- ==================================== -->
 
                             <!-- Jadwal -->
                             <td>
@@ -159,25 +152,5 @@
     </div>
 
 </div>
-
-<!-- Script tutup alert manual -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll("[data-alert-close]").forEach(function (btn) {
-        btn.addEventListener("click", function (e) {
-            e.preventDefault();
-            const alertBox = btn.closest("[data-alert]");
-            if (!alertBox) return;
-
-            alertBox.style.transition = "opacity .2s ease";
-            alertBox.style.opacity = "0";
-
-            setTimeout(function () {
-                alertBox.remove();
-            }, 200);
-        });
-    });
-});
-</script>
 
 @endsection

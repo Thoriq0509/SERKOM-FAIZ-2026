@@ -34,9 +34,6 @@
         <div class="alert alert-success alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-check-circle"></i>
             <span class="alert-text">{{ session('success') }}</span>
-            <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
-                <i class="fas fa-xmark"></i>
-            </button>
         </div>
     @endif
 
@@ -45,9 +42,6 @@
         <div class="alert alert-danger alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-exclamation-circle"></i>
             <span class="alert-text">{{ session('error') }}</span>
-            <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
-                <i class="fas fa-xmark"></i>
-            </button>
         </div>
     @endif
 
@@ -101,7 +95,7 @@
             </div>
             <hr class="section-divider">
 
-            <div class="news-content">{{ $news->isi }}</div>
+            <div class="news-content">{!! nl2br(e($news->isi)) !!}</div>
 
             <!-- Informasi data -->
             <div class="section-title">
@@ -109,6 +103,7 @@
             </div>
             <hr class="section-divider">
 
+            <div class="detail-grid">
                 <div class="detail-item">
                     <div class="detail-label">Tanggal Publikasi</div>
                     <div class="detail-value">
@@ -123,7 +118,7 @@
                     </div>
                 </div>
 
-                <div class="detail-item">
+                <div class="detail-item" style="grid-column: 1 / -1;">
                     <div class="detail-label">Terakhir Diperbarui</div>
                     <div class="detail-value">
                         {{ $news->updated_at
@@ -159,21 +154,5 @@
     </div>
 
 </div>
-
-<!-- Script tutup alert manual -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll("[data-alert-close]").forEach(function (btn) {
-        btn.addEventListener("click", function (e) {
-            e.preventDefault();
-            const box = btn.closest("[data-alert]");
-            if (!box) return;
-            box.style.transition = "opacity .2s ease";
-            box.style.opacity = "0";
-            setTimeout(() => box.remove(), 200);
-        });
-    });
-});
-</script>
 
 @endsection

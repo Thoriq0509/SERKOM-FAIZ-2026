@@ -53,9 +53,6 @@
                     @endforeach
                 </ul>
             </div>
-            <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
-                <i class="fas fa-xmark"></i>
-            </button>
         </div>
     @endif
 
@@ -251,11 +248,10 @@
 
 </div>
 
-<!-- Script preview gambar + tutup alert -->
+{{-- Script khusus halaman ini: preview gambar --}}
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    // Preview gambar
     const fotoInput      = document.getElementById('gambar');
     const previewWrapper = document.getElementById('previewWrapper');
     const previewPhoto   = document.getElementById('previewPhoto');
@@ -278,18 +274,6 @@ document.addEventListener("DOMContentLoaded", function () {
             reader.readAsDataURL(file);
         });
     }
-
-    // Tutup alert manual
-    document.querySelectorAll('[data-alert-close]').forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            const box = btn.closest('[data-alert]');
-            if (!box) return;
-            box.style.transition = 'opacity .2s ease';
-            box.style.opacity = '0';
-            setTimeout(() => box.remove(), 200);
-        });
-    });
 
 });
 </script>

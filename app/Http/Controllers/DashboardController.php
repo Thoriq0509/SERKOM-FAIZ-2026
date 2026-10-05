@@ -9,37 +9,37 @@ class DashboardController extends Controller
     // Halaman beranda publik
     public function index()
     {
-        return view('public.dashboard');
+        return view('landing.dashboard');
     }
 
     // Halaman profil sekolah (publik)
     public function profile()
     {
-        return view('public.profile');
+        return view('landing.profile');
     }
 
     public function extracurricular()
     {
-        return view('public.extracurricular');
+        return view('landing.extracurricular');
     }
 
     public function teachers()
     {
-        return view('public.teachers');
+        return view('landing.teachers');
     }
 
     public function students()
     {
-        return view('public.students');
+        return view('landing.students');
     }
 
     public function news()
     {
-        return view('public.news');
+        return view('landing.news');
     }
 
     public function gallery()
     {
-        return view('public.gallery');
+        return view('landing.gallery');
     }
 }

@@ -26,23 +26,17 @@
 
     <!-- Alert sukses -->
     @if (session('success'))
-        <div class="alert alert-success alert-soft alert-dismissible fade show" role="alert" data-alert>
+        <div class="alert alert-success alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-check-circle"></i>
             <span class="alert-text">{{ session('success') }}</span>
-            <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
-                <i class="fas fa-xmark"></i>
-            </button>
         </div>
     @endif
 
     <!-- Alert error -->
     @if (session('error'))
-        <div class="alert alert-danger alert-soft alert-dismissible fade show" role="alert" data-alert>
+        <div class="alert alert-danger alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-exclamation-circle"></i>
             <span class="alert-text">{{ session('error') }}</span>
-            <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
-                <i class="fas fa-xmark"></i>
-            </button>
         </div>
     @endif
 
@@ -59,7 +53,7 @@
 
                 <thead>
                     <tr>
-                        <th width="5%">No</th>
+                        <th width="5%" data-orderable="false">No</th>
                         <th width="13%" class="text-center" data-orderable="false">Preview</th>
                         <th width="35%">Judul & Keterangan</th>
                         <th width="13%" class="text-center">Kategori</th>
@@ -157,25 +151,5 @@
     </div>
 
 </div>
-
-<!-- Script tutup alert manual -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll("[data-alert-close]").forEach(function (btn) {
-        btn.addEventListener("click", function (e) {
-            e.preventDefault();
-            const alertBox = btn.closest("[data-alert]");
-            if (!alertBox) return;
-
-            alertBox.style.transition = "opacity .2s ease";
-            alertBox.style.opacity = "0";
-
-            setTimeout(function () {
-                alertBox.remove();
-            }, 200);
-        });
-    });
-});
-</script>
 
 @endsection

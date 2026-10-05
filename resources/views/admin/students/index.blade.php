@@ -29,9 +29,6 @@
         <div class="alert alert-success alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-check-circle"></i>
             <span class="alert-text">{{ session('success') }}</span>
-            <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
-                <i class="fas fa-xmark"></i>
-            </button>
         </div>
     @endif
 
@@ -40,9 +37,6 @@
         <div class="alert alert-danger alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-exclamation-circle"></i>
             <span class="alert-text">{{ session('error') }}</span>
-            <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
-                <i class="fas fa-xmark"></i>
-            </button>
         </div>
     @endif
 
@@ -58,7 +52,7 @@
             <table id="tableStudents" class="table table-clean align-middle" data-datatable style="width:100%">
                 <thead>
                     <tr>
-                        <th width="5%">No</th>
+                        <th width="5%" data-orderable="false">No</th>
                         <th width="15%">NISN</th>
                         <th width="30%">Nama Siswa</th>
                         <th width="15%" class="text-center">Jenis Kelamin</th>
@@ -125,25 +119,5 @@
     </div>
 
 </div>
-
-<!-- Script tutup alert manual -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll("[data-alert-close]").forEach(function (btn) {
-        btn.addEventListener("click", function (e) {
-            e.preventDefault();
-            const alertBox = btn.closest("[data-alert]");
-            if (!alertBox) return;
-
-            alertBox.style.transition = "opacity .2s ease";
-            alertBox.style.opacity = "0";
-
-            setTimeout(function () {
-                alertBox.remove();
-            }, 200);
-        });
-    });
-});
-</script>
 
 @endsection

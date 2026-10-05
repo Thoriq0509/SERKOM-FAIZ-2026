@@ -38,9 +38,6 @@
                     @endforeach
                 </ul>
             </div>
-            <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
-                <i class="fas fa-xmark"></i>
-            </button>
         </div>
     @endif
 
@@ -49,9 +46,6 @@
         <div class="alert-soft alert-success mb-4" role="alert" data-alert>
             <i class="fas fa-check-circle"></i>
             <span class="alert-body">{{ session('success') }}</span>
-            <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
-                <i class="fas fa-xmark"></i>
-            </button>
         </div>
     @endif
 
@@ -285,24 +279,49 @@
             </div>
         </div>
 
-        <!-- Section: Visi & misi -->
+        <!-- Section: Visi & Misi -->
         <div class="card-clean mb-4">
             <div class="card-head">
                 <h6><i class="fas fa-bullseye me-2"></i>Visi & Misi</h6>
             </div>
 
             <div class="card-body">
-                <label for="visi_misi" class="form-label">
-                    Visi dan Misi <span class="req">*</span>
-                </label>
-                <textarea id="visi_misi"
-                          name="visi_misi"
-                          rows="8"
-                          class="form-control @error('visi_misi') is-invalid @enderror"
-                          required>{{ old('visi_misi', $schoolProfile->visi_misi ?? '') }}</textarea>
-                @error('visi_misi')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+                <div class="row g-3">
+
+                    <!-- Visi -->
+                    <div class="col-lg-6">
+                        <label for="visi" class="form-label">
+                            Visi <span class="req">*</span>
+                        </label>
+                        <textarea id="visi"
+                                  name="visi"
+                                  rows="8"
+                                  class="form-control @error('visi') is-invalid @enderror"
+                                  placeholder="Tulis visi sekolah di sini..."
+                                  required>{{ old('visi', $schoolProfile->visi ?? '') }}</textarea>
+                        @error('visi')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Misi -->
+                    <div class="col-lg-6">
+                        <label for="misi" class="form-label">
+                            Misi <span class="req">*</span>
+                        </label>
+                        <textarea id="misi"
+                                  name="misi"
+                                  rows="8"
+                                  class="form-control @error('misi') is-invalid @enderror"
+                                  placeholder="Tulis misi sekolah di sini..."
+                                  required>{{ old('misi', $schoolProfile->misi ?? '') }}</textarea>
+                        @error('misi')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <small class="form-hint">Boleh pakai enter antar poin misi.</small>
+                    </div>
+
+                </div>
             </div>
         </div>
 
@@ -365,21 +384,5 @@
     </form>
 
 </div>
-
-<!-- Script tutup alert manual -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll("[data-alert-close]").forEach(function (btn) {
-        btn.addEventListener("click", function (e) {
-            e.preventDefault();
-            const box = btn.closest("[data-alert]");
-            if (!box) return;
-            box.style.transition = "opacity .2s ease";
-            box.style.opacity = "0";
-            setTimeout(() => box.remove(), 200);
-        });
-    });
-});
-</script>
 
 @endsection

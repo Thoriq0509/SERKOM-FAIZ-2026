@@ -129,7 +129,7 @@
                          alt="Logo {{ $schoolProfile->nama_sekolah }}"
                          class="navbar-school-logo">
                 @else
-                    <img src="{{ asset('') }}"
+                    <img src="{{ asset('assets/admin/img/smatn.png') }}"
                          alt="Logo Sekolah"
                          class="navbar-school-logo">
                 @endif
@@ -370,6 +370,18 @@ document.addEventListener("DOMContentLoaded", function () {
             if (adminMenu.classList.contains("show")) positionDropdown();
         }, true);
     }
+
+    // =========================================================
+    // AUTO-DISMISS ALERT — SEMUA ALERT HILANG SETELAH 3 DETIK
+    // =========================================================
+    document.querySelectorAll("[data-alert]").forEach(function (box) {
+        setTimeout(function () {
+            box.style.transition = "opacity .4s ease, transform .4s ease";
+            box.style.opacity = "0";
+            box.style.transform = "translateY(-10px)";
+            setTimeout(() => box.remove(), 400);
+        }, 3000); // 3000ms = 3 detik
+    });
 
 });
 </script>

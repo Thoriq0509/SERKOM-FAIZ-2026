@@ -12,11 +12,7 @@ class SchoolProfileController extends Controller
     // Tampilkan profil sekolah
     public function index()
     {
-        $schoolProfile = SchoolProfile::first();
-
-        if (! $schoolProfile) {
-            $schoolProfile = new SchoolProfile();
-        }
+        $schoolProfile = SchoolProfile::first() ?? new SchoolProfile();
 
         return view('admin.school_profile.index', compact('schoolProfile'));
     }
@@ -28,19 +24,20 @@ class SchoolProfileController extends Controller
 
         if (! $schoolProfile) {
             $schoolProfile = SchoolProfile::create([
-                'nama_sekolah'   => '',
-                'kepala_sekolah' => '',
-                'npsn'           => '',
-                'alamat'         => '',
-                'kontak'         => '',
-                'email'          => '',
-                'visi_misi'      => '',
-                'tahun_berdiri'  => null,
-                'deskripsi'      => null,
-                'logo'           => null,
-                'foto'           => null,
-                'foto_kepsek'    => null,
-                'sambutan_kepsek'=> null,
+                'nama_sekolah'    => '',
+                'kepala_sekolah'  => '',
+                'npsn'            => '',
+                'alamat'          => '',
+                'kontak'          => '',
+                'email'           => '',
+                'visi'            => '',   // ← GANTI dari visi_misi
+                'misi'            => '',   // ← TAMBAH
+                'tahun_berdiri'   => null,
+                'deskripsi'       => null,
+                'logo'            => null,
+                'foto'            => null,
+                'foto_kepsek'     => null,
+                'sambutan_kepsek' => null,
             ]);
         }
 
@@ -64,7 +61,8 @@ class SchoolProfileController extends Controller
         $schoolProfile->alamat          = $validated['alamat'];
         $schoolProfile->kontak          = $validated['kontak'];
         $schoolProfile->email           = $validated['email'] ?? null;
-        $schoolProfile->visi_misi       = $validated['visi_misi'];
+        $schoolProfile->visi            = $validated['visi'];   // ← GANTI
+        $schoolProfile->misi            = $validated['misi'];   // ← TAMBAH
         $schoolProfile->tahun_berdiri   = $validated['tahun_berdiri'];
         $schoolProfile->deskripsi       = $validated['deskripsi'] ?? null;
         $schoolProfile->sambutan_kepsek = $validated['sambutan_kepsek'] ?? null;
@@ -134,7 +132,10 @@ class SchoolProfileController extends Controller
             'alamat'          => ['required', 'string'],
             'kontak'          => ['required', 'string', 'max:15'],
             'email'           => ['nullable', 'email', 'max:100'],
-            'visi_misi'       => ['required', 'string'],
+
+            'visi'            => ['required', 'string'],   // ← GANTI dari visi_misi
+            'misi'            => ['required', 'string'],   // ← TAMBAH
+
             'tahun_berdiri'   => ['required', 'digits:4', 'integer'],
             'deskripsi'       => ['nullable', 'string'],
             'sambutan_kepsek' => ['nullable', 'string'],
@@ -165,7 +166,8 @@ class SchoolProfileController extends Controller
             'email.email' => 'Format email tidak valid.',
             'email.max'   => 'Email maksimal 100 karakter.',
 
-            'visi_misi.required' => 'Visi & misi wajib diisi.',
+            'visi.required' => 'Visi wajib diisi.',   // ← GANTI
+            'misi.required' => 'Misi wajib diisi.',   // ← TAMBAH
 
             'tahun_berdiri.required' => 'Tahun berdiri wajib diisi.',
             'tahun_berdiri.digits'   => 'Tahun berdiri harus 4 digit.',

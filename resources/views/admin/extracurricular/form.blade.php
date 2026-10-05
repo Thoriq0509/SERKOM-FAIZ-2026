@@ -83,9 +83,6 @@
                     @endforeach
                 </ul>
             </div>
-            <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
-                <i class="fas fa-xmark"></i>
-            </button>
         </div>
     @endif
 
@@ -153,9 +150,7 @@
                         <small class="form-hint">Maksimal 40 karakter.</small>
                     </div>
 
-                    <!-- ============================================ -->
-                    <!-- PEMBINA — DIUBAH JADI DROPDOWN DARI DATA GURU -->
-                    <!-- ============================================ -->
+                    <!-- Pembina — dropdown dari data guru -->
                     <div class="col-md-6 mb-4">
                         <label for="id_guru" class="form-label">
                             Pembina <span class="opt">(Opsional)</span>
@@ -177,7 +172,6 @@
                         @enderror
                         <small class="form-hint">Pilih dari daftar guru yang tersedia.</small>
                     </div>
-                    <!-- ============================================ -->
 
                     <!-- Jadwal latihan -->
                     <div class="col-12 mb-4">
@@ -354,7 +348,7 @@
 
 </div>
 
-<!-- Script jadwal + preview gambar + tutup alert -->
+{{-- Script khusus halaman ini: preview jadwal & gambar --}}
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -433,18 +427,6 @@ document.addEventListener("DOMContentLoaded", function () {
             reader.readAsDataURL(file);
         });
     }
-
-    // ==== Tutup alert manual ====
-    document.querySelectorAll('[data-alert-close]').forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            const box = btn.closest('[data-alert]');
-            if (!box) return;
-            box.style.transition = 'opacity .2s ease';
-            box.style.opacity = '0';
-            setTimeout(() => box.remove(), 200);
-        });
-    });
 
 });
 </script>

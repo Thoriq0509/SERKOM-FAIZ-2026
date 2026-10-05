@@ -34,9 +34,6 @@
         <div class="alert alert-success alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-check-circle"></i>
             <span class="alert-text">{{ session('success') }}</span>
-            <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
-                <i class="fas fa-xmark"></i>
-            </button>
         </div>
     @endif
 
@@ -45,9 +42,6 @@
         <div class="alert alert-danger alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-exclamation-circle"></i>
             <span class="alert-text">{{ session('error') }}</span>
-            <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
-                <i class="fas fa-xmark"></i>
-            </button>
         </div>
     @endif
 
@@ -69,8 +63,6 @@
             <div class="hero-info">
                 <h4 class="hero-name">{{ $extracurricular->nama_ekskul }}</h4>
                 <div class="hero-badges">
-
-                    {{-- ============ PEMBINA — DIREVISI ============ --}}
                     @if ($extracurricular->pembina)
                         <span class="badge-info">
                             <i class="fas fa-user-tie"></i>
@@ -81,7 +73,6 @@
                             <i class="fas fa-user-tie"></i>Pembina belum diisi
                         </span>
                     @endif
-                    {{-- ============================================ --}}
 
                     @if ($extracurricular->jadwal_latihan)
                         <span class="badge-info">
@@ -119,7 +110,7 @@
             <hr class="section-divider">
 
             @if ($extracurricular->deskripsi)
-                <div class="ekskul-desc">{{ $extracurricular->deskripsi }}</div>
+                <div class="ekskul-desc">{!! nl2br(e($extracurricular->deskripsi)) !!}</div>
             @else
                 <div class="ekskul-desc empty">Belum ada deskripsi untuk ekstrakurikuler ini.</div>
             @endif
@@ -130,6 +121,7 @@
             </div>
             <hr class="section-divider">
 
+            <div class="detail-grid">
                 <div class="detail-item">
                     <div class="detail-label">Nama Ekstrakurikuler</div>
                     <div class="detail-value">{{ $extracurricular->nama_ekskul }}</div>
@@ -169,7 +161,7 @@
                     </div>
                 </div>
 
-                <div class="detail-item">
+                <div class="detail-item" style="grid-column: 1 / -1;">
                     <div class="detail-label">Terakhir Diperbarui</div>
                     <div class="detail-value">
                         {{ $extracurricular->updated_at
@@ -205,21 +197,5 @@
     </div>
 
 </div>
-
-<!-- Script tutup alert manual -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll("[data-alert-close]").forEach(function (btn) {
-        btn.addEventListener("click", function (e) {
-            e.preventDefault();
-            const box = btn.closest("[data-alert]");
-            if (!box) return;
-            box.style.transition = "opacity .2s ease";
-            box.style.opacity = "0";
-            setTimeout(() => box.remove(), 200);
-        });
-    });
-});
-</script>
 
 @endsection

@@ -55,7 +55,7 @@
         </div>
 
         <div class="table-responsive">
-            <table class="table table-clean">
+            <table id="tableUsers" class="table table-clean align-middle" data-datatable style="width:100%">
 
                 <thead>
                     <tr>

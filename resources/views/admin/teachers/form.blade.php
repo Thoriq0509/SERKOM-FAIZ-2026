@@ -39,6 +39,7 @@
         </a>
     </div>
 
+    <!-- Alert validasi -->
     @if ($errors->any())
         <div class="alert-soft alert-danger mb-4" role="alert" data-alert>
             <i class="fas fa-exclamation-triangle"></i>
@@ -51,19 +52,14 @@
                     @endforeach
                 </ul>
             </div>
-            <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
-                <i class="fas fa-xmark"></i>
-            </button>
         </div>
     @endif
 
+    <!-- Alert sukses -->
     @if (session('success'))
         <div class="alert-soft alert-success mb-4" role="alert" data-alert>
             <i class="fas fa-check-circle"></i>
             <span class="alert-body">{{ session('success') }}</span>
-            <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
-                <i class="fas fa-xmark"></i>
-            </button>
         </div>
     @endif
 
@@ -234,6 +230,7 @@
 
 </div>
 
+{{-- Script khusus halaman ini: preview foto --}}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -260,17 +257,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    document.querySelectorAll('[data-alert-close]').forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            const box = btn.closest('[data-alert]');
-            if (!box) return;
-            box.style.transition = 'opacity .2s ease';
-            box.style.opacity = '0';
-            setTimeout(() => box.remove(), 200);
-        });
-    });
-
 });
 </script>
+
 @endsection

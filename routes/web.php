@@ -18,15 +18,16 @@ use App\Http\Controllers\Admin\ExtracurricularController;
 use App\Http\Controllers\Admin\GalleryController;
 
 // =========================================================
-// PUBLIC
+// PUBLIC — Landing Page
 // =========================================================
-Route::get('/', [PublicDashboardController::class, 'index'])->name('public.dashboard');
-Route::get('/profile', [PublicDashboardController::class, 'profile'])->name('public.profile');
-Route::get('/extracurricular', [PublicDashboardController::class, 'extracurricular'])->name('public.extracurricular');
-Route::get('/teachers', [PublicDashboardController::class, 'teachers'])->name('public.teachers');
-Route::get('/students', [PublicDashboardController::class, 'students'])->name('public.students');
-Route::get('/news', [PublicDashboardController::class, 'news'])->name('public.news');
-Route::get('/gallery', [PublicDashboardController::class, 'gallery'])->name('public.gallery');
+Route::get('/',           [PublicDashboardController::class, 'index'])->name('landing.dashboard');
+Route::get('/dashboard',  [PublicDashboardController::class, 'index'])->name('landing.dashboard.alias');
+Route::get('/profile',    [PublicDashboardController::class, 'profile'])->name('landing.profile');
+Route::get('/extracurricular', [PublicDashboardController::class, 'extracurricular'])->name('landing.extracurricular');
+Route::get('/teachers',   [PublicDashboardController::class, 'teachers'])->name('landing.teachers');
+Route::get('/students',   [PublicDashboardController::class, 'students'])->name('landing.students');
+Route::get('/news',       [PublicDashboardController::class, 'news'])->name('landing.news');
+Route::get('/gallery',    [PublicDashboardController::class, 'gallery'])->name('landing.gallery');
 
 // =========================================================
 // GUEST — Login
