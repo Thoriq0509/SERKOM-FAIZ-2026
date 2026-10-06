@@ -1,0 +1,315 @@
+/* Font Montserrat */
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/montserrat/Montserrat-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/montserrat/Montserrat-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/montserrat/Montserrat-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/montserrat/Montserrat-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/montserrat/Montserrat-ExtraBold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+
+/* Halaman Profil — Hero */
+.profile-hero {
+    background: linear-gradient(135deg, #1f2f46 0%, #2a3f5f 100%);
+    padding: 100px 0 80px;
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(59, 130, 246, .25) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.profile-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.profile-hero-label {
+    display: inline-block;
+    color: #3b82f6;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.profile-hero-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 42px;
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 14px;
+    letter-spacing: -.5px;
+    text-transform: uppercase;
+    line-height: 1.15;
+}
+
+.profile-hero-desc {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, .8);
+    margin: 0;
+    line-height: 1.7;
+}
+
+
+/* Halaman Profil — Info Card */
+.info-card {
+    background: #fff;
+    border: 1px solid #eef1f6;
+    border-radius: 16px;
+    padding: 24px 22px;
+    height: 100%;
+    transition: all .3s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(31, 47, 70, .1);
+    border-color: #e0edff;
+}
+
+.info-icon {
+    width: 46px;
+    height: 46px;
+    background: #e0edff;
+    color: #1d4ed8;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    margin-bottom: 16px;
+}
+
+.info-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+}
+
+.info-value {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #1f2f46;
+    line-height: 1.5;
+}
+
+
+/* Halaman Visi Misi — Heading */
+.vm-heading {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: #1f2f46;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 0 20px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #3b82f6;
+    display: inline-block;
+}
+
+.vm-heading + p {
+    margin-bottom: 40px;
+}
+
+.vm-heading:not(:first-child) {
+    margin-top: 40px;
+}
+
+
+/* Halaman Visi Misi — List Misi */
+.vm-list {
+    list-style: none;
+    counter-reset: misi-counter;
+    padding: 0;
+    margin: 0;
+}
+
+.vm-list li {
+    position: relative;
+    padding-left: 50px;
+    margin-bottom: 18px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.9;
+    color: #4b5563;
+    counter-increment: misi-counter;
+}
+
+.vm-list li::before {
+    content: counter(misi-counter);
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 32px;
+    height: 32px;
+    background: #1f2f46;
+    color: #fff;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.vm-list li:last-child {
+    margin-bottom: 0;
+}
+
+
+/* Halaman Sejarah — Hero Gambar */
+.sejarah-hero {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+}
+
+.sejarah-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.sejarah-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(31, 47, 70, .45);
+}
+
+.sejarah-hero-title {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 60px;
+    z-index: 2;
+}
+
+.sejarah-hero-title h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 56px;
+    font-weight: 800;
+    color: #fff;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, .4);
+}
+
+
+/* Halaman Sejarah — Body Teks */
+.sejarah-body {
+    padding: 60px 0 80px;
+    background: #fff;
+}
+
+.sejarah-body-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.sejarah-body-content p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 2;
+    color: #4b5563;
+    margin: 0 0 22px;
+    text-align: justify;
+}
+
+.sejarah-body-content p:last-child {
+    margin-bottom: 0;
+}
+
+.sejarah-body-content strong {
+    color: #1f2f46;
+    font-weight: 700;
+}
+
+
+/* Responsive */
+@media (max-width: 991.98px) {
+    .profile-hero { padding: 80px 0 60px; }
+    .profile-hero-title { font-size: 34px; }
+
+    .sejarah-hero { height: 320px; }
+    .sejarah-hero-title { padding: 0 40px; }
+    .sejarah-hero-title h1 { font-size: 42px; }
+}
+
+@media (max-width: 767.98px) {
+    .profile-hero { padding: 70px 0 50px; }
+    .profile-hero-title { font-size: 26px; }
+    .profile-hero-desc { font-size: 13.5px; }
+
+    .info-card { padding: 20px 18px; }
+    .info-icon { width: 40px; height: 40px; font-size: 15px; margin-bottom: 14px; }
+    .info-value { font-size: 13.5px; }
+
+    .vm-heading { font-size: 22px; }
+    .vm-list li { padding-left: 44px; font-size: 13.5px; }
+    .vm-list li::before { width: 28px; height: 28px; font-size: 12px; }
+
+    .sejarah-hero { height: 240px; }
+    .sejarah-hero-title { padding: 0 24px; }
+    .sejarah-hero-title h1 { font-size: 30px; }
+
+    .sejarah-body { padding: 40px 0 60px; }
+    .sejarah-body-content p { font-size: 14px; line-height: 1.9; text-align: left; }
+}   

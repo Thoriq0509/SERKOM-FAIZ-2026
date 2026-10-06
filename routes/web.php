@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 
-// Dashboard publik (root) — pakai alias biar nggak bentrok
+// Dashboard publik (root)
 use App\Http\Controllers\DashboardController as PublicDashboardController;
 
 // Controller admin
@@ -20,16 +20,17 @@ use App\Http\Controllers\Admin\GalleryController;
 // =========================================================
 // PUBLIC — Landing Page
 // =========================================================
-Route::get('/',           [PublicDashboardController::class, 'index'])->name('landing.dashboard');
-Route::get('/dashboard',  [PublicDashboardController::class, 'index'])->name('landing.dashboard.alias');
-Route::get('/profile',    [PublicDashboardController::class, 'profile'])->name('landing.profile');
-Route::get('/extracurricular', [PublicDashboardController::class, 'extracurricular'])->name('landing.extracurricular');
-Route::get('/teachers',   [PublicDashboardController::class, 'teachers'])->name('landing.teachers');
-Route::get('/students',   [PublicDashboardController::class, 'students'])->name('landing.students');
-Route::get('/news',       [PublicDashboardController::class, 'news'])->name('landing.news');
-Route::get('/gallery',    [PublicDashboardController::class, 'gallery'])->name('landing.gallery');
-Route::get('/history',    [PublicDashboardController::class, 'history'])->name('landing.history');
-Route::get('/vision-mission', [PublicDashboardController::class, 'visionMission'])->name('landing.vision-mission');
+Route::get('/',                [PublicDashboardController::class, 'index'])->name('landing.dashboard');
+Route::get('/profile',         [PublicDashboardController::class, 'profile'])->name('landing.profile');
+Route::get('/history',         [PublicDashboardController::class, 'history'])->name('landing.history');
+Route::get('/vision-mission',  [PublicDashboardController::class, 'visionMission'])->name('landing.vision-mission');
+Route::get('/teachers',        [PublicDashboardController::class, 'teachers'])->name('landing.teachers');
+Route::get('/teachers/{index}', [PublicDashboardController::class, 'teacherShow'])->name('landing.teachers.show');
+Route::get('/students',        [PublicDashboardController::class, 'students'])->name('landing.students');
+Route::get('/extracurricular',         [PublicDashboardController::class, 'extracurricular'])->name('landing.extracurricular');
+Route::get('/extracurricular/{index}', [PublicDashboardController::class, 'extracurricularShow'])->name('landing.extracurricular.show');
+Route::get('/news',            [PublicDashboardController::class, 'news'])->name('landing.news');
+Route::get('/gallery',         [PublicDashboardController::class, 'gallery'])->name('landing.gallery');
 
 // =========================================================
 // GUEST — Login

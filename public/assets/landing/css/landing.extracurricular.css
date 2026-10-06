@@ -1,0 +1,420 @@
+/* Font Montserrat */
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/montserrat/Montserrat-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/montserrat/Montserrat-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/montserrat/Montserrat-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/montserrat/Montserrat-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/montserrat/Montserrat-ExtraBold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+
+/* Hero Header */
+.page-hero {
+    background: linear-gradient(135deg, #1f2f46 0%, #2a3f5f 100%);
+    padding: 100px 0 80px;
+    position: relative;
+    overflow: hidden;
+}
+
+.page-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(59, 130, 246, .25) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.page-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.page-hero-label {
+    display: inline-block;
+    color: #3b82f6;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.page-hero-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 42px;
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 14px;
+    letter-spacing: -.5px;
+    text-transform: uppercase;
+    line-height: 1.15;
+}
+
+.page-hero-desc {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, .8);
+    margin: 0;
+    line-height: 1.7;
+}
+
+
+/* Section umum */
+.section-block {
+    padding: 80px 0;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-label {
+    display: inline-block;
+    color: #3b82f6;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+}
+
+.section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 34px;
+    font-weight: 800;
+    color: #1f2f46;
+    margin: 0 0 12px;
+    letter-spacing: -.5px;
+    text-transform: uppercase;
+}
+
+.section-desc {
+    color: #6b7280;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+
+/* Link pembungkus card */
+.eskul-card-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.eskul-card-link:hover {
+    color: inherit;
+}
+
+
+/* Card Ekstrakurikuler */
+.eskul-card {
+    background: #fff;
+    border: 1px solid #eef1f6;
+    border-radius: 16px;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: all .3s ease;
+}
+
+.eskul-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(31, 47, 70, .12);
+    border-color: #e0edff;
+}
+
+.eskul-photo-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f8fafc, #eef2f7);
+}
+
+.eskul-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform .5s ease;
+}
+
+.eskul-card:hover .eskul-photo {
+    transform: scale(1.05);
+}
+
+.eskul-photo-empty {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #cbd5e1;
+    font-size: 48px;
+}
+
+.eskul-body {
+    padding: 20px 18px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.eskul-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: #1f2f46;
+    margin: 0 0 10px;
+    line-height: 1.35;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 40px;
+}
+
+.eskul-pembina,
+.eskul-jadwal {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #6b7280;
+    margin-bottom: 6px;
+}
+
+.eskul-pembina i,
+.eskul-jadwal i {
+    color: #3b82f6;
+    font-size: 12px;
+    margin-top: 2px;
+    flex-shrink: 0;
+    width: 14px;
+}
+
+.eskul-pembina {
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+
+/* Detail Ekstrakurikuler */
+.eskul-detail-photo-wrap {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(31, 47, 70, .15);
+    aspect-ratio: 4 / 3;
+    background: linear-gradient(135deg, #f8fafc, #eef2f7);
+}
+
+.eskul-detail-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.eskul-detail-photo-empty {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #cbd5e1;
+    font-size: 100px;
+}
+
+.eskul-detail-content {
+    padding: 10px 0;
+}
+
+.eskul-detail-label {
+    display: inline-block;
+    color: #3b82f6;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.eskul-detail-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    color: #1f2f46;
+    margin: 0 0 16px;
+    line-height: 1.25;
+    letter-spacing: -.3px;
+    text-transform: uppercase;
+}
+
+.eskul-detail-divider {
+    width: 60px;
+    height: 4px;
+    background: #3b82f6;
+    border-radius: 2px;
+    margin-bottom: 24px;
+}
+
+.eskul-detail-info {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border-top: 1px solid #eef1f6;
+    padding-top: 24px;
+}
+
+.eskul-detail-info li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eef1f6;
+}
+
+.eskul-detail-info li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.eskul-detail-info li span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.eskul-detail-info li strong {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1f2f46;
+    text-align: right;
+}
+
+.eskul-detail-desc {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14.5px;
+    font-weight: 400;
+    line-height: 1.9;
+    color: #4b5563;
+    margin: 0 0 28px;
+    text-align: justify;
+}
+
+.eskul-detail-btn {
+    display: inline-flex;
+    align-items: center;
+    background: #1f2f46;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    transition: all .25s ease;
+}
+
+.eskul-detail-btn:hover {
+    background: #3b82f6;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, .35);
+}
+
+
+/* Responsive */
+@media (max-width: 991.98px) {
+    .page-hero { padding: 80px 0 60px; }
+    .page-hero-title { font-size: 34px; }
+
+    .section-block { padding: 60px 0; }
+    .section-title { font-size: 28px; }
+
+    .eskul-name { font-size: 14px; }
+
+    .eskul-detail-name { font-size: 24px; }
+    .eskul-detail-photo-wrap { max-width: 500px; margin: 0 auto; }
+}
+
+@media (max-width: 767.98px) {
+    .page-hero { padding: 70px 0 50px; }
+    .page-hero-title { font-size: 26px; }
+    .page-hero-desc { font-size: 13.5px; }
+
+    .section-block { padding: 50px 0; }
+    .section-title { font-size: 22px; }
+    .section-header { margin-bottom: 35px; }
+
+    .eskul-body { padding: 16px 14px; }
+    .eskul-name { font-size: 13px; min-height: 36px; }
+    .eskul-pembina,
+    .eskul-jadwal { font-size: 11px; }
+    .eskul-photo-empty { font-size: 36px; }
+
+    .eskul-detail-name { font-size: 20px; }
+    .eskul-detail-info li strong { font-size: 13.5px; }
+    .eskul-detail-photo-empty { font-size: 70px; }
+}

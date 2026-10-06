@@ -19,7 +19,7 @@
     <nav class="navbar navbar-expand-lg navbar-custom" id="mainNavbar">
         <div class="container">
 
-            {{-- Brand: logo + divider + 2 baris teks --}}
+            {{-- Brand: logo + divider + nama sekolah --}}
             <a class="navbar-brand navbar-brand-custom" href="{{ route('landing.dashboard') }}">
                 <img src="{{ asset('assets/admin/img/smatn.png') }}"
                      alt="Logo Sekolah"
@@ -115,6 +115,7 @@
         </div>
     </nav>
 
+    {{-- Konten halaman --}}
     <main>
         @yield('content')
     </main>
