@@ -8,30 +8,37 @@ use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
+use Throwable;
 
 class ExtracurricularController extends Controller
 {
-    // Daftar ekstrakurikuler
+    /**
+     * Daftar ekstrakurikuler
+     */
     public function index()
     {
         $extracurriculars = Extracurricular::with('pembina')
             ->orderByDesc('id')
-            ->paginate(10);
+            ->get();
 
         return view('admin.extracurricular.index', compact('extracurriculars'));
     }
 
-    // Form tambah ekstrakurikuler
+    /**
+     * Form tambah ekstrakurikuler
+     */
     public function create()
     {
         return view('admin.extracurricular.form', [
             'extracurricular' => new Extracurricular(),
             'isEdit'          => false,
-            'teachers'        => Teacher::orderBy('nama_guru')->get(),  // ← TAMBAH
+            'teachers'        => Teacher::orderBy('nama_guru')->get(),
         ]);
     }
 
-    // Simpan ekstrakurikuler baru
+    /**
+     * Simpan ekstrakurikuler baru
+     */
     public function store(Request $request)
     {
         $validated = $request->validate(
@@ -50,7 +57,9 @@ class ExtracurricularController extends Controller
             ->with('success', 'Data ekstrakurikuler berhasil ditambahkan.');
     }
 
-    // Detail ekstrakurikuler
+    /**
+     * Detail ekstrakurikuler
+     */
     public function show($id)
     {
         $extracurricular = $this->findExtracurricular($id);
@@ -62,7 +71,9 @@ class ExtracurricularController extends Controller
         return view('admin.extracurricular.show', compact('extracurricular'));
     }
 
-    // Form edit ekstrakurikuler
+    /**
+     * Form edit ekstrakurikuler
+     */
     public function edit($id)
     {
         $extracurricular = $this->findExtracurricular($id);
@@ -74,11 +85,13 @@ class ExtracurricularController extends Controller
         return view('admin.extracurricular.form', [
             'extracurricular' => $extracurricular,
             'isEdit'          => true,
-            'teachers'        => Teacher::orderBy('nama_guru')->get(),  // ← TAMBAH
+            'teachers'        => Teacher::orderBy('nama_guru')->get(),
         ]);
     }
 
-    // Update ekstrakurikuler
+    /**
+     * Update ekstrakurikuler
+     */
     public function update(Request $request, $id)
     {
         $extracurricular = $this->findExtracurricular($id);
@@ -108,7 +121,9 @@ class ExtracurricularController extends Controller
             ->with('success', 'Data ekstrakurikuler berhasil diperbarui.');
     }
 
-    // Hapus ekstrakurikuler
+    /**
+     * Hapus ekstrakurikuler
+     */
     public function destroy($id)
     {
         $extracurricular = $this->findExtracurricular($id);
@@ -129,21 +144,21 @@ class ExtracurricularController extends Controller
             ->with('success', 'Data ekstrakurikuler berhasil dihapus.');
     }
 
-    // =========================================================
-    // HELPERS
-    // =========================================================
-
-    // Cari ekstrakurikuler berdasarkan encrypted ID
+    /**
+     * Cari ekstrakurikuler berdasarkan encrypted ID
+     */
     private function findExtracurricular(string $encryptedId): ?Extracurricular
     {
         try {
             return Extracurricular::find(Crypt::decryptString($encryptedId));
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return null;
         }
     }
 
-    // Redirect ke index dengan pesan error
+    /**
+     * Redirect ke index dengan pesan error
+     */
     private function backWithError(string $message)
     {
         return redirect()
@@ -151,26 +166,30 @@ class ExtracurricularController extends Controller
             ->with('error', $message);
     }
 
-    // Aturan validasi
+    /**
+     * Aturan validasi
+     */
     private function rules(): array
     {
         return [
             'nama_ekskul'    => ['required', 'string', 'max:40'],
-            'id_guru'        => ['nullable', 'exists:teachers,id'],  // ← DIUBAH
+            'id_guru'        => ['nullable', 'exists:teachers,id'],
             'jadwal_latihan' => ['nullable', 'string', 'max:40'],
             'deskripsi'      => ['nullable', 'string'],
             'gambar'         => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ];
     }
 
-    // Pesan validasi
+    /**
+     * Pesan validasi
+     */
     private function messages(): array
     {
         return [
             'nama_ekskul.required' => 'Nama ekstrakurikuler wajib diisi.',
             'nama_ekskul.max'      => 'Nama ekstrakurikuler maksimal 40 karakter.',
 
-            'id_guru.exists'     => 'Pembina yang dipilih tidak valid.',  // ← DIUBAH
+            'id_guru.exists'     => 'Pembina yang dipilih tidak valid.',
             'jadwal_latihan.max' => 'Jadwal latihan maksimal 40 karakter.',
 
             'gambar.image' => 'File harus berupa gambar.',

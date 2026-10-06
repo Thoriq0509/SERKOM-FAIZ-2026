@@ -9,21 +9,26 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Throwable;
 
 class NewsController extends Controller
 {
-    // Daftar berita
+    /**
+     * Daftar berita
+     */
     public function index()
     {
         $news = News::with('user')
             ->orderByDesc('tanggal')
             ->orderByDesc('id')
-            ->paginate(10);
+            ->get();
 
         return view('admin.news.index', compact('news'));
     }
 
-    // Form tambah berita
+    /**
+     * Form tambah berita
+     */
     public function create()
     {
         return view('admin.news.form', [
@@ -32,7 +37,9 @@ class NewsController extends Controller
         ]);
     }
 
-    // Simpan berita baru
+    /**
+     * Simpan berita baru
+     */
     public function store(Request $request)
     {
         $validated = $request->validate(
@@ -53,7 +60,9 @@ class NewsController extends Controller
             ->with('success', 'Berita berhasil ditambahkan.');
     }
 
-    // Detail berita
+    /**
+     * Detail berita
+     */
     public function show($id)
     {
         $news = $this->findNews($id);
@@ -65,7 +74,9 @@ class NewsController extends Controller
         return view('admin.news.show', compact('news'));
     }
 
-    // Form edit berita
+    /**
+     * Form edit berita
+     */
     public function edit($id)
     {
         $news = $this->findNews($id);
@@ -80,7 +91,9 @@ class NewsController extends Controller
         ]);
     }
 
-    // Update berita
+    /**
+     * Update berita
+     */
     public function update(Request $request, $id)
     {
         $news = $this->findNews($id);
@@ -110,7 +123,9 @@ class NewsController extends Controller
             ->with('success', 'Berita berhasil diperbarui.');
     }
 
-    // Hapus berita
+    /**
+     * Hapus berita
+     */
     public function destroy($id)
     {
         $news = $this->findNews($id);
@@ -131,17 +146,21 @@ class NewsController extends Controller
             ->with('success', 'Berita berhasil dihapus.');
     }
 
-    // Cari berita berdasarkan encrypted ID
+    /**
+     * Cari berita berdasarkan encrypted ID
+     */
     private function findNews(string $encryptedId): ?News
     {
         try {
             return News::find(Crypt::decryptString($encryptedId));
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return null;
         }
     }
 
-    // Redirect ke index dengan pesan error
+    /**
+     * Redirect ke index dengan pesan error
+     */
     private function backWithError(string $message)
     {
         return redirect()
@@ -149,11 +168,13 @@ class NewsController extends Controller
             ->with('error', $message);
     }
 
-    // Aturan validasi
+    /**
+     * Aturan validasi
+     */
     private function rules(): array
     {
         return [
-            'judul'   => ['required', 'string', 'max:50'],
+            'judul'   => ['required', 'string', 'max:100'],
             'isi'     => ['required', 'string'],
             'tanggal' => ['required', 'date'],
             'status'  => ['required', Rule::in(['Publish', 'Draft'])],
@@ -161,7 +182,9 @@ class NewsController extends Controller
         ];
     }
 
-    // Pesan validasi
+    /**
+     * Pesan validasi
+     */
     private function messages(): array
     {
         return [

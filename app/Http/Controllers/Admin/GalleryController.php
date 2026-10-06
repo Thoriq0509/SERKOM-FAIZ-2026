@@ -8,20 +8,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Throwable;
 
 class GalleryController extends Controller
 {
-    // Daftar galeri
+    /**
+     * Daftar galeri
+     */
     public function index()
     {
         $galleries = Gallery::orderByDesc('tanggal')
             ->orderByDesc('id')
-            ->paginate(10);
+            ->get();
 
         return view('admin.gallery.index', compact('galleries'));
     }
 
-    // Form tambah galeri
+    /**
+     * Form tambah galeri
+     */
     public function create()
     {
         return view('admin.gallery.form', [
@@ -30,7 +35,9 @@ class GalleryController extends Controller
         ]);
     }
 
-    // Simpan galeri baru
+    /**
+     * Simpan galeri baru
+     */
     public function store(Request $request)
     {
         $validated = $request->validate(
@@ -49,7 +56,9 @@ class GalleryController extends Controller
             ->with('success', 'Media galeri berhasil ditambahkan.');
     }
 
-    // Detail galeri
+    /**
+     * Detail galeri
+     */
     public function show($id)
     {
         $gallery = $this->findGallery($id);
@@ -61,7 +70,9 @@ class GalleryController extends Controller
         return view('admin.gallery.show', compact('gallery'));
     }
 
-    // Form edit galeri
+    /**
+     * Form edit galeri
+     */
     public function edit($id)
     {
         $gallery = $this->findGallery($id);
@@ -76,7 +87,9 @@ class GalleryController extends Controller
         ]);
     }
 
-    // Update galeri
+    /**
+     * Update galeri
+     */
     public function update(Request $request, $id)
     {
         $gallery = $this->findGallery($id);
@@ -106,7 +119,9 @@ class GalleryController extends Controller
             ->with('success', 'Media galeri berhasil diperbarui.');
     }
 
-    // Hapus galeri
+    /**
+     * Hapus galeri
+     */
     public function destroy($id)
     {
         $gallery = $this->findGallery($id);
@@ -127,17 +142,21 @@ class GalleryController extends Controller
             ->with('success', 'Media galeri berhasil dihapus.');
     }
 
-    // Cari galeri berdasarkan encrypted ID
+    /**
+     * Cari galeri berdasarkan encrypted ID
+     */
     private function findGallery(string $encryptedId): ?Gallery
     {
         try {
             return Gallery::find(Crypt::decryptString($encryptedId));
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return null;
         }
     }
 
-    // Redirect ke index dengan pesan error
+    /**
+     * Redirect ke index dengan pesan error
+     */
     private function backWithError(string $message)
     {
         return redirect()
@@ -145,7 +164,9 @@ class GalleryController extends Controller
             ->with('error', $message);
     }
 
-    // Aturan validasi
+    /**
+     * Aturan validasi
+     */
     private function rules(): array
     {
         return [
@@ -157,7 +178,9 @@ class GalleryController extends Controller
         ];
     }
 
-    // Pesan validasi
+    /**
+     * Pesan validasi
+     */
     private function messages(): array
     {
         return [

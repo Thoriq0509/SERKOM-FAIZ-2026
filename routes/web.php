@@ -28,6 +28,8 @@ Route::get('/teachers',   [PublicDashboardController::class, 'teachers'])->name(
 Route::get('/students',   [PublicDashboardController::class, 'students'])->name('landing.students');
 Route::get('/news',       [PublicDashboardController::class, 'news'])->name('landing.news');
 Route::get('/gallery',    [PublicDashboardController::class, 'gallery'])->name('landing.gallery');
+Route::get('/history',    [PublicDashboardController::class, 'history'])->name('landing.history');
+Route::get('/vision-mission', [PublicDashboardController::class, 'visionMission'])->name('landing.vision-mission');
 
 // =========================================================
 // GUEST — Login

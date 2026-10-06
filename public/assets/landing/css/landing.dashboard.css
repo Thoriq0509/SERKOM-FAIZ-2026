@@ -1,0 +1,377 @@
+/* Section umum */
+.section-block {
+    padding: 80px 0;
+}
+
+.section-alt {
+    background: #f8fafc;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-label {
+    display: inline-block;
+    color: #3b82f6;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.section-title {
+    font-size: 34px;
+    font-weight: 700;
+    color: #1f2f46;
+    margin: 0 0 12px;
+}
+
+.section-desc {
+    color: #6b7280;
+    font-size: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+
+/* Sambutan Card */
+.sambutan-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(31, 47, 70, .12);
+    border: 1px solid #eef1f6;
+    position: relative;
+    transition: all .3s ease;
+}
+
+.sambutan-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #1f2f46 0%, #3b82f6 100%);
+    z-index: 2;
+}
+
+.sambutan-card:hover {
+    box-shadow: 0 24px 60px rgba(31, 47, 70, .18);
+}
+
+.sambutan-photo-wrap {
+    padding: 30px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
+}
+
+.sambutan-photo {
+    width: 100%;
+    max-width: 220px;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(31, 47, 70, .18);
+    border: 4px solid #fff;
+}
+
+.sambutan-body {
+    padding: 36px 40px;
+}
+
+.sambutan-label {
+    display: inline-block;
+    color: #3b82f6;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.sambutan-heading {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1f2f46;
+    margin: 0 0 16px;
+    line-height: 1.3;
+    letter-spacing: -.3px;
+}
+
+.sambutan-divider {
+    width: 50px;
+    height: 3px;
+    background: #3b82f6;
+    border-radius: 2px;
+    margin-bottom: 20px;
+}
+
+.sambutan-text p {
+    font-size: 14.5px;
+    line-height: 1.9;
+    color: #4b5563;
+    margin: 0 0 12px;
+    text-align: justify;
+}
+
+.sambutan-author {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid #eef1f6;
+}
+
+.sambutan-author h5 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1f2f46;
+    margin: 0 0 3px;
+}
+
+.sambutan-author span {
+    font-size: 13px;
+    color: #3b82f6;
+    font-weight: 600;
+}
+
+
+/* Profil Sekolah */
+.gedung-wrap {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(31, 47, 70, .15);
+    aspect-ratio: 4 / 3;
+}
+
+.gedung-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .5s ease;
+}
+
+.gedung-wrap:hover .gedung-img {
+    transform: scale(1.05);
+}
+
+.profil-content {
+    padding: 10px 0;
+}
+
+.profil-label {
+    display: inline-block;
+    color: #3b82f6;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.profil-heading {
+    font-size: 26px;
+    font-weight: 800;
+    color: #1f2f46;
+    margin: 0 0 16px;
+    line-height: 1.3;
+}
+
+.profil-divider {
+    width: 50px;
+    height: 3px;
+    background: #3b82f6;
+    border-radius: 2px;
+    margin-bottom: 18px;
+}
+
+.profil-text {
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: #4b5563;
+    margin: 0 0 24px;
+}
+
+.profil-info {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.profil-info li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.profil-info li i {
+    width: 40px;
+    height: 40px;
+    background: #e0edff;
+    color: #1d4ed8;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+.profil-info li span {
+    display: block;
+    font-size: 12px;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 2px;
+}
+
+.profil-info li strong {
+    display: block;
+    font-size: 14.5px;
+    color: #1f2f46;
+    font-weight: 600;
+}
+
+.profil-btn {
+    display: inline-flex;
+    align-items: center;
+    background: #1f2f46;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all .25s ease;
+}
+
+.profil-btn:hover {
+    background: #3b82f6;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, .35);
+}
+
+
+/* Berita */
+.news-card {
+    background: #fff;
+    border: 1px solid #eef1f6;
+    border-radius: 16px;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: all .3s ease;
+}
+
+.news-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(31, 47, 70, .12);
+    border-color: #e0edff;
+}
+
+.news-thumb {
+    height: 200px;
+    overflow: hidden;
+    background: #f8fafc;
+}
+
+.news-thumb-empty {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #cbd5e1;
+    font-size: 40px;
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+}
+
+.news-body {
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.news-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #6b7280;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.news-title {
+    color: #1f2f46;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin: 0 0 10px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.news-excerpt {
+    color: #6b7280;
+    font-size: 13.5px;
+    line-height: 1.6;
+    margin: 0 0 16px;
+    flex: 1;
+}
+
+.news-link {
+    color: #3b82f6;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    transition: all .2s ease;
+}
+
+.news-link:hover {
+    color: #1d4ed8;
+    gap: 6px;
+}
+
+
+/* Responsive */
+@media (max-width: 991.98px) {
+    .section-block { padding: 60px 0; }
+    .section-title { font-size: 28px; }
+
+    .sambutan-body { padding: 28px 30px; }
+    .sambutan-heading { font-size: 21px; }
+
+    .profil-heading { font-size: 22px; }
+    .gedung-wrap { margin-bottom: 10px; }
+}
+
+@media (max-width: 767.98px) {
+    .section-block { padding: 50px 0; }
+    .section-title { font-size: 24px; }
+    .section-header { margin-bottom: 35px; }
+
+    .sambutan-photo-wrap { padding: 24px; }
+    .sambutan-photo { max-width: 180px; aspect-ratio: 1 / 1; }
+    .sambutan-body { padding: 24px 22px; }
+    .sambutan-heading { font-size: 19px; }
+    .sambutan-text p { font-size: 14px; text-align: left; }
+
+    .profil-heading { font-size: 20px; }
+    .profil-text { font-size: 14px; }
+
+    .news-thumb { height: 180px; }
+    .news-body { padding: 18px; }
+    .news-title { font-size: 16px; }
+}

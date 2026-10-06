@@ -5,31 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Sekolah')</title>
 
-    {{-- CSS --}}
     <link rel="stylesheet" href="{{ asset('assets/landing/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/landing/aos-library/aos.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/landing/css/landing.css') }}">
-
-    {{-- Font Awesome --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/landing/css/landing.dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/fontawesome/css/all.min.css') }}">
 
     @stack('styles')
 </head>
 <body>
 
     {{-- Navbar --}}
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
-        <div class="container position-relative">
+    <nav class="navbar navbar-expand-lg navbar-custom" id="mainNavbar">
+        <div class="container">
 
-            {{-- Brand: logo + nama --}}
+            {{-- Brand: logo + divider + 2 baris teks --}}
             <a class="navbar-brand navbar-brand-custom" href="{{ route('landing.dashboard') }}">
                 <img src="{{ asset('assets/admin/img/smatn.png') }}"
                      alt="Logo Sekolah"
                      class="brand-logo">
-                <span class="brand-name">SMA TARUNA NUSANTARA</span>
+
+                <span class="brand-divider"></span>
+
+                <span class="brand-text">
+                    <span class="brand-line-2">SMA Taruna Nusantara</span>
+                </span>
             </a>
 
-            {{-- Toggler mobile --}}
+            {{-- Toggler --}}
             <button class="navbar-toggler" type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent"
@@ -39,28 +42,72 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            {{-- Menu — DORONG KE KANAN --}}
+            {{-- Menu --}}
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
 
-                    @php
-                        $menu = [
-                            "landing.dashboard"       => "Beranda",
-                            "landing.profile"         => "Profil Sekolah",
-                            "landing.teachers"        => "Guru",
-                            "landing.students"        => "Siswa",
-                            "landing.extracurricular" => "Ekstrakurikuler",
-                            "landing.news"            => "Berita",
-                            "landing.gallery"         => "Galeri",
-                        ];
-                    @endphp
+                    {{-- Beranda --}}
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('landing.dashboard') ? 'active' : '' }}"
+                           href="{{ route('landing.dashboard') }}">Beranda</a>
+                    </li>
 
-                    @foreach ($menu as $route => $label)
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs($route) ? 'active' : '' }}"
-                               href="{{ route($route) }}">{{ $label }}</a>
-                        </li>
-                    @endforeach
+                    {{-- Dropdown Profil --}}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {{ request()->routeIs('landing.profile') || request()->routeIs('landing.history') || request()->routeIs('landing.vision-mission') ? 'active' : '' }}"
+                           href="#"
+                           id="profilDropdown"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            Profil
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="profilDropdown">
+                            <li>
+                                <a class="dropdown-item {{ request()->routeIs('landing.profile') ? 'active' : '' }}"
+                                   href="{{ route('landing.profile') }}">
+                                    Profil Sekolah
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item {{ request()->routeIs('landing.history') ? 'active' : '' }}"
+                                   href="{{ route('landing.history') }}">
+                                    Sejarah
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item {{ request()->routeIs('landing.vision-mission') ? 'active' : '' }}"
+                                   href="{{ route('landing.vision-mission') }}">
+                                    Visi &amp; Misi
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    {{-- Menu lain --}}
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('landing.teachers') ? 'active' : '' }}"
+                           href="{{ route('landing.teachers') }}">Guru</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('landing.extracurricular') ? 'active' : '' }}"
+                           href="{{ route('landing.extracurricular') }}">Ekstrakurikuler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('landing.news') ? 'active' : '' }}"
+                           href="{{ route('landing.news') }}">Berita</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('landing.gallery') ? 'active' : '' }}"
+                           href="{{ route('landing.gallery') }}">Galeri</a>
+                    </li>
+
+                    {{-- Search icon --}}
+                    <li class="nav-item ms-lg-3">
+                        <a class="nav-link nav-search" href="#" aria-label="Cari">
+                            <i class="fas fa-search"></i>
+                        </a>
+                    </li>
 
                 </ul>
             </div>
@@ -68,7 +115,6 @@
         </div>
     </nav>
 
-    {{-- Konten --}}
     <main>
         @yield('content')
     </main>
@@ -78,7 +124,6 @@
         <div class="container">
             <div class="row g-4">
 
-                {{-- Brand --}}
                 <div class="col-lg-4 col-md-6">
                     <div class="footer-brand">
                         <img src="{{ asset('assets/admin/img/smatn.png') }}"
@@ -99,7 +144,6 @@
                     </div>
                 </div>
 
-                {{-- Kontak --}}
                 <div class="col-lg-4 col-md-6">
                     <h6 class="footer-title">Kontak Kami</h6>
                     <ul class="footer-contact">
@@ -118,7 +162,6 @@
                     </ul>
                 </div>
 
-                {{-- Tautan --}}
                 <div class="col-lg-4 col-md-12">
                     <h6 class="footer-title">Tautan Cepat</h6>
                     <div class="row">
@@ -142,7 +185,6 @@
 
             </div>
 
-            {{-- Copyright --}}
             <div class="footer-bottom">
                 <p class="mb-0">
                     &copy; {{ date('Y') }} <strong>SMA Taruna Nusantara</strong>. Hak cipta dilindungi.

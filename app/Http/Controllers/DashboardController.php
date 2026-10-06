@@ -18,6 +18,16 @@ class DashboardController extends Controller
         return view('landing.profile');
     }
 
+    public function history()
+    {
+        return view('landing.history');
+    }
+
+    public function visionMission()
+    {
+        return view('landing.vision-mission');
+    }
+
     public function extracurricular()
     {
         return view('landing.extracurricular');

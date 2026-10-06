@@ -11,15 +11,16 @@
 
     <title>Dashboard Admin - {{ $schoolProfile->nama_sekolah ?? 'Sistem Sekolah' }}</title>
 
-    {{-- Favicon: pakai logo sekolah kalau ada, fallback ke default --}}
     <link rel="icon" type="image/png"
           href="{{ $schoolProfile?->logo ? asset('storage/'.$schoolProfile->logo) : asset('assets/admin/img/smatn.png') }}">
 
+    {{-- CSS Admin --}}
     <link rel="stylesheet" href="{{ asset('assets/admin/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/css/layout.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/css/theme.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/datatables/css/datatables.css') }}">
+
+    {{-- CSS DataTables --}}
     <link rel="stylesheet" href="{{ asset('assets/datatables/css/datatables.min.css') }}">
 
     @stack('styles')
@@ -48,7 +49,6 @@
     <div class="nav-section-title">Manajemen Data</div>
     <ul class="sidebar-menu">
 
-        {{-- Profil Sekolah - Admin & Operator --}}
         <li>
             <a href="{{ route('admin.school_profile') }}"
                class="{{ request()->routeIs('admin.school_profile*') ? 'active' : '' }}">
@@ -138,69 +138,58 @@
             </div>
         </div>
 
-        <div class="d-flex align-items-center gap-2 gap-md-3">
+        {{-- Hanya dropdown profil admin --}}
+        <div class="dropdown" id="adminDropdownWrapper">
+            <button class="admin-profile-btn"
+                    type="button"
+                    id="adminDropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+                <img src="{{ asset('assets/admin/img/user.png') }}"
+                     alt="Foto Profil"
+                     onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->username ?? 'Admin') }}&background=1f2f46&color=fff&rounded=true'">
 
-            <div class="navbar-datetime d-none d-md-flex">
-                <i class="far fa-clock navbar-datetime-icon"></i>
-                <span class="navbar-datetime-text">
-                    <span id="liveDate"></span>
-                    <span class="navbar-datetime-sep">•</span>
-                    <span id="liveClock">--:--:--</span>
-                </span>
-            </div>
+                <div class="admin-info">
+                    <span class="admin-name">{{ Auth::user()->username ?? 'Admin' }}</span>
+                    <span class="admin-role">{{ Auth::user()->role ?? 'Administrator' }}</span>
+                </div>
 
-            <div class="dropdown" id="adminDropdownWrapper">
-                <button class="admin-profile-btn"
-                        type="button"
-                        id="adminDropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false">
-                    <img src="{{ asset('assets/admin/img/user.png') }}"
-                         alt="Foto Profil"
-                         onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->username ?? 'Admin') }}&background=1f2f46&color=fff&rounded=true'">
+                <i class="fas fa-chevron-down" style="font-size:.7rem;color:#6c757d;"></i>
+            </button>
 
-                    <div class="admin-info">
-                        <span class="admin-name">{{ Auth::user()->username ?? 'Admin' }}</span>
-                        <span class="admin-role">{{ Auth::user()->role ?? 'Administrator' }}</span>
-                    </div>
+            <ul class="admin-dropdown" id="adminDropdownMenu" role="menu">
+                <li>
+                    <div class="dropdown-header text-center">
+                        <img src="{{ asset('assets/admin/img/user.png') }}"
+                             alt="User"
+                             onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->username ?? 'Admin') }}&background=1f2f46&color=fff&size=100'">
 
-                    <i class="fas fa-chevron-down" style="font-size:.7rem;color:#6c757d;"></i>
-                </button>
-
-                <ul class="admin-dropdown" id="adminDropdownMenu" role="menu">
-                    <li>
-                        <div class="dropdown-header text-center">
-                            <img src="{{ asset('assets/admin/img/user.png') }}"
-                                 alt="User"
-                                 onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->username ?? 'Admin') }}&background=1f2f46&color=fff&size=100'">
-
-                            <h6>{{ Auth::user()->username ?? 'Admin' }}</h6>
-                            <small class="text-muted d-block">
-                                ID: {{ Auth::user()->id_user ?? '10293' }}
+                        <h6>{{ Auth::user()->username ?? 'Admin' }}</h6>
+                        <small class="text-muted d-block">
+                            ID: {{ Auth::user()->id_user ?? '10293' }}
+                        </small>
+                        <div class="mt-1">
+                            <small class="fw-semibold" style="color:#1f3b5b;">
+                                {{ Auth::user()->role ?? 'Administrator' }}
                             </small>
-                            <div class="mt-1">
-                                <small class="fw-semibold" style="color:#1f3b5b;">
-                                    {{ Auth::user()->role ?? 'Administrator' }}
-                                </small>
-                            </div>
                         </div>
-                    </li>
+                    </div>
+                </li>
 
-                    <li><hr class="dropdown-divider"></li>
+                <li><hr class="dropdown-divider"></li>
 
-                    <li>
-                        <form action="{{ route('logout') }}" method="POST" class="m-0">
-                            @csrf
-                            <button type="submit" class="admin-dropdown-item text-danger">
-                                <i class="fas fa-right-from-bracket"></i>
-                                Keluar Aplikasi
-                            </button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-
+                <li>
+                    <form action="{{ route('logout') }}" method="POST" class="m-0">
+                        @csrf
+                        <button type="submit" class="admin-dropdown-item text-danger">
+                            <i class="fas fa-right-from-bracket"></i>
+                            Keluar Aplikasi
+                        </button>
+                    </form>
+                </li>
+            </ul>
         </div>
+
     </header>
 
     <main class="content-area">
@@ -228,39 +217,12 @@
 
 </div>
 
-<script src="{{ asset('assets/datatables/js/jquery-4.0.0.min.js') }}"></script>
-<script src="{{ asset('assets/datatables/js/datatables.js') }}"></script>
+{{-- JS: jQuery + DataTables --}}
+<script src="{{ asset('assets/datatables/js/jquery-3.7.1.min.js') }}"></script>
 <script src="{{ asset('assets/datatables/js/datatables.min.js') }}"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-
-    // Live clock & date
-    const hariIndo  = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-    const bulanIndo = ['Januari','Februari','Maret','April','Mei','Juni',
-                       'Juli','Agustus','September','Oktober','November','Desember'];
-
-    function updateLiveClock() {
-        const now = new Date();
-
-        const hari   = hariIndo[now.getDay()];
-        const tgl    = String(now.getDate()).padStart(2, '0');
-        const bulan  = bulanIndo[now.getMonth()];
-        const tahun  = now.getFullYear();
-
-        const jam    = String(now.getHours()).padStart(2, '0');
-        const menit  = String(now.getMinutes()).padStart(2, '0');
-        const detik  = String(now.getSeconds()).padStart(2, '0');
-
-        const dateEl  = document.getElementById('liveDate');
-        const clockEl = document.getElementById('liveClock');
-
-        if (dateEl)  dateEl.textContent  = hari + ', ' + tgl + ' ' + bulan + ' ' + tahun;
-        if (clockEl) clockEl.textContent = jam + ':' + menit + ':' + detik;
-    }
-
-    updateLiveClock();
-    setInterval(updateLiveClock, 1000);
 
     // Sidebar toggle
     const sidebarToggle  = document.getElementById("sidebarToggle");
@@ -371,16 +333,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }, true);
     }
 
-    // =========================================================
-    // AUTO-DISMISS ALERT — SEMUA ALERT HILANG SETELAH 3 DETIK
-    // =========================================================
+    // Auto-dismiss alert 3 detik
     document.querySelectorAll("[data-alert]").forEach(function (box) {
         setTimeout(function () {
             box.style.transition = "opacity .4s ease, transform .4s ease";
             box.style.opacity = "0";
             box.style.transform = "translateY(-10px)";
             setTimeout(() => box.remove(), 400);
-        }, 3000); // 3000ms = 3 detik
+        }, 3000);
     });
 
 });
@@ -392,15 +352,24 @@ document.addEventListener("DOMContentLoaded", function () {
         $('table[data-datatable]').each(function () {
             if (!$.fn.DataTable.isDataTable(this)) {
                 $(this).DataTable({
-                    pageLength: 10,
+                    pageLength: 25,
+                    lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Semua"]],
                     responsive: true,
+                    order: [],
                     language: {
                         search: "Cari:",
                         lengthMenu: "Tampilkan _MENU_ data",
                         info: "Menampilkan _START_–_END_ dari _TOTAL_ data",
                         infoEmpty: "Tidak ada data",
+                        infoFiltered: "(difilter dari _MAX_ total data)",
                         zeroRecords: "Data tidak ditemukan",
-                        paginate: { previous: "Sebelumnya", next: "Berikutnya" }
+                        emptyTable: "Belum ada data",
+                        paginate: {
+                            first: "Pertama",
+                            last: "Terakhir",
+                            previous: "Sebelumnya",
+                            next: "Berikutnya"
+                        }
                     }
                 });
             }

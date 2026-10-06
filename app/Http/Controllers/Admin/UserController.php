@@ -8,10 +8,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Validation\Rule;
+use Throwable;
 
 class UserController extends Controller
 {
-    // tampilkan daftar pengguna
+    /**
+     * Daftar pengguna
+     */
     public function index()
     {
         $users = User::orderByDesc('id_user')->get();
@@ -19,7 +22,9 @@ class UserController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
-    // rom tambah edit
+    /**
+     * Form tambah / edit pengguna
+     */
     public function addEdit($id = null)
     {
         $user = $id ? $this->findUser($id) : null;
@@ -31,7 +36,9 @@ class UserController extends Controller
         return view('admin.users.form', compact('user'));
     }
 
-    // simpan data baru / ubah pengguna
+    /**
+     * Simpan data baru / ubah pengguna
+     */
     public function save(Request $request, $id = null)
     {
         $user = $id ? $this->findUser($id) : new User();
@@ -65,7 +72,9 @@ class UserController extends Controller
             );
     }
 
-    // detail pengguna
+    /**
+     * Detail pengguna
+     */
     public function show($id)
     {
         $user = $this->findUser($id);
@@ -77,7 +86,9 @@ class UserController extends Controller
         return view('admin.users.show', compact('user'));
     }
 
-    // hapus pengguna
+    /**
+     * Hapus pengguna
+     */
     public function destroy($id)
     {
         $user = $this->findUser($id);
@@ -98,19 +109,23 @@ class UserController extends Controller
             ->with('success', 'Data pengguna berhasil dihapus.');
     }
 
-    // cari user berdasarkan id yang di enkripsi
+    /**
+     * Cari user berdasarkan encrypted ID
+     */
     private function findUser(string $encryptedId): ?User
     {
         try {
             $id = Crypt::decryptString($encryptedId);
 
             return User::where('id_user', $id)->first();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return null;
         }
     }
 
-    // Redirect ke index dengan pesan error.
+    /**
+     * Redirect ke index dengan pesan error
+     */
     private function backWithError(string $message)
     {
         return redirect()
@@ -118,7 +133,9 @@ class UserController extends Controller
             ->with('error', $message);
     }
 
-    // aturan validasi
+    /**
+     * Aturan validasi
+     */
     private function rules(?int $userId): array
     {
         return [
@@ -138,7 +155,9 @@ class UserController extends Controller
         ];
     }
 
-    // pesan validasi
+    /**
+     * Pesan validasi
+     */
     private function messages(): array
     {
         return [

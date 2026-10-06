@@ -12,48 +12,39 @@ use Throwable;
 
 class TeacherController extends Controller
 {
-    // Daftar guru
+    /**
+     * Daftar guru
+     */
     public function index()
     {
-        $teachers = Teacher::latest()->paginate(10);
+        $teachers = Teacher::latest()->get();
 
         return view('admin.teachers.index', compact('teachers'));
     }
 
-    // Form tambah guru
+    /**
+     * Form tambah guru
+     */
     public function create()
     {
         return view('admin.teachers.form');
     }
 
-    // Simpan guru baru
+    /**
+     * Simpan guru baru
+     */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nama_guru' => ['required', 'string', 'max:40'],
-            'nip'       => ['nullable', 'string', 'max:15', Rule::unique('teachers', 'nip')],
-            'mapel'     => ['nullable', 'string', 'max:40'],
-            'foto'      => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
-        ], [
-            'nama_guru.required' => 'Nama guru wajib diisi.',
-            'nama_guru.max'      => 'Nama guru maksimal 40 karakter.',
-
-            'nip.unique' => 'NIP sudah digunakan oleh guru lain.',
-            'nip.max'    => 'NIP maksimal 15 karakter.',
-
-            'mapel.max' => 'Mata pelajaran maksimal 40 karakter.',
-
-            'foto.image' => 'File foto harus berupa gambar.',
-            'foto.mimes' => 'Foto harus berformat JPG, JPEG, atau PNG.',
-            'foto.max'   => 'Ukuran foto maksimal 2 MB.',
-        ]);
+        $validated = $request->validate(
+            $this->rules(),
+            $this->messages()
+        );
 
         $teacher = new Teacher();
         $teacher->nama_guru = $validated['nama_guru'];
-        $teacher->nip       = $validated['nip'] ?? null;
+        $teacher->nip       = $validated['nip']   ?? null;
         $teacher->mapel     = $validated['mapel'] ?? null;
 
-        // Upload foto
         if ($request->hasFile('foto')) {
             $teacher->foto = $request->file('foto')->store('teachers', 'public');
         }
@@ -65,7 +56,9 @@ class TeacherController extends Controller
             ->with('success', 'Data guru berhasil ditambahkan.');
     }
 
-    // Detail guru
+    /**
+     * Detail guru
+     */
     public function show($encryptedId)
     {
         $teacher = $this->findTeacherByEncryptedId($encryptedId);
@@ -77,7 +70,9 @@ class TeacherController extends Controller
         return view('admin.teachers.show', compact('teacher'));
     }
 
-    // Form edit guru
+    /**
+     * Form edit guru
+     */
     public function edit($encryptedId)
     {
         $teacher = $this->findTeacherByEncryptedId($encryptedId);
@@ -89,7 +84,9 @@ class TeacherController extends Controller
         return view('admin.teachers.form', compact('teacher'));
     }
 
-    // Update data guru
+    /**
+     * Update data guru
+     */
     public function update(Request $request, $encryptedId)
     {
         $teacher = $this->findTeacherByEncryptedId($encryptedId);
@@ -98,30 +95,13 @@ class TeacherController extends Controller
             return $this->backWithError('Data guru tidak ditemukan.');
         }
 
-        $validated = $request->validate([
-            'nama_guru' => ['required', 'string', 'max:40'],
-            'nip'       => [
-                'nullable', 'string', 'max:15',
-                Rule::unique('teachers', 'nip')->ignore($teacher->getKey(), $teacher->getKeyName()),
-            ],
-            'mapel' => ['nullable', 'string', 'max:40'],
-            'foto'  => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
-        ], [
-            'nama_guru.required' => 'Nama guru wajib diisi.',
-            'nama_guru.max'      => 'Nama guru maksimal 40 karakter.',
-
-            'nip.unique' => 'NIP sudah digunakan oleh guru lain.',
-            'nip.max'    => 'NIP maksimal 15 karakter.',
-
-            'mapel.max' => 'Mata pelajaran maksimal 40 karakter.',
-
-            'foto.image' => 'File foto harus berupa gambar.',
-            'foto.mimes' => 'Foto harus berformat JPG, JPEG, atau PNG.',
-            'foto.max'   => 'Ukuran foto maksimal 2 MB.',
-        ]);
+        $validated = $request->validate(
+            $this->rules($teacher->getKey()),
+            $this->messages()
+        );
 
         $teacher->nama_guru = $validated['nama_guru'];
-        $teacher->nip       = $validated['nip'] ?? null;
+        $teacher->nip       = $validated['nip']   ?? null;
         $teacher->mapel     = $validated['mapel'] ?? null;
 
         // Upload foto baru + hapus yang lama
@@ -140,7 +120,9 @@ class TeacherController extends Controller
             ->with('success', 'Data guru berhasil diperbarui.');
     }
 
-    // Hapus data guru
+    /**
+     * Hapus data guru
+     */
     public function destroy($encryptedId)
     {
         $teacher = $this->findTeacherByEncryptedId($encryptedId);
@@ -161,7 +143,9 @@ class TeacherController extends Controller
             ->with('success', 'Data guru berhasil dihapus.');
     }
 
-    // Cari guru berdasarkan encrypted ID
+    /**
+     * Cari guru berdasarkan encrypted ID
+     */
     private function findTeacherByEncryptedId($encryptedId)
     {
         try {
@@ -173,11 +157,53 @@ class TeacherController extends Controller
         }
     }
 
-    // Redirect ke index dengan pesan error
+    /**
+     * Redirect ke index dengan pesan error
+     */
     private function backWithError(string $message)
     {
         return redirect()
             ->route('admin.guru')
             ->with('error', $message);
+    }
+
+    /**
+     * Aturan validasi
+     */
+    private function rules($ignoreId = null): array
+    {
+        return [
+            'nama_guru' => ['required', 'string', 'max:40'],
+            'nip'       => [
+                'nullable',
+                'string',
+                'max:15',
+                $ignoreId
+                    ? Rule::unique('teachers', 'nip')->ignore($ignoreId)
+                    : Rule::unique('teachers', 'nip'),
+            ],
+            'mapel' => ['nullable', 'string', 'max:40'],
+            'foto'  => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+        ];
+    }
+
+    /**
+     * Pesan validasi
+     */
+    private function messages(): array
+    {
+        return [
+            'nama_guru.required' => 'Nama guru wajib diisi.',
+            'nama_guru.max'      => 'Nama guru maksimal 40 karakter.',
+
+            'nip.unique' => 'NIP sudah digunakan oleh guru lain.',
+            'nip.max'    => 'NIP maksimal 15 karakter.',
+
+            'mapel.max' => 'Mata pelajaran maksimal 40 karakter.',
+
+            'foto.image' => 'File foto harus berupa gambar.',
+            'foto.mimes' => 'Foto harus berformat JPG, JPEG, atau PNG.',
+            'foto.max'   => 'Ukuran foto maksimal 2 MB.',
+        ];
     }
 }

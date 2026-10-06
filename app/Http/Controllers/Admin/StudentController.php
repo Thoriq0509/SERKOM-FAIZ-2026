@@ -11,15 +11,19 @@ use Illuminate\Validation\Rule;
 
 class StudentController extends Controller
 {
-    // Daftar siswa
+    /**
+     * Daftar siswa
+     */
     public function index()
     {
-        $students = Student::latest()->paginate(10);
+        $students = Student::latest()->get();
 
         return view('admin.students.index', compact('students'));
     }
 
-    // Form tambah siswa
+    /**
+     * Form tambah siswa
+     */
     public function create()
     {
         $student = new Student();
@@ -27,7 +31,9 @@ class StudentController extends Controller
         return view('admin.students.form', compact('student'));
     }
 
-    // Simpan siswa baru
+    /**
+     * Simpan siswa baru
+     */
     public function store(Request $request)
     {
         $validated = $request->validate(
@@ -42,7 +48,9 @@ class StudentController extends Controller
             ->with('success', 'Data siswa berhasil ditambahkan.');
     }
 
-    // Detail siswa
+    /**
+     * Detail siswa
+     */
     public function show($id)
     {
         $student = $this->findStudentByEncryptedId($id);
@@ -50,7 +58,9 @@ class StudentController extends Controller
         return view('admin.students.show', compact('student'));
     }
 
-    // Form edit siswa
+    /**
+     * Form edit siswa
+     */
     public function edit($id)
     {
         $student = $this->findStudentByEncryptedId($id);
@@ -58,7 +68,9 @@ class StudentController extends Controller
         return view('admin.students.form', compact('student'));
     }
 
-    // Update data siswa
+    /**
+     * Update data siswa
+     */
     public function update(Request $request, $id)
     {
         $student = $this->findStudentByEncryptedId($id);
@@ -75,7 +87,9 @@ class StudentController extends Controller
             ->with('success', 'Data siswa berhasil diperbarui.');
     }
 
-    // Hapus data siswa
+    /**
+     * Hapus data siswa
+     */
     public function destroy($id)
     {
         $student = $this->findStudentByEncryptedId($id);
@@ -87,7 +101,9 @@ class StudentController extends Controller
             ->with('success', 'Data siswa berhasil dihapus.');
     }
 
-    // Cari siswa berdasarkan encrypted ID
+    /**
+     * Cari siswa berdasarkan encrypted ID
+     */
     private function findStudentByEncryptedId($id)
     {
         try {
@@ -99,7 +115,9 @@ class StudentController extends Controller
         return Student::findOrFail($studentId);
     }
 
-    // Aturan validasi
+    /**
+     * Aturan validasi
+     */
     private function rules($ignoreId = null): array
     {
         return [
@@ -123,7 +141,9 @@ class StudentController extends Controller
         ];
     }
 
-    // Pesan validasi
+    /**
+     * Pesan validasi
+     */
     private function messages(): array
     {
         return [
