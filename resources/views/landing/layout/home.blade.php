@@ -21,14 +21,22 @@
 
             {{-- Brand: logo + divider + nama sekolah --}}
             <a class="navbar-brand navbar-brand-custom" href="{{ route('landing.dashboard') }}">
-                <img src="{{ asset('assets/admin/img/smatn.png') }}"
-                     alt="Logo Sekolah"
-                     class="brand-logo">
+                @if ($schoolProfile && $schoolProfile->logo)
+                    <img src="{{ asset('storage/' . $schoolProfile->logo) }}"
+                         alt="Logo {{ $schoolProfile->nama_sekolah }}"
+                         class="brand-logo">
+                @else
+                    <img src="{{ asset('assets/admin/img/smatn.png') }}"
+                         alt="Logo Sekolah"
+                         class="brand-logo">
+                @endif
 
                 <span class="brand-divider"></span>
 
                 <span class="brand-text">
-                    <span class="brand-line-2">SMA Taruna Nusantara</span>
+                    <span class="brand-line-2">
+                        {{ $schoolProfile->nama_sekolah ?? 'SMA Taruna Nusantara' }}
+                    </span>
                 </span>
             </a>
 
@@ -86,27 +94,20 @@
 
                     {{-- Menu lain --}}
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('landing.teachers') ? 'active' : '' }}"
+                        <a class="nav-link {{ request()->routeIs('landing.teachers*') ? 'active' : '' }}"
                            href="{{ route('landing.teachers') }}">Guru</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('landing.extracurricular') ? 'active' : '' }}"
+                        <a class="nav-link {{ request()->routeIs('landing.extracurricular*') ? 'active' : '' }}"
                            href="{{ route('landing.extracurricular') }}">Ekstrakurikuler</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('landing.news') ? 'active' : '' }}"
+                        <a class="nav-link {{ request()->routeIs('landing.news*') ? 'active' : '' }}"
                            href="{{ route('landing.news') }}">Berita</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('landing.gallery') ? 'active' : '' }}"
                            href="{{ route('landing.gallery') }}">Galeri</a>
-                    </li>
-
-                    {{-- Search icon --}}
-                    <li class="nav-item ms-lg-3">
-                        <a class="nav-link nav-search" href="#" aria-label="Cari">
-                            <i class="fas fa-search"></i>
-                        </a>
                     </li>
 
                 </ul>
@@ -127,10 +128,17 @@
 
                 <div class="col-lg-4 col-md-6">
                     <div class="footer-brand">
-                        <img src="{{ asset('assets/admin/img/smatn.png') }}"
-                             alt="Logo Sekolah"
-                             class="footer-logo">
-                        <h5>SMA Taruna Nusantara</h5>
+                        @if ($schoolProfile && $schoolProfile->logo)
+                            <img src="{{ asset('storage/' . $schoolProfile->logo) }}"
+                                 alt="Logo {{ $schoolProfile->nama_sekolah }}"
+                                 class="footer-logo">
+                        @else
+                            <img src="{{ asset('assets/admin/img/smatn.png') }}"
+                                 alt="Logo Sekolah"
+                                 class="footer-logo">
+                        @endif
+
+                        <h5>{{ $schoolProfile->nama_sekolah ?? 'SMA Taruna Nusantara' }}</h5>
                     </div>
                     <p class="footer-desc">
                         Membangun generasi unggul, berkarakter, dan berprestasi
@@ -150,15 +158,15 @@
                     <ul class="footer-contact">
                         <li>
                             <i class="fas fa-location-dot"></i>
-                            <span>Jl. Raya Magelang - Purworejo KM 5, Banyurojo, Mertoyudan, Magelang, Jawa Tengah 56172</span>
+                            <span>{{ $schoolProfile->alamat ?? 'Alamat sekolah' }}</span>
                         </li>
                         <li>
                             <i class="fas fa-phone"></i>
-                            <span>(0293) 364195</span>
+                            <span>{{ $schoolProfile->kontak ?? '(0293) 364195' }}</span>
                         </li>
                         <li>
                             <i class="fas fa-envelope"></i>
-                            <span>info@smatn.sch.id</span>
+                            <span>{{ $schoolProfile->email ?? 'info@smatn.sch.id' }}</span>
                         </li>
                     </ul>
                 </div>
@@ -188,7 +196,9 @@
 
             <div class="footer-bottom">
                 <p class="mb-0">
-                    &copy; {{ date('Y') }} <strong>SMA Taruna Nusantara</strong>. Hak cipta dilindungi.
+                    &copy; {{ date('Y') }}
+                    <strong>{{ $schoolProfile->nama_sekolah ?? 'SMA Taruna Nusantara' }}</strong>.
+                    Hak cipta dilindungi.
                 </p>
             </div>
         </div>

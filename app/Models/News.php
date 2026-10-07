@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasSlug;
 
 class News extends Model
 {
-    use HasFactory;
+    use HasFactory, HasSlug;
 
     protected $table = 'news';
 
@@ -18,14 +19,18 @@ class News extends Model
         'gambar',
         'status',
         'id_user',
+        'slug',
     ];
 
-    // Cast tipe data
     protected $casts = [
         'tanggal' => 'date',
     ];
 
-    // Relasi ke User (pembuat berita)
+    public function slugSource(): string
+    {
+        return 'judul';
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user', 'id_user');

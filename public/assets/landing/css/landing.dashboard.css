@@ -292,6 +292,10 @@
     text-align: justify;
 }
 
+.sambutan-text p:last-child {
+    margin-bottom: 0;
+}
+
 .sambutan-author {
     margin-top: 20px;
     padding-top: 18px;
@@ -320,7 +324,30 @@
     overflow: hidden;
 }
 
-.split-left {
+/* KIRI: Gambar */
+.split-left-img {
+    position: relative;
+    overflow: hidden;
+    min-height: 560px;
+    background: #eef2f7;
+}
+
+.split-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform .8s ease;
+}
+
+.split-left-img:hover .split-img {
+    transform: scale(1.05);
+}
+
+/* KANAN: Navy + Teks */
+.split-right-content {
     background: #1f2f46;
     color: #fff;
     display: flex;
@@ -330,7 +357,7 @@
     min-height: 560px;
 }
 
-.split-left-inner {
+.split-content-inner {
     max-width: 480px;
     width: 100%;
 }
@@ -388,8 +415,8 @@
 .split-info li {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    gap: 16px;
+    align-items: flex-start;
+    gap: 20px;
 }
 
 .split-info li span {
@@ -399,14 +426,18 @@
     color: rgba(255, 255, 255, .6);
     text-transform: uppercase;
     letter-spacing: 1.5px;
+    flex-shrink: 0;
+    padding-top: 2px;
 }
 
 .split-info li strong {
     font-family: 'Montserrat', sans-serif;
-    font-size: 14.5px;
+    font-size: 14px;
     font-weight: 700;
     color: #fff;
     text-align: right;
+    line-height: 1.6;
+    word-break: break-word;
 }
 
 .split-btn {
@@ -431,29 +462,8 @@
     box-shadow: 0 12px 28px rgba(59, 130, 246, .4);
 }
 
-.split-right {
-    position: relative;
-    overflow: hidden;
-    min-height: 560px;
-    background: #eef2f7;
-}
 
-.split-img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    transition: transform .8s ease;
-}
-
-.split-right:hover .split-img {
-    transform: scale(1.05);
-}
-
-
-/* Tombol umum (dipakai "Lihat Semua Berita" & "Lihat Semua Galeri") */
+/* Tombol umum */
 .profil-btn {
     display: inline-flex;
     align-items: center;
@@ -501,6 +511,18 @@
     background: #f8fafc;
 }
 
+.news-thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform .5s ease;
+}
+
+.news-card:hover .news-thumb-img {
+    transform: scale(1.05);
+}
+
 .news-thumb-empty {
     height: 100%;
     display: flex;
@@ -531,6 +553,10 @@
     margin-bottom: 10px;
 }
 
+.news-date i {
+    color: #3b82f6;
+}
+
 .news-title {
     color: #1f2f46;
     font-family: 'Montserrat', sans-serif;
@@ -552,6 +578,10 @@
     line-height: 1.7;
     margin: 0 0 16px;
     flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .news-link {
@@ -595,6 +625,18 @@
     height: 220px;
     overflow: hidden;
     background: #f8fafc;
+}
+
+.gallery-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform .5s ease;
+}
+
+.gallery-card:hover .gallery-img {
+    transform: scale(1.05);
 }
 
 .gallery-thumb-empty {
@@ -656,6 +698,10 @@
     text-transform: uppercase;
 }
 
+.gallery-date i {
+    color: #3b82f6;
+}
+
 
 /* Responsive */
 @media (max-width: 991.98px) {
@@ -674,13 +720,12 @@
     .sambutan-body { padding: 28px 30px; }
     .sambutan-heading { font-size: 21px; }
 
-    .split-left {
+    .split-right-content {
         padding: 60px 40px;
         min-height: auto;
     }
-
     .split-heading { font-size: 30px; }
-    .split-right { min-height: 400px; }
+    .split-left-img { min-height: 400px; }
 }
 
 @media (max-width: 767.98px) {
@@ -718,15 +763,16 @@
     .sambutan-heading { font-size: 19px; }
     .sambutan-text p { font-size: 13.5px; text-align: left; }
 
-    .split-left { padding: 50px 24px; }
+    .split-right-content { padding: 50px 24px; }
     .split-heading { font-size: 24px; }
     .split-text { font-size: 14px; }
-    .split-info li strong { font-size: 13.5px; }
-    .split-right { min-height: 280px; }
+    .split-info li strong { font-size: 13px; }
+    .split-left-img { min-height: 280px; }
 
     .news-thumb { height: 180px; }
     .news-body { padding: 18px; }
     .news-title { font-size: 15.5px; }
+    .news-excerpt { font-size: 13px; }
 
     .gallery-thumb { height: 180px; }
     .gallery-title { font-size: 15px; }

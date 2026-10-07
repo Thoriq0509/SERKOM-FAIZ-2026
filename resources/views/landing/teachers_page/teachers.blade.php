@@ -31,51 +31,45 @@
                 <p class="section-desc">Guru-guru yang mengabdi di SMA Taruna Nusantara.</p>
             </div>
 
-            @php
-                $teachers = [
-                    ['nama' => 'Drs. H. Ahmad Suryadi, M.Pd.',   'mapel' => 'Matematika'],
-                    ['nama' => 'Kolonel Inf. Bambang Prasetyo',  'mapel' => 'PKn'],
-                    ['nama' => 'Dra. Siti Nurhaliza, M.Pd.',     'mapel' => 'Bahasa Indonesia'],
-                    ['nama' => 'Ir. Joko Widodo, M.T.',          'mapel' => 'Fisika'],
-                    ['nama' => 'Drs. Muhammad Yusuf, M.Ag.',     'mapel' => 'Pendidikan Agama Islam'],
-                    ['nama' => 'Rina Kartika Sari, S.Pd.',       'mapel' => 'Matematika'],
-                    ['nama' => 'Andi Prasetyo, S.Kom.',          'mapel' => 'Informatika'],
-                    ['nama' => 'Dewi Lestari, S.Pd., M.Pd.',     'mapel' => 'Bahasa Inggris'],
-                    ['nama' => 'Letkol Kav. Hendra Wijaya, S.E.','mapel' => 'Sejarah'],
-                    ['nama' => 'Maya Anggraini, S.Pd.',          'mapel' => 'Biologi'],
-                    ['nama' => 'Drs. Bambang Sutejo, M.Pd.',     'mapel' => 'Kimia'],
-                    ['nama' => 'Sri Wahyuni, S.Pd.',             'mapel' => 'Matematika'],
-                ];
-            @endphp
-
             <div class="row g-4">
 
-                @foreach ($teachers as $index => $teacher)
+                @forelse ($teachers as $index => $teacher)
                     <div class="col-6 col-md-4 col-lg-3"
                          data-aos="fade-up"
                          data-aos-delay="{{ ($index % 4) * 100 }}">
 
-                        <a href="{{ url('/teachers/' . $index) }}"
+                        <a href="{{ route('landing.teachers.show', $teacher) }}"
                            class="teacher-card-link">
 
                             <div class="teacher-card">
 
                                 <div class="teacher-photo-wrap">
-                                    <div class="teacher-photo-empty">
-                                        <i class="fas fa-user-tie"></i>
-                                    </div>
+                                    @if ($teacher->foto)
+                                        <img src="{{ asset('storage/' . $teacher->foto) }}"
+                                             alt="{{ $teacher->nama_guru }}"
+                                             class="teacher-photo">
+                                    @else
+                                        <div class="teacher-photo-empty">
+                                            <i class="fas fa-user-tie"></i>
+                                        </div>
+                                    @endif
                                 </div>
 
                                 <div class="teacher-body">
-                                    <h5 class="teacher-name">{{ $teacher['nama'] }}</h5>
-                                    <div class="teacher-mapel">{{ $teacher['mapel'] }}</div>
+                                    <h5 class="teacher-name">{{ $teacher->nama_guru }}</h5>
+                                    <div class="teacher-mapel">{{ $teacher->mapel ?? '-' }}</div>
                                 </div>
 
                             </div>
 
                         </a>
                     </div>
-                @endforeach
+
+                @empty
+                    <div class="col-12 text-center py-5">
+                        <p class="text-muted">Belum ada data guru.</p>
+                    </div>
+                @endforelse
 
             </div>
 

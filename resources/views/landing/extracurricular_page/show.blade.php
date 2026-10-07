@@ -1,6 +1,6 @@
 @extends('landing.layout.home')
 
-@section('title', $extracurricular['nama'] . ' - SMA Taruna Nusantara')
+@section('title', $extracurricular->nama_ekskul . ' - SMA Taruna Nusantara')
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/landing/css/landing.extracurricular.css') }}">
@@ -30,9 +30,15 @@
                 {{-- Foto --}}
                 <div class="col-lg-4" data-aos="fade-right">
                     <div class="eskul-detail-photo-wrap">
-                        <div class="eskul-detail-photo-empty">
-                            <i class="fas fa-people-group"></i>
-                        </div>
+                        @if ($extracurricular->gambar)
+                            <img src="{{ asset('storage/' . $extracurricular->gambar) }}"
+                                 alt="{{ $extracurricular->nama_ekskul }}"
+                                 class="eskul-detail-photo">
+                        @else
+                            <div class="eskul-detail-photo-empty">
+                                <i class="fas fa-people-group"></i>
+                            </div>
+                        @endif
                     </div>
                 </div>
 
@@ -42,24 +48,24 @@
 
                         <span class="eskul-detail-label">Ekstrakurikuler</span>
 
-                        <h2 class="eskul-detail-name">{{ $extracurricular['nama'] }}</h2>
+                        <h2 class="eskul-detail-name">{{ $extracurricular->nama_ekskul }}</h2>
 
                         <div class="eskul-detail-divider"></div>
 
                         <ul class="eskul-detail-info">
                             <li>
                                 <span>Pembina</span>
-                                <strong>{{ $extracurricular['pembina'] ?? '—' }}</strong>
+                                <strong>{{ $extracurricular->pembina->nama_guru ?? '-' }}</strong>
                             </li>
                             <li>
                                 <span>Jadwal Latihan</span>
-                                <strong>{{ $extracurricular['jadwal'] ?? '—' }}</strong>
+                                <strong>{{ $extracurricular->jadwal_latihan ?? '-' }}</strong>
                             </li>
                         </ul>
 
-                        @if (!empty($extracurricular['deskripsi']))
+                        @if ($extracurricular->deskripsi)
                             <p class="eskul-detail-desc">
-                                {{ $extracurricular['deskripsi'] }}
+                                {{ $extracurricular->deskripsi }}
                             </p>
                         @endif
 

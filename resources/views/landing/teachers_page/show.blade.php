@@ -1,6 +1,6 @@
 @extends('landing.layout.home')
 
-@section('title', $teacher['nama'] . ' - SMA Taruna Nusantara')
+@section('title', $teacher->nama_guru . ' - SMA Taruna Nusantara')
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/landing/css/landing.teachers.css') }}">
@@ -30,9 +30,15 @@
                 {{-- Foto --}}
                 <div class="col-lg-4" data-aos="fade-right">
                     <div class="teacher-detail-photo-wrap">
-                        <div class="teacher-detail-photo-empty">
-                            <i class="fas fa-user-tie"></i>
-                        </div>
+                        @if ($teacher->foto)
+                            <img src="{{ asset('storage/' . $teacher->foto) }}"
+                                 alt="{{ $teacher->nama_guru }}"
+                                 class="teacher-detail-photo">
+                        @else
+                            <div class="teacher-detail-photo-empty">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                        @endif
                     </div>
                 </div>
 
@@ -42,22 +48,18 @@
 
                         <span class="teacher-detail-label">Tenaga Pendidik</span>
 
-                        <h2 class="teacher-detail-name">{{ $teacher['nama'] }}</h2>
+                        <h2 class="teacher-detail-name">{{ $teacher->nama_guru }}</h2>
 
                         <div class="teacher-detail-divider"></div>
 
                         <ul class="teacher-detail-info">
                             <li>
                                 <span>NIP</span>
-                                <strong>{{ $teacher['nip'] ?? '—' }}</strong>
+                                <strong>{{ $teacher->nip ?? '-' }}</strong>
                             </li>
                             <li>
                                 <span>Mata Pelajaran</span>
-                                <strong>{{ $teacher['mapel'] ?? '—' }}</strong>
-                            </li>
-                            <li>
-                                <span>Email</span>
-                                <strong>{{ $teacher['email'] ?? '—' }}</strong>
+                                <strong>{{ $teacher->mapel ?? '-' }}</strong>
                             </li>
                         </ul>
 

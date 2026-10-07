@@ -12,9 +12,7 @@ use Throwable;
 
 class GalleryController extends Controller
 {
-    /**
-     * Daftar galeri
-     */
+    // Daftar galeri
     public function index()
     {
         $galleries = Gallery::orderByDesc('tanggal')
@@ -24,9 +22,7 @@ class GalleryController extends Controller
         return view('admin.gallery.index', compact('galleries'));
     }
 
-    /**
-     * Form tambah galeri
-     */
+    // Form tambah galeri
     public function create()
     {
         return view('admin.gallery.form', [
@@ -35,9 +31,7 @@ class GalleryController extends Controller
         ]);
     }
 
-    /**
-     * Simpan galeri baru
-     */
+    // Simpan galeri baru
     public function store(Request $request)
     {
         $validated = $request->validate(
@@ -45,8 +39,19 @@ class GalleryController extends Controller
             $this->messages()
         );
 
+        // Upload file gambar (kalau ada dan kategori Foto)
         if ($request->hasFile('gambar')) {
             $validated['gambar'] = $request->file('gambar')->store('galleries', 'public');
+        }
+
+        // Kalau kategori Video, kosongkan gambar
+        if ($validated['kategori'] === 'Video') {
+            $validated['gambar'] = null;
+        }
+
+        // Kalau kategori Foto, kosongkan link_video
+        if ($validated['kategori'] === 'Foto') {
+            $validated['link_video'] = null;
         }
 
         Gallery::create($validated);
@@ -56,9 +61,7 @@ class GalleryController extends Controller
             ->with('success', 'Media galeri berhasil ditambahkan.');
     }
 
-    /**
-     * Detail galeri
-     */
+    // Detail galeri
     public function show($id)
     {
         $gallery = $this->findGallery($id);
@@ -70,9 +73,7 @@ class GalleryController extends Controller
         return view('admin.gallery.show', compact('gallery'));
     }
 
-    /**
-     * Form edit galeri
-     */
+    // Form edit galeri
     public function edit($id)
     {
         $gallery = $this->findGallery($id);
@@ -87,9 +88,7 @@ class GalleryController extends Controller
         ]);
     }
 
-    /**
-     * Update galeri
-     */
+    // Update galeri
     public function update(Request $request, $id)
     {
         $gallery = $this->findGallery($id);
@@ -103,13 +102,27 @@ class GalleryController extends Controller
             $this->messages()
         );
 
-        if ($request->hasFile('gambar')) {
-            // Hapus gambar lama
+        if ($validated['kategori'] === 'Video') {
+            // Hapus file gambar lama (kalau ada)
             if ($gallery->gambar && Storage::disk('public')->exists($gallery->gambar)) {
                 Storage::disk('public')->delete($gallery->gambar);
             }
 
-            $validated['gambar'] = $request->file('gambar')->store('galleries', 'public');
+            $validated['gambar'] = null;
+
+        } elseif ($validated['kategori'] === 'Foto') {
+            // Kalau ada upload gambar baru
+            if ($request->hasFile('gambar')) {
+                // Hapus gambar lama
+                if ($gallery->gambar && Storage::disk('public')->exists($gallery->gambar)) {
+                    Storage::disk('public')->delete($gallery->gambar);
+                }
+
+                $validated['gambar'] = $request->file('gambar')->store('galleries', 'public');
+            }
+
+            // Kosongkan link_video
+            $validated['link_video'] = null;
         }
 
         $gallery->update($validated);
@@ -119,9 +132,7 @@ class GalleryController extends Controller
             ->with('success', 'Media galeri berhasil diperbarui.');
     }
 
-    /**
-     * Hapus galeri
-     */
+    // Hapus galeri
     public function destroy($id)
     {
         $gallery = $this->findGallery($id);
@@ -130,7 +141,7 @@ class GalleryController extends Controller
             return $this->backWithError('Data galeri tidak ditemukan.');
         }
 
-        // Hapus gambar
+        // Hapus file gambar kalau ada
         if ($gallery->gambar && Storage::disk('public')->exists($gallery->gambar)) {
             Storage::disk('public')->delete($gallery->gambar);
         }
@@ -142,9 +153,7 @@ class GalleryController extends Controller
             ->with('success', 'Media galeri berhasil dihapus.');
     }
 
-    /**
-     * Cari galeri berdasarkan encrypted ID
-     */
+    // Cari galeri berdasarkan encrypted ID
     private function findGallery(string $encryptedId): ?Gallery
     {
         try {
@@ -154,9 +163,7 @@ class GalleryController extends Controller
         }
     }
 
-    /**
-     * Redirect ke index dengan pesan error
-     */
+    // Redirect ke index dengan pesan error
     private function backWithError(string $message)
     {
         return redirect()
@@ -164,9 +171,7 @@ class GalleryController extends Controller
             ->with('error', $message);
     }
 
-    /**
-     * Aturan validasi
-     */
+    // Aturan validasi
     private function rules(): array
     {
         return [
@@ -174,13 +179,21 @@ class GalleryController extends Controller
             'keterangan' => ['nullable', 'string'],
             'kategori'   => ['required', Rule::in(['Foto', 'Video'])],
             'tanggal'    => ['required', 'date'],
-            'gambar'     => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'gambar'     => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:5120',
+            ],
+            'link_video' => [
+                'nullable',
+                'url',
+                'max:255',
+            ],
         ];
     }
 
-    /**
-     * Pesan validasi
-     */
+    // Pesan validasi
     private function messages(): array
     {
         return [
@@ -195,7 +208,10 @@ class GalleryController extends Controller
 
             'gambar.image' => 'File harus berupa gambar.',
             'gambar.mimes' => 'Format gambar harus JPG, JPEG, PNG, atau WEBP.',
-            'gambar.max'   => 'Ukuran gambar maksimal 2 MB.',
+            'gambar.max'   => 'Ukuran gambar maksimal 5 MB.',
+
+            'link_video.url' => 'Link YouTube harus berupa URL yang valid.',
+            'link_video.max' => 'Link YouTube maksimal 255 karakter.',
         ];
     }
 }

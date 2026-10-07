@@ -96,14 +96,22 @@
 
                         <div class="row g-0 align-items-center">
 
+                            {{-- Foto Kepsek --}}
                             <div class="col-md-4">
                                 <div class="sambutan-photo-wrap">
-                                    <img src="{{ asset('assets/landing/img-coba/kepalasekolah.jpg') }}"
-                                         alt="Foto Kepala Sekolah"
-                                         class="sambutan-photo">
+                                    @if ($schoolProfile && $schoolProfile->foto_kepsek)
+                                        <img src="{{ asset('storage/' . $schoolProfile->foto_kepsek) }}"
+                                             alt="Foto Kepala Sekolah"
+                                             class="sambutan-photo">
+                                    @else
+                                        <img src="{{ asset('assets/landing/img-coba/kepalasekolah.jpg') }}"
+                                             alt="Foto Kepala Sekolah"
+                                             class="sambutan-photo">
+                                    @endif
                                 </div>
                             </div>
 
+                            {{-- Teks Sambutan --}}
                             <div class="col-md-8">
                                 <div class="sambutan-body">
 
@@ -116,20 +124,11 @@
                                     <div class="sambutan-divider"></div>
 
                                     <div class="sambutan-text">
-                                        <p>
-                                            Assalamualaikum warahmatullahi wabarakatuh. Selamat datang
-                                            di website resmi SMA Taruna Nusantara — sekolah yang
-                                            menjunjung tinggi disiplin, ketegasan, dan semangat
-                                            kenusantaraan dalam membentuk generasi muda yang berilmu,
-                                            berkarakter, dan cinta tanah air.
-                                        </p>
-                                        <p class="mb-0">
-                                            Wassalamualaikum warahmatullahi wabarakatuh.
-                                        </p>
+                                        {!! nl2br(e($schoolProfile->sambutan_kepsek ?? 'Selamat datang di website resmi sekolah.')) !!}
                                     </div>
 
                                     <div class="sambutan-author">
-                                        <h5>Mayjen TNI Muhammad Imam Gogor Agnie Aditya</h5>
+                                        <h5>{{ $schoolProfile->kepala_sekolah ?? 'Kepala Sekolah' }}</h5>
                                         <span>Kepala Sekolah</span>
                                     </div>
 
@@ -149,35 +148,52 @@
     <section class="section-split-profil">
         <div class="row g-0 align-items-stretch">
 
-            {{-- Kiri: Navy + Teks --}}
-            <div class="col-lg-6 split-left">
-                <div class="split-left-inner" data-aos="fade-right">
+            {{-- KIRI: Gambar Gedung --}}
+            <div class="col-lg-6 split-left-img" data-aos="fade-right">
+                @if ($schoolProfile && $schoolProfile->foto)
+                    <img src="{{ asset('storage/' . $schoolProfile->foto) }}"
+                         alt="Gedung {{ $schoolProfile->nama_sekolah }}"
+                         class="split-img">
+                @else
+                    <img src="{{ asset('assets/landing/img-coba/fotosekolah.jpg') }}"
+                         alt="Gedung Sekolah"
+                         class="split-img">
+                @endif
+            </div>
+
+            {{-- KANAN: Navy + Teks --}}
+            <div class="col-lg-6 split-right-content">
+                <div class="split-content-inner" data-aos="fade-left">
 
                     <span class="split-label">Tentang Kami</span>
 
-                    <h2 class="split-heading">SMA Taruna Nusantara</h2>
+                    <h2 class="split-heading">
+                        {{ $schoolProfile->nama_sekolah ?? 'SMA Taruna Nusantara' }}
+                    </h2>
 
                     <div class="split-divider"></div>
 
+                    {{-- Deskripsi STATIS --}}
                     <p class="split-text">
                         Sekolah menengah atas berasrama penuh (<em>boarding school</em>)
                         berstandar nasional dengan sistem semi-militer yang terletak
-                        di Mertoyudan, Magelang, Jawa Tengah. Didirikan pada tahun 1990
-                        untuk membentuk kader pemimpin bangsa.
+                        di Mertoyudan, Magelang, Jawa Tengah. Didirikan untuk
+                        membentuk kader pemimpin bangsa.
                     </p>
 
+                    {{-- Info DINAMIS --}}
                     <ul class="split-info">
                         <li>
                             <span>NPSN</span>
-                            <strong>20307641</strong>
+                            <strong>{{ $schoolProfile->npsn ?? '—' }}</strong>
                         </li>
                         <li>
                             <span>Tahun Berdiri</span>
-                            <strong>1990</strong>
+                            <strong>{{ $schoolProfile->tahun_berdiri ?? '—' }}</strong>
                         </li>
                         <li>
                             <span>Lokasi</span>
-                            <strong>Magelang, Jawa Tengah</strong>
+                            <strong>{{ $schoolProfile->alamat ?? 'Magelang, Jawa Tengah' }}</strong>
                         </li>
                     </ul>
 
@@ -186,13 +202,6 @@
                     </a>
 
                 </div>
-            </div>
-
-            {{-- Kanan: Gambar Gedung --}}
-            <div class="col-lg-6 split-right" data-aos="fade-left">
-                <img src="{{ asset('assets/landing/img-coba/fotosekolah.jpg') }}"
-                     alt="Gedung SMA Taruna Nusantara"
-                     class="split-img">
             </div>
 
         </div>
@@ -210,68 +219,50 @@
 
             <div class="row g-4">
 
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="0">
-                    <article class="news-card">
-                        <div class="news-thumb">
-                            <div class="news-thumb-empty"><i class="fas fa-newspaper"></i></div>
-                        </div>
-                        <div class="news-body">
-                            <div class="news-date">
-                                <i class="far fa-calendar"></i> 17 Agustus 2025
-                            </div>
-                            <h5 class="news-title">Upacara Peringatan HUT Kemerdekaan RI ke-80</h5>
-                            <p class="news-excerpt">
-                                Seluruh taruna dan taruni mengikuti upacara peringatan
-                                HUT Kemerdekaan RI ke-80 dengan khidmat...
-                            </p>
-                            <a href="{{ route('landing.news') }}" class="news-link">
-                                Baca Selengkapnya <i class="fas fa-arrow-right ms-1"></i>
-                            </a>
-                        </div>
-                    </article>
-                </div>
+                @forelse ($news as $index => $item)
+                    <div class="col-md-6 col-lg-4"
+                         data-aos="fade-up"
+                         data-aos-delay="{{ ($index % 3) * 100 }}">
 
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
-                    <article class="news-card">
-                        <div class="news-thumb">
-                            <div class="news-thumb-empty"><i class="fas fa-newspaper"></i></div>
-                        </div>
-                        <div class="news-body">
-                            <div class="news-date">
-                                <i class="far fa-calendar"></i> 5 September 2025
-                            </div>
-                            <h5 class="news-title">Taruna Raih Medali Emas Olimpiade Sains Nasional 2025</h5>
-                            <p class="news-excerpt">
-                                Membanggakan! Salah satu taruna terbaik berhasil meraih
-                                medali emas pada ajang OSN 2025...
-                            </p>
-                            <a href="{{ route('landing.news') }}" class="news-link">
-                                Baca Selengkapnya <i class="fas fa-arrow-right ms-1"></i>
-                            </a>
-                        </div>
-                    </article>
-                </div>
+                        <article class="news-card">
 
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
-                    <article class="news-card">
-                        <div class="news-thumb">
-                            <div class="news-thumb-empty"><i class="fas fa-newspaper"></i></div>
-                        </div>
-                        <div class="news-body">
-                            <div class="news-date">
-                                <i class="far fa-calendar"></i> 12 September 2025
+                            <div class="news-thumb">
+                                @if ($item->gambar)
+                                    <img src="{{ asset('storage/' . $item->gambar) }}"
+                                         alt="{{ $item->judul }}"
+                                         class="news-thumb-img">
+                                @else
+                                    <div class="news-thumb-empty">
+                                        <i class="fas fa-newspaper"></i>
+                                    </div>
+                                @endif
                             </div>
-                            <h5 class="news-title">Kunjungan Studi Banding dari SMA Negeri 1 Yogyakarta</h5>
-                            <p class="news-excerpt">
-                                SMA Taruna Nusantara menerima kunjungan studi banding
-                                dari SMA Negeri 1 Yogyakarta...
-                            </p>
-                            <a href="{{ route('landing.news') }}" class="news-link">
-                                Baca Selengkapnya <i class="fas fa-arrow-right ms-1"></i>
-                            </a>
-                        </div>
-                    </article>
-                </div>
+
+                            <div class="news-body">
+                                <div class="news-date">
+                                    <i class="far fa-calendar"></i>
+                                    {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                                </div>
+
+                                <h5 class="news-title">{{ $item->judul }}</h5>
+
+                                <p class="news-excerpt">
+                                    {{ Str::limit(strip_tags($item->isi), 120) }}
+                                </p>
+
+                                <a href="{{ url('/news/' . $item->id) }}" class="news-link">
+                                    Baca Selengkapnya <i class="fas fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+
+                        </article>
+                    </div>
+
+                @empty
+                    <div class="col-12 text-center py-5">
+                        <p class="text-muted">Belum ada berita.</p>
+                    </div>
+                @endforelse
 
             </div>
 
@@ -296,95 +287,45 @@
 
             <div class="row g-4">
 
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="0">
-                    <div class="gallery-card">
-                        <div class="gallery-thumb">
-                            <div class="gallery-thumb-empty"><i class="fas fa-image"></i></div>
-                            <span class="gallery-badge">Foto</span>
-                        </div>
-                        <div class="gallery-body">
-                            <h5 class="gallery-title">Upacara HUT RI ke-80</h5>
-                            <div class="gallery-date">
-                                <i class="far fa-calendar"></i> 17 Agustus 2025
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @forelse ($galleries as $index => $item)
+                    <div class="col-md-6 col-lg-4"
+                         data-aos="fade-up"
+                         data-aos-delay="{{ ($index % 3) * 100 }}">
 
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="gallery-card">
-                        <div class="gallery-thumb">
-                            <div class="gallery-thumb-empty"><i class="fas fa-video"></i></div>
-                            <span class="gallery-badge video">Video</span>
-                        </div>
-                        <div class="gallery-body">
-                            <h5 class="gallery-title">Profil SMA Taruna Nusantara</h5>
-                            <div class="gallery-date">
-                                <i class="far fa-calendar"></i> 1 Juli 2025
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                        <div class="gallery-card">
 
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="gallery-card">
-                        <div class="gallery-thumb">
-                            <div class="gallery-thumb-empty"><i class="fas fa-image"></i></div>
-                            <span class="gallery-badge">Foto</span>
-                        </div>
-                        <div class="gallery-body">
-                            <h5 class="gallery-title">Latihan Paskibra</h5>
-                            <div class="gallery-date">
-                                <i class="far fa-calendar"></i> 10 Agustus 2025
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            <div class="gallery-thumb">
+                                @if ($item->gambar)
+                                    <img src="{{ asset('storage/' . $item->gambar) }}"
+                                         alt="{{ $item->judul }}"
+                                         class="gallery-img">
+                                @else
+                                    <div class="gallery-thumb-empty">
+                                        <i class="fas fa-image"></i>
+                                    </div>
+                                @endif
 
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="0">
-                    <div class="gallery-card">
-                        <div class="gallery-thumb">
-                            <div class="gallery-thumb-empty"><i class="fas fa-image"></i></div>
-                            <span class="gallery-badge">Foto</span>
-                        </div>
-                        <div class="gallery-body">
-                            <h5 class="gallery-title">Kunjungan Studi Banding</h5>
-                            <div class="gallery-date">
-                                <i class="far fa-calendar"></i> 12 September 2025
+                                <span class="gallery-badge {{ strtolower($item->kategori) }}">
+                                    {{ $item->kategori }}
+                                </span>
                             </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="gallery-card">
-                        <div class="gallery-thumb">
-                            <div class="gallery-thumb-empty"><i class="fas fa-video"></i></div>
-                            <span class="gallery-badge video">Video</span>
-                        </div>
-                        <div class="gallery-body">
-                            <h5 class="gallery-title">Liputan HUT RI ke-80</h5>
-                            <div class="gallery-date">
-                                <i class="far fa-calendar"></i> 17 Agustus 2025
+                            <div class="gallery-body">
+                                <h5 class="gallery-title">{{ $item->judul }}</h5>
+                                <div class="gallery-date">
+                                    <i class="far fa-calendar"></i>
+                                    {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="gallery-card">
-                        <div class="gallery-thumb">
-                            <div class="gallery-thumb-empty"><i class="fas fa-image"></i></div>
-                            <span class="gallery-badge">Foto</span>
-                        </div>
-                        <div class="gallery-body">
-                            <h5 class="gallery-title">Lomba Cerdas Cermat</h5>
-                            <div class="gallery-date">
-                                <i class="far fa-calendar"></i> 25 September 2025
-                            </div>
                         </div>
                     </div>
-                </div>
+
+                @empty
+                    <div class="col-12 text-center py-5">
+                        <p class="text-muted">Belum ada galeri.</p>
+                    </div>
+                @endforelse
 
             </div>
 

@@ -15,6 +15,7 @@ class Gallery extends Model
         'judul',
         'keterangan',
         'gambar',
+        'link_video',
         'kategori',
         'tanggal',
     ];

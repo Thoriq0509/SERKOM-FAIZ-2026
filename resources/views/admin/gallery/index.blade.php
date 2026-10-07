@@ -12,7 +12,7 @@
 
 <div class="container-fluid p-0">
 
-    <!-- Header -->
+    {{-- Header --}}
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
         <div>
             <h2 class="page-title">Kelola Galeri</h2>
@@ -24,7 +24,7 @@
         </a>
     </div>
 
-    <!-- Alert sukses -->
+    {{-- Alert sukses --}}
     @if (session('success'))
         <div class="alert alert-success alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-check-circle"></i>
@@ -32,7 +32,7 @@
         </div>
     @endif
 
-    <!-- Alert error -->
+    {{-- Alert error --}}
     @if (session('error'))
         <div class="alert alert-danger alert-soft mb-4" role="alert" data-alert>
             <i class="fas fa-exclamation-circle"></i>
@@ -40,7 +40,7 @@
         </div>
     @endif
 
-    <!-- Card tabel -->
+    {{-- Card tabel --}}
     <div class="card-clean">
 
         <div class="card-head">
@@ -66,17 +66,42 @@
                     @foreach ($galleries as $item)
                         @php
                             $encryptedId = \Illuminate\Support\Facades\Crypt::encryptString($item->id);
+                            $isVideo     = $item->kategori === 'Video';
+                            $hasYoutube  = $isVideo && !empty($item->link_video);
+                            $hasFoto     = !$isVideo && !empty($item->gambar);
+                            $hasVideoLokal = $isVideo && !empty($item->gambar) && !$hasYoutube;
                         @endphp
 
                         <tr>
                             <td>{{ $loop->iteration }}</td>
 
-                            <!-- Thumbnail -->
+                            {{-- Preview --}}
                             <td class="text-center">
-                                @if ($item->gambar)
+                                @if ($hasFoto)
                                     <img src="{{ asset('storage/' . $item->gambar) }}"
                                          alt="{{ $item->judul }}"
                                          class="gallery-thumb">
+                                @elseif ($hasVideoLokal)
+                                    <div class="gallery-thumb-video">
+                                        <i class="fas fa-video"></i>
+                                        <span class="video-label">Video</span>
+                                    </div>
+                                @elseif ($hasYoutube)
+                                    @if ($item->gambar)
+                                        <div class="gallery-thumb-youtube-wrap">
+                                            <img src="{{ asset('storage/' . $item->gambar) }}"
+                                                 alt="{{ $item->judul }}"
+                                                 class="gallery-thumb">
+                                            <span class="youtube-badge">
+                                                <i class="fab fa-youtube"></i>
+                                            </span>
+                                        </div>
+                                    @else
+                                        <div class="gallery-thumb-youtube">
+                                            <i class="fab fa-youtube"></i>
+                                            <span class="video-label">YouTube</span>
+                                        </div>
+                                    @endif
                                 @else
                                     <div class="gallery-thumb-placeholder">
                                         <i class="fas fa-image"></i>
@@ -84,15 +109,22 @@
                                 @endif
                             </td>
 
-                            <!-- Judul + keterangan -->
+                            {{-- Judul + keterangan --}}
                             <td>
                                 <div class="cell-title">{{ $item->judul }}</div>
                                 <div class="cell-desc">
                                     {{ $item->keterangan ?: 'Belum ada keterangan' }}
                                 </div>
+
+                                @if ($hasYoutube)
+                                    <div class="cell-source">
+                                        <i class="fab fa-youtube"></i>
+                                        <span>{{ $item->link_video }}</span>
+                                    </div>
+                                @endif
                             </td>
 
-                            <!-- Kategori -->
+                            {{-- Kategori --}}
                             <td class="text-center">
                                 @if ($item->kategori === 'Foto')
                                     <span class="badge-cat photo">
@@ -109,8 +141,9 @@
                                 @endif
                             </td>
 
-                            <!-- Tanggal -->
-                            <td class="text-center" data-order="{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') : '' }}">
+                            {{-- Tanggal --}}
+                            <td class="text-center"
+                                data-order="{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') : '' }}">
                                 <span class="cell-date">
                                     {{ $item->tanggal
                                         ? \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y')
@@ -119,7 +152,7 @@
                                 </span>
                             </td>
 
-                            <!-- Aksi -->
+                            {{-- Aksi --}}
                             <td class="text-center text-nowrap">
                                 <a href="{{ route('admin.gallery.show', $encryptedId) }}"
                                    class="btn-icon view me-1" title="Lihat Detail">
