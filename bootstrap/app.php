@@ -13,9 +13,19 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+
+        // Alias middleware custom
         $middleware->alias([
             'role' => RoleMiddleware::class,
         ]);
+
+        // Redirect user yang sudah login (akses /login saat sudah login)
+        // HARUS dipanggil setelah redirectGuestsTo kalau ada
+        $middleware->redirectUsersTo(fn () => route('admin.dashboard'));
+
+        // Redirect user yang belum login (akses halaman admin tanpa login)
+        $middleware->redirectGuestsTo(fn () => route('login'));
+
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

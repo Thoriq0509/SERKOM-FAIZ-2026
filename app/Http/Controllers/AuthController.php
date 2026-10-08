@@ -9,16 +9,19 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // tampilkan login page
+    /**
+     * Tampilkan halaman login
+     */
     public function index()
     {
         return view('auth.login');
     }
 
-    // login
+    /**
+     * Proses login
+     */
     public function login(Request $request)
     {
-        // Validasi input
         $request->validate([
             'username' => ['required', 'string'],
             'password' => ['required', 'string'],
@@ -27,30 +30,32 @@ class AuthController extends Controller
             'password.required' => 'Password wajib diisi.',
         ]);
 
-        // cari berdasar username
         $user = User::where('username', $request->username)->first();
 
-        // Username not found OR password mismatch
+        // Username tidak ditemukan ATAU password salah
         if (! $user || ! Hash::check($request->password, $user->password)) {
             return $this->loginFailed($request, 'Username atau password salah.');
         }
 
-        // cek role
+        // Cek role (hanya admin & operator yang boleh masuk)
         $role = strtolower(trim((string) $user->role));
 
         if (! in_array($role, ['admin', 'operator'], true)) {
             return $this->loginFailed($request, 'Role akun tidak memiliki akses.');
         }
 
-        // Manual login
-        Auth::login($user);
+        // Login manual
+        Auth::login($user, $request->boolean('remember'));
 
-        // Regenerate session
+        // Regenerate session untuk mencegah session fixation
         $request->session()->regenerate();
 
-        return redirect()->route('dashboard');
+        return redirect()->intended(route('admin.dashboard'));
     }
 
+    /**
+     * Proses logout
+     */
     public function logout(Request $request)
     {
         Auth::logout();
@@ -61,6 +66,9 @@ class AuthController extends Controller
         return redirect()->route('login');
     }
 
+    /**
+     * Kembali ke halaman login dengan pesan error
+     */
     private function loginFailed(Request $request, string $message)
     {
         return back()

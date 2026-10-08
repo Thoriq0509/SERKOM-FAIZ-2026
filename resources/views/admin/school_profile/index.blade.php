@@ -127,6 +127,71 @@
         </div>
     </div>
 
+    <!-- Sosial Media -->
+    <div class="card-clean mb-4">
+
+        <div class="card-head">
+            <h6><i class="fas fa-share-nodes me-2"></i>Sosial Media</h6>
+        </div>
+
+        <div class="card-body">
+            <div class="info-grid">
+
+                <div class="info-item">
+                    <div class="label">Facebook</div>
+                    <div class="value">
+                        @if ($schoolProfile->facebook)
+                            <a href="{{ $schoolProfile->facebook }}"
+                               target="_blank"
+                               rel="noopener"
+                               class="social-link facebook">
+                                <i class="fab fa-facebook-f"></i>
+                                {{ $schoolProfile->facebook }}
+                            </a>
+                        @else
+                            <span class="text-muted">-</span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="label">Instagram</div>
+                    <div class="value">
+                        @if ($schoolProfile->instagram)
+                            <a href="{{ $schoolProfile->instagram }}"
+                               target="_blank"
+                               rel="noopener"
+                               class="social-link instagram">
+                                <i class="fab fa-instagram"></i>
+                                {{ $schoolProfile->instagram }}
+                            </a>
+                        @else
+                            <span class="text-muted">-</span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="label">WhatsApp</div>
+                    <div class="value">
+                        @if ($schoolProfile->whatsapp)
+                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $schoolProfile->whatsapp) }}"
+                               target="_blank"
+                               rel="noopener"
+                               class="social-link whatsapp">
+                                <i class="fab fa-whatsapp"></i>
+                                {{ $schoolProfile->whatsapp }}
+                            </a>
+                        @else
+                            <span class="text-muted">-</span>
+                        @endif
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <!-- Visi, Misi & Deskripsi -->
     <div class="row g-4 mb-4">
 

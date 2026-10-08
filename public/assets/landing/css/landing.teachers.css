@@ -1,37 +1,42 @@
 /* Font Montserrat */
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat/Montserrat-Regular.ttf') format('truetype');
+    src: url('../../fonts/mosentrat/static/Montserrat-Regular.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat/Montserrat-Medium.ttf') format('truetype');
+    src: url('../../fonts/mosentrat/static/Montserrat-Medium.ttf') format('truetype');
     font-weight: 500;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat/Montserrat-SemiBold.ttf') format('truetype');
+    src: url('../../fonts/mosentrat/static/Montserrat-SemiBold.ttf') format('truetype');
     font-weight: 600;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat/Montserrat-Bold.ttf') format('truetype');
+    src: url('../../fonts/mosentrat/static/Montserrat-Bold.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat/Montserrat-ExtraBold.ttf') format('truetype');
+    src: url('../../fonts/mosentrat/static/Montserrat-ExtraBold.ttf') format('truetype');
     font-weight: 800;
     font-style: normal;
+    font-display: swap;
 }
 
 
@@ -219,6 +224,160 @@
 }
 
 
+/* ===== Detail Guru ===== */
+.teacher-detail-photo-wrap {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(31, 47, 70, .15);
+    aspect-ratio: 4 / 5;
+    background: linear-gradient(135deg, #f8fafc, #eef2f7);
+}
+
+.teacher-detail-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+}
+
+.teacher-detail-photo-empty {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #cbd5e1;
+    font-size: 100px;
+}
+
+.teacher-detail-content {
+    padding: 10px 0;
+}
+
+.teacher-detail-label {
+    display: inline-block;
+    color: #3b82f6;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.teacher-detail-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    color: #1f2f46;
+    margin: 0 0 16px;
+    line-height: 1.25;
+    letter-spacing: -.3px;
+    text-transform: uppercase;
+}
+
+.teacher-detail-divider {
+    width: 60px;
+    height: 4px;
+    background: #3b82f6;
+    border-radius: 2px;
+    margin-bottom: 24px;
+}
+
+.teacher-detail-info {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border-top: 1px solid #eef1f6;
+    padding-top: 24px;
+}
+
+.teacher-detail-info li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eef1f6;
+}
+
+.teacher-detail-info li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.teacher-detail-info li span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.teacher-detail-info li strong {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1f2f46;
+    text-align: right;
+}
+
+.teacher-detail-btn {
+    display: inline-flex;
+    align-items: center;
+    background: #1f2f46;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    transition: all .25s ease;
+}
+
+.teacher-detail-btn:hover {
+    background: #3b82f6;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, .35);
+}
+
+
+/* Empty state (list guru) */
+.teacher-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 80px 20px;
+    color: #94a3b8;
+}
+
+.teacher-empty i {
+    font-size: 56px;
+    opacity: .4;
+    display: block;
+    margin-bottom: 16px;
+}
+
+.teacher-empty h5 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    color: #1f2f46;
+    margin: 0 0 8px;
+}
+
+.teacher-empty p {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+}
+
+
 /* Responsive */
 @media (max-width: 991.98px) {
     .page-hero { padding: 80px 0 60px; }
@@ -228,6 +387,9 @@
     .section-title { font-size: 28px; }
 
     .teacher-name { font-size: 14px; }
+
+    .teacher-detail-name { font-size: 24px; }
+    .teacher-detail-photo-wrap { max-width: 400px; margin: 0 auto; }
 }
 
 @media (max-width: 767.98px) {
@@ -243,4 +405,8 @@
     .teacher-name { font-size: 13px; min-height: 36px; }
     .teacher-mapel { font-size: 10.5px; letter-spacing: .5px; }
     .teacher-photo-empty { font-size: 40px; }
+
+    .teacher-detail-name { font-size: 20px; }
+    .teacher-detail-info li strong { font-size: 13.5px; }
+    .teacher-detail-photo-empty { font-size: 70px; }
 }

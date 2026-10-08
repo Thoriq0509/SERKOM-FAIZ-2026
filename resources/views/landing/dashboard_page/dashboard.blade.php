@@ -2,6 +2,10 @@
 
 @section('title', 'Beranda - SMA Taruna Nusantara')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/landing/glightbox-master/dist/css/glightbox.min.css') }}">
+@endpush
+
 @section('content')
 
     {{-- Carousel --}}
@@ -173,7 +177,6 @@
 
                     <div class="split-divider"></div>
 
-                    {{-- Deskripsi STATIS --}}
                     <p class="split-text">
                         Sekolah menengah atas berasrama penuh (<em>boarding school</em>)
                         berstandar nasional dengan sistem semi-militer yang terletak
@@ -181,7 +184,6 @@
                         membentuk kader pemimpin bangsa.
                     </p>
 
-                    {{-- Info DINAMIS --}}
                     <ul class="split-info">
                         <li>
                             <span>NPSN</span>
@@ -247,10 +249,11 @@
                                 <h5 class="news-title">{{ $item->judul }}</h5>
 
                                 <p class="news-excerpt">
-                                    {{ Str::limit(strip_tags($item->isi), 120) }}
+                                    {{ \Illuminate\Support\Str::limit(strip_tags($item->isi), 120) }}
                                 </p>
 
-                                <a href="{{ url('/news/' . $item->id) }}" class="news-link">
+                                <a href="{{ route('landing.news.show', $item->slug) }}"
+                                   class="news-link">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ms-1"></i>
                                 </a>
                             </div>
@@ -288,37 +291,98 @@
             <div class="row g-4">
 
                 @forelse ($galleries as $index => $item)
+                    @php
+                        $isVideo     = strtolower($item->kategori ?? '') === 'video';
+                        $hasYoutube  = $isVideo && !empty($item->link_video);
+                        $hasFoto     = !$isVideo && !empty($item->gambar);
+
+                        // Tentukan target GLightbox
+                        if ($hasYoutube) {
+                            $href = $item->link_video;
+                        } elseif ($hasFoto) {
+                            $href = asset('storage/' . $item->gambar);
+                        } else {
+                            $href = null;
+                        }
+
+                        // Kalau tidak ada media, arahkan ke halaman galeri
+                        $safeTitle = str_replace(['"', "'"], '', $item->judul ?? '');
+                        $safeDesc  = str_replace(['"', "'", "\n", "\r"], ' ', $item->keterangan ?? '');
+                        $glightboxAttr = 'title: ' . $safeTitle . '; description: ' . $safeDesc;
+                    @endphp
+
                     <div class="col-md-6 col-lg-4"
                          data-aos="fade-up"
                          data-aos-delay="{{ ($index % 3) * 100 }}">
 
-                        <div class="gallery-card">
+                        @if ($href)
+                            {{-- Ada media → buka GLightbox --}}
+                            <a href="{{ $href }}"
+                               class="glightbox gallery-card gallery-card-link"
+                               data-gallery="home-gallery"
+                               data-glightbox="{{ $glightboxAttr }}">
 
-                            <div class="gallery-thumb">
-                                @if ($item->gambar)
-                                    <img src="{{ asset('storage/' . $item->gambar) }}"
-                                         alt="{{ $item->judul }}"
-                                         class="gallery-img">
-                                @else
+                                <div class="gallery-thumb">
+                                    @if ($hasFoto)
+                                        <img src="{{ asset('storage/' . $item->gambar) }}"
+                                             alt="{{ $item->judul }}"
+                                             class="gallery-img">
+                                    @elseif ($hasYoutube)
+                                        @if (!empty($item->gambar))
+                                            <img src="{{ asset('storage/' . $item->gambar) }}"
+                                                 alt="{{ $item->judul }}"
+                                                 class="gallery-img">
+                                        @else
+                                            <div class="gallery-thumb-empty youtube">
+                                                <i class="fab fa-youtube"></i>
+                                            </div>
+                                        @endif
+
+                                        <div class="gallery-play-overlay">
+                                            <i class="fas fa-play"></i>
+                                        </div>
+                                    @endif
+
+                                    <span class="gallery-badge {{ strtolower($item->kategori) }}">
+                                        {{ $item->kategori }}
+                                    </span>
+                                </div>
+
+                                <div class="gallery-body">
+                                    <h5 class="gallery-title">{{ $item->judul }}</h5>
+                                    <div class="gallery-date">
+                                        <i class="far fa-calendar"></i>
+                                        {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                                    </div>
+                                </div>
+
+                            </a>
+                        @else
+                            {{-- Tidak ada media → arahkan ke halaman galeri --}}
+                            <a href="{{ route('landing.gallery') }}"
+                               class="gallery-card gallery-card-link">
+
+                                <div class="gallery-thumb">
                                     <div class="gallery-thumb-empty">
                                         <i class="fas fa-image"></i>
                                     </div>
-                                @endif
 
-                                <span class="gallery-badge {{ strtolower($item->kategori) }}">
-                                    {{ $item->kategori }}
-                                </span>
-                            </div>
-
-                            <div class="gallery-body">
-                                <h5 class="gallery-title">{{ $item->judul }}</h5>
-                                <div class="gallery-date">
-                                    <i class="far fa-calendar"></i>
-                                    {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                                    <span class="gallery-badge {{ strtolower($item->kategori) }}">
+                                        {{ $item->kategori }}
+                                    </span>
                                 </div>
-                            </div>
 
-                        </div>
+                                <div class="gallery-body">
+                                    <h5 class="gallery-title">{{ $item->judul }}</h5>
+                                    <div class="gallery-date">
+                                        <i class="far fa-calendar"></i>
+                                        {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                                    </div>
+                                </div>
+
+                            </a>
+                        @endif
+
                     </div>
 
                 @empty
@@ -339,3 +403,19 @@
     </section>
 
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('assets/landing/glightbox-master/dist/js/glightbox.min.js') }}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            if (typeof GLightbox !== 'undefined') {
+                GLightbox({
+                    selector: '.glightbox',
+                    touchNavigation: true,
+                    loop: true,
+                    zoomable: true,
+                });
+            }
+        });
+    </script>
+@endpush

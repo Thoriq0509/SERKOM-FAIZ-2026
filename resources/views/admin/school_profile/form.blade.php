@@ -188,6 +188,76 @@
             </div>
         </div>
 
+        <!-- Section: Sosial Media -->
+        <div class="card-clean mb-4">
+            <div class="card-head">
+                <h6><i class="fas fa-share-nodes me-2"></i>Sosial Media</h6>
+            </div>
+
+            <div class="card-body">
+                <div class="row g-3">
+
+                    <!-- Facebook -->
+                    <div class="col-md-4">
+                        <label for="facebook" class="form-label">
+                            Facebook <span class="opt">(Opsional)</span>
+                        </label>
+                        <input type="url"
+                               id="facebook"
+                               name="facebook"
+                               class="form-control @error('facebook') is-invalid @enderror"
+                               value="{{ old('facebook', $schoolProfile->facebook ?? '') }}"
+                               maxlength="255"
+                               placeholder="https://facebook.com/smatn">
+                        @error('facebook')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <small class="form-hint">Link halaman Facebook sekolah.</small>
+                    </div>
+
+                    <!-- Instagram -->
+                    <div class="col-md-4">
+                        <label for="instagram" class="form-label">
+                            Instagram <span class="opt">(Opsional)</span>
+                        </label>
+                        <input type="url"
+                               id="instagram"
+                               name="instagram"
+                               class="form-control @error('instagram') is-invalid @enderror"
+                               value="{{ old('instagram', $schoolProfile->instagram ?? '') }}"
+                               maxlength="255"
+                               placeholder="https://instagram.com/smatn">
+                        @error('instagram')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <small class="form-hint">Link akun Instagram sekolah.</small>
+                    </div>
+
+                    <!-- WhatsApp -->
+                    <div class="col-md-4">
+                        <label for="whatsapp" class="form-label">
+                            WhatsApp <span class="opt">(Opsional)</span>
+                        </label>
+                        <input type="text"
+                               id="whatsapp"
+                               name="whatsapp"
+                               class="form-control @error('whatsapp') is-invalid @enderror"
+                               value="{{ old('whatsapp', $schoolProfile->whatsapp ?? '') }}"
+                               maxlength="20"
+                               placeholder="628123456789">
+                        @error('whatsapp')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <small class="form-hint">
+                            Format internasional tanpa <strong>+</strong> dan tanpa <strong>62</strong>.
+                            Contoh: <strong>08123456789</strong>
+                        </small>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
         <!-- Section: Media sekolah -->
         <div class="card-clean mb-4">
             <div class="card-head">

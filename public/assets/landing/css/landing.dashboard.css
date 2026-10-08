@@ -1,37 +1,42 @@
 /* Font Montserrat */
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat/Montserrat-Regular.ttf') format('truetype');
+    src: url('../../fonts/mosentrat/static/Montserrat-Regular.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat/Montserrat-Medium.ttf') format('truetype');
+    src: url('../../fonts/mosentrat/static/Montserrat-Medium.ttf') format('truetype');
     font-weight: 500;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat/Montserrat-SemiBold.ttf') format('truetype');
+    src: url('../../fonts/mosentrat/static/Montserrat-SemiBold.ttf') format('truetype');
     font-weight: 600;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat/Montserrat-Bold.ttf') format('truetype');
+    src: url('../../fonts/mosentrat/static/Montserrat-Bold.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat/Montserrat-ExtraBold.ttf') format('truetype');
+    src: url('../../fonts/mosentrat/static/Montserrat-ExtraBold.ttf') format('truetype');
     font-weight: 800;
     font-style: normal;
+    font-display: swap;
 }
 
 
@@ -324,7 +329,6 @@
     overflow: hidden;
 }
 
-/* KIRI: Gambar */
 .split-left-img {
     position: relative;
     overflow: hidden;
@@ -346,7 +350,6 @@
     transform: scale(1.05);
 }
 
-/* KANAN: Navy + Teks */
 .split-right-content {
     background: #1f2f46;
     color: #fff;
@@ -700,6 +703,19 @@
 
 .gallery-date i {
     color: #3b82f6;
+}
+
+
+/* Galeri card link (buat yang di dashboard biar clickable ke GLightbox) */
+.gallery-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.gallery-card-link:hover {
+    text-decoration: none;
+    color: inherit;
 }
 
 

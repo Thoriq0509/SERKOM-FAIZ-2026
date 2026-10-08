@@ -30,8 +30,11 @@ class SchoolProfileController extends Controller
                 'alamat'          => '',
                 'kontak'          => '',
                 'email'           => '',
-                'visi'            => '',   // ← GANTI dari visi_misi
-                'misi'            => '',   // ← TAMBAH
+                'facebook'        => null,
+                'instagram'       => null,
+                'whatsapp'        => null,
+                'visi'            => '',
+                'misi'            => '',
                 'tahun_berdiri'   => null,
                 'deskripsi'       => null,
                 'logo'            => null,
@@ -61,8 +64,14 @@ class SchoolProfileController extends Controller
         $schoolProfile->alamat          = $validated['alamat'];
         $schoolProfile->kontak          = $validated['kontak'];
         $schoolProfile->email           = $validated['email'] ?? null;
-        $schoolProfile->visi            = $validated['visi'];   // ← GANTI
-        $schoolProfile->misi            = $validated['misi'];   // ← TAMBAH
+
+        // Sosial media
+        $schoolProfile->facebook        = $validated['facebook'] ?? null;
+        $schoolProfile->instagram       = $validated['instagram'] ?? null;
+        $schoolProfile->whatsapp        = $validated['whatsapp'] ?? null;
+
+        $schoolProfile->visi            = $validated['visi'];
+        $schoolProfile->misi            = $validated['misi'];
         $schoolProfile->tahun_berdiri   = $validated['tahun_berdiri'];
         $schoolProfile->deskripsi       = $validated['deskripsi'] ?? null;
         $schoolProfile->sambutan_kepsek = $validated['sambutan_kepsek'] ?? null;
@@ -133,8 +142,13 @@ class SchoolProfileController extends Controller
             'kontak'          => ['required', 'string', 'max:15'],
             'email'           => ['nullable', 'email', 'max:100'],
 
-            'visi'            => ['required', 'string'],   // ← GANTI dari visi_misi
-            'misi'            => ['required', 'string'],   // ← TAMBAH
+            // Sosial media
+            'facebook'        => ['nullable', 'url', 'max:255'],
+            'instagram'       => ['nullable', 'url', 'max:255'],
+            'whatsapp'        => ['nullable', 'string', 'max:20'],
+
+            'visi'            => ['required', 'string'],
+            'misi'            => ['required', 'string'],
 
             'tahun_berdiri'   => ['required', 'digits:4', 'integer'],
             'deskripsi'       => ['nullable', 'string'],
@@ -166,8 +180,15 @@ class SchoolProfileController extends Controller
             'email.email' => 'Format email tidak valid.',
             'email.max'   => 'Email maksimal 100 karakter.',
 
-            'visi.required' => 'Visi wajib diisi.',   // ← GANTI
-            'misi.required' => 'Misi wajib diisi.',   // ← TAMBAH
+            // Sosial media
+            'facebook.url'    => 'Link Facebook harus berupa URL yang valid.',
+            'facebook.max'    => 'Link Facebook maksimal 255 karakter.',
+            'instagram.url'   => 'Link Instagram harus berupa URL yang valid.',
+            'instagram.max'   => 'Link Instagram maksimal 255 karakter.',
+            'whatsapp.max'    => 'Nomor WhatsApp maksimal 20 karakter.',
+
+            'visi.required' => 'Visi wajib diisi.',
+            'misi.required' => 'Misi wajib diisi.',
 
             'tahun_berdiri.required' => 'Tahun berdiri wajib diisi.',
             'tahun_berdiri.digits'   => 'Tahun berdiri harus 4 digit.',

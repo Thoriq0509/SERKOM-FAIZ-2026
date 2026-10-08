@@ -127,14 +127,14 @@
                 </div>
 
                 <div class="col-6 col-md-4 col-xl-2">
-                    <a href="{{ route('admin.guru') }}" class="quick-access-item">
+                    <a href="{{ route('admin.guru.index') }}" class="quick-access-item">
                         <i class="fas fa-chalkboard"></i>
                         <span>Guru</span>
                     </a>
                 </div>
 
                 <div class="col-6 col-md-4 col-xl-2">
-                    <a href="{{ route('admin.siswa') }}" class="quick-access-item">
+                    <a href="{{ route('admin.siswa.index') }}" class="quick-access-item">
                         <i class="fas fa-user-graduate"></i>
                         <span>Siswa</span>
                     </a>

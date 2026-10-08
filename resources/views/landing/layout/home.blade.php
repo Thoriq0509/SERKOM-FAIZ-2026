@@ -146,10 +146,34 @@
                     </p>
 
                     <div class="footer-social">
-                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-                        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+
+                        @if (!empty($schoolProfile?->facebook))
+                            <a href="{{ $schoolProfile->facebook }}"
+                               target="_blank"
+                               rel="noopener"
+                               aria-label="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        @endif
+
+                        @if (!empty($schoolProfile?->instagram))
+                            <a href="{{ $schoolProfile->instagram }}"
+                               target="_blank"
+                               rel="noopener"
+                               aria-label="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        @endif
+
+                        @if (!empty($schoolProfile?->whatsapp))
+                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $schoolProfile->whatsapp) }}"
+                               target="_blank"
+                               rel="noopener"
+                               aria-label="WhatsApp">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                        @endif
+
                     </div>
                 </div>
 
@@ -211,6 +235,25 @@
             duration: 800,
             once: true,
             offset: 100
+        });
+    </script>
+
+    {{-- Navbar scroll effect --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const navbar = document.getElementById("mainNavbar");
+            if (!navbar) return;
+
+            function handleScroll() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add("scrolled");
+                } else {
+                    navbar.classList.remove("scrolled");
+                }
+            }
+
+            handleScroll();
+            window.addEventListener("scroll", handleScroll, { passive: true });
         });
     </script>
 

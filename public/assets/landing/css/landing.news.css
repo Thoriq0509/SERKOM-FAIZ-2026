@@ -1,37 +1,42 @@
 /* Font Montserrat */
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat/Montserrat-Regular.ttf') format('truetype');
+    src: url('../../fonts/mosentrat/static/Montserrat-Regular.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat/Montserrat-Medium.ttf') format('truetype');
+    src: url('../../fonts/mosentrat/static/Montserrat-Medium.ttf') format('truetype');
     font-weight: 500;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat/Montserrat-SemiBold.ttf') format('truetype');
+    src: url('../../fonts/mosentrat/static/Montserrat-SemiBold.ttf') format('truetype');
     font-weight: 600;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat/Montserrat-Bold.ttf') format('truetype');
+    src: url('../../fonts/mosentrat/static/Montserrat-Bold.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat/Montserrat-ExtraBold.ttf') format('truetype');
+    src: url('../../fonts/mosentrat/static/Montserrat-ExtraBold.ttf') format('truetype');
     font-weight: 800;
     font-style: normal;
+    font-display: swap;
 }
 
 
@@ -362,6 +367,71 @@
 }
 
 
+/* Empty state */
+.news-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 80px 20px;
+    color: #94a3b8;
+}
+
+.news-empty i {
+    font-size: 56px;
+    opacity: .4;
+    display: block;
+    margin-bottom: 16px;
+}
+
+.news-empty h5 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    color: #1f2f46;
+    margin: 0 0 8px;
+}
+
+.news-empty p {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+}
+
+
+/* Pagination */
+.news-pagination .pagination {
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.news-pagination .page-link {
+    border-radius: 8px;
+    border: 1px solid #eef1f6;
+    color: #1f2f46;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 14px;
+    transition: all .2s ease;
+}
+
+.news-pagination .page-link:hover {
+    background: #e0edff;
+    border-color: #3b82f6;
+    color: #1d4ed8;
+}
+
+.news-pagination .page-item.active .page-link {
+    background: #1f2f46;
+    border-color: #1f2f46;
+    color: #fff;
+}
+
+.news-pagination .page-item.disabled .page-link {
+    color: #cbd5e1;
+    border-color: #eef1f6;
+}
+
+
 /* Responsive */
 @media (max-width: 991.98px) {
     .page-hero { padding: 80px 0 60px; }
@@ -393,4 +463,9 @@
     .news-body-title { font-size: 22px; }
     .news-body-text { font-size: 14px; line-height: 1.9; text-align: left; }
     .news-body-btn { font-size: 12px; padding: 10px 20px; }
+
+    .news-pagination .page-link {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
 }

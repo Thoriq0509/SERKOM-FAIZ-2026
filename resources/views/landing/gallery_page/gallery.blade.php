@@ -29,8 +29,8 @@
             {{-- Filter Kategori --}}
             <div class="gallery-filter" data-aos="fade-up">
                 <button type="button" class="filter-btn active" data-filter="all">Semua</button>
-                <button type="button" class="filter-btn" data-filter="Foto">Foto</button>
-                <button type="button" class="filter-btn" data-filter="Video">Video</button>
+                <button type="button" class="filter-btn" data-filter="foto">Foto</button>
+                <button type="button" class="filter-btn" data-filter="video">Video</button>
             </div>
 
             {{-- Grid Galeri --}}
@@ -38,7 +38,11 @@
 
                 @forelse ($galleries as $index => $item)
                     @php
-                        $isVideo    = $item->kategori === 'Video';
+                        // Normalisasi kategori: lowercase, hapus spasi
+                        $kategoriRaw  = strtolower(trim((string) $item->kategori));
+                        $isVideo      = $kategoriRaw === 'video';
+                        $kategoriSlug = $isVideo ? 'video' : 'foto';
+
                         $hasYoutube = $isVideo && !empty($item->link_video);
                         $hasFoto    = !$isVideo && !empty($item->gambar);
 
@@ -48,7 +52,7 @@
                         } elseif ($hasFoto) {
                             $href = asset('storage/' . $item->gambar);
                         } else {
-                            $href = '#';
+                            $href = null;
                         }
 
                         // Sanitasi untuk atribut data-glightbox
@@ -58,72 +62,98 @@
                     @endphp
 
                     <div class="gallery-item"
-                         data-kategori="{{ $item->kategori }}"
+                         data-kategori="{{ $kategoriSlug }}"
                          data-aos="fade-up"
                          data-aos-delay="{{ ($index % 4) * 100 }}">
 
-                        <a href="{{ $href }}"
-                           class="glightbox gallery-link"
-                           data-gallery="gallery-1"
-                           data-glightbox="{{ $glightboxAttr }}"
-                           @if (!$hasYoutube && !$hasFoto) aria-disabled="true" @endif>
+                        @if ($href)
+                            <a href="{{ $href }}"
+                               class="glightbox gallery-link"
+                               data-gallery="gallery-1"
+                               data-glightbox="{{ $glightboxAttr }}">
 
-                            <div class="gallery-thumb">
+                                <div class="gallery-thumb">
 
-                                {{-- ===== Media Preview ===== --}}
-                                @if ($hasYoutube)
-                                    {{-- Video YouTube --}}
-                                    @if (!empty($item->gambar))
+                                    {{-- Media Preview --}}
+                                    @if ($hasYoutube)
+                                        @if (!empty($item->gambar))
+                                            <img src="{{ asset('storage/' . $item->gambar) }}"
+                                                 alt="{{ $item->judul }}"
+                                                 class="gallery-img">
+                                        @else
+                                            <div class="gallery-thumb-empty youtube">
+                                                <i class="fab fa-youtube"></i>
+                                            </div>
+                                        @endif
+
+                                        <div class="gallery-play-overlay">
+                                            <i class="fas fa-play"></i>
+                                        </div>
+
+                                    @elseif ($hasFoto)
                                         <img src="{{ asset('storage/' . $item->gambar) }}"
                                              alt="{{ $item->judul }}"
                                              class="gallery-img">
+
                                     @else
-                                        <div class="gallery-thumb-empty youtube">
-                                            <i class="fab fa-youtube"></i>
+                                        <div class="gallery-thumb-empty">
+                                            <i class="fas fa-image"></i>
                                         </div>
                                     @endif
 
-                                    <div class="gallery-play-overlay">
-                                        <i class="fas fa-play"></i>
-                                    </div>
+                                    {{-- Overlay Info --}}
+                                    <div class="gallery-overlay">
 
-                                @elseif ($hasFoto)
-                                    {{-- Foto --}}
-                                    <img src="{{ asset('storage/' . $item->gambar) }}"
-                                         alt="{{ $item->judul }}"
-                                         class="gallery-img">
+                                        <span class="gallery-badge {{ $isVideo ? 'video' : '' }}">
+                                            @if ($isVideo)
+                                                <i class="fas fa-play"></i> Video
+                                            @else
+                                                <i class="fas fa-camera"></i> Foto
+                                            @endif
+                                        </span>
 
-                                @else
-                                    {{-- Tidak ada media --}}
-                                    <div class="gallery-thumb-empty">
-                                        <i class="fas fa-image"></i>
-                                    </div>
-                                @endif
-
-                                {{-- ===== Overlay Info ===== --}}
-                                <div class="gallery-overlay">
-
-                                    <span class="gallery-badge {{ $isVideo ? 'video' : '' }}">
-                                        @if ($isVideo)
-                                            <i class="fas fa-play"></i> Video
-                                        @else
-                                            <i class="fas fa-camera"></i> Foto
-                                        @endif
-                                    </span>
-
-                                    <div class="gallery-info">
-                                        <h5 class="gallery-title">{{ $item->judul }}</h5>
-                                        <div class="gallery-date">
-                                            <i class="far fa-calendar"></i>
-                                            {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                                        <div class="gallery-info">
+                                            <h5 class="gallery-title">{{ $item->judul }}</h5>
+                                            <div class="gallery-date">
+                                                <i class="far fa-calendar"></i>
+                                                {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                                            </div>
                                         </div>
+
                                     </div>
 
                                 </div>
 
-                            </div>
+                            </a>
+                        @else
+                            {{-- Tidak ada media sama sekali --}}
+                            <div class="gallery-link" aria-disabled="true">
+                                <div class="gallery-thumb">
+                                    <div class="gallery-thumb-empty">
+                                        <i class="fas fa-image"></i>
+                                    </div>
 
-                        </a>
+                                    <div class="gallery-overlay">
+                                        <span class="gallery-badge {{ $isVideo ? 'video' : '' }}">
+                                            @if ($isVideo)
+                                                <i class="fas fa-play"></i> Video
+                                            @else
+                                                <i class="fas fa-camera"></i> Foto
+                                            @endif
+                                        </span>
+
+                                        <div class="gallery-info">
+                                            <h5 class="gallery-title">{{ $item->judul }}</h5>
+                                            <div class="gallery-date">
+                                                <i class="far fa-calendar"></i>
+                                                {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
                     </div>
 
                 @empty
@@ -147,7 +177,6 @@
 
             const galleryGrid = document.getElementById('galleryGrid');
             const filterBtns  = document.querySelectorAll('.filter-btn');
-            const items       = galleryGrid ? galleryGrid.querySelectorAll('.gallery-item') : [];
 
             // ===== Init GLightbox =====
             function initLightbox() {
@@ -165,20 +194,29 @@
             filterBtns.forEach(function (btn) {
                 btn.addEventListener('click', function () {
 
+                    // Set active state
                     filterBtns.forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
 
-                    const filter = this.dataset.filter;
+                    const filter = (this.dataset.filter || 'all').toLowerCase().trim();
+
+                    // Ambil item terbaru (setelah render)
+                    const items = galleryGrid
+                        ? galleryGrid.querySelectorAll('.gallery-item')
+                        : [];
 
                     items.forEach(function (item) {
-                        const cocok = (filter === 'all' || item.dataset.kategori === filter);
+                        const kategori = (item.dataset.kategori || '').toLowerCase().trim();
+                        const cocok = (filter === 'all' || kategori === filter);
+
                         item.classList.toggle('is-hidden', !cocok);
                     });
 
-                    // Reinit lightbox supaya navigasi prev/next
-                    // hanya mengikuti item yang kelihatan
-                    lightbox.destroy();
-                    lightbox = initLightbox();
+                    // Reinit lightbox supaya prev/next hanya mengikuti item yang terlihat
+                    if (lightbox) {
+                        lightbox.destroy();
+                        lightbox = initLightbox();
+                    }
                 });
             });
 

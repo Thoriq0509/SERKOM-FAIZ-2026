@@ -1,37 +1,42 @@
 /* Font Montserrat */
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat/Montserrat-Regular.ttf') format('truetype');
+    src: url('../../fonts/mosentrat/static/Montserrat-Regular.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat/Montserrat-Medium.ttf') format('truetype');
+    src: url('../../fonts/mosentrat/static/Montserrat-Medium.ttf') format('truetype');
     font-weight: 500;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat/Montserrat-SemiBold.ttf') format('truetype');
+    src: url('../../fonts/mosentrat/static/Montserrat-SemiBold.ttf') format('truetype');
     font-weight: 600;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat/Montserrat-Bold.ttf') format('truetype');
+    src: url('../../fonts/mosentrat/static/Montserrat-Bold.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat/Montserrat-ExtraBold.ttf') format('truetype');
+    src: url('../../fonts/mosentrat/static/Montserrat-ExtraBold.ttf') format('truetype');
     font-weight: 800;
     font-style: normal;
+    font-display: swap;
 }
 
 
@@ -130,6 +135,11 @@
     color: #3b82f6;
 }
 
+.filter-btn:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
 .filter-btn.active {
     background: #1f2f46;
     border-color: #1f2f46;
@@ -148,10 +158,21 @@
     position: relative;
 }
 
+.gallery-item.is-hidden {
+    display: none !important;
+}
+
 .gallery-link {
     display: block;
     text-decoration: none;
     color: inherit;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.gallery-link:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 3px;
 }
 
 .gallery-thumb {
@@ -169,13 +190,68 @@
     object-fit: cover;
     object-position: center;
     transition: transform .6s ease;
+    display: block;
 }
 
 .gallery-link:hover .gallery-img {
     transform: scale(1.08);
 }
 
-/* Overlay */
+
+/* Placeholder (tanpa gambar / youtube tanpa thumbnail) */
+.gallery-thumb-empty {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #eef2f7 0%, #dbe3ee 100%);
+    color: #94a3b8;
+    font-size: 42px;
+}
+
+.gallery-thumb-empty.youtube {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    color: #dc2626;
+}
+
+.gallery-thumb-empty.video {
+    background: linear-gradient(135deg, #1f2f46 0%, #2a3f5f 100%);
+    color: rgba(255, 255, 255, .85);
+}
+
+
+/* Play Overlay (video) */
+.gallery-play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.gallery-play-overlay i {
+    width: 58px;
+    height: 58px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(220, 38, 38, .9);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 20px;
+    padding-left: 4px;
+    box-shadow: 0 8px 24px rgba(220, 38, 38, .4);
+    transition: transform .3s ease;
+}
+
+.gallery-link:hover .gallery-play-overlay i {
+    transform: scale(1.12);
+}
+
+
+/* Overlay Info (judul + tanggal) */
 .gallery-overlay {
     position: absolute;
     inset: 0;
@@ -194,7 +270,6 @@
     opacity: 1;
 }
 
-/* Badge */
 .gallery-badge {
     position: absolute;
     top: 14px;
@@ -221,7 +296,6 @@
     font-size: 9px;
 }
 
-/* Info (Judul + Tanggal) */
 .gallery-info {
     color: #fff;
     transform: translateY(10px);
@@ -262,6 +336,29 @@
 }
 
 
+/* Empty State */
+.gallery-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: #94a3b8;
+}
+
+.gallery-empty i {
+    font-size: 48px;
+    margin-bottom: 12px;
+    opacity: .5;
+    display: block;
+}
+
+.gallery-empty p {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+
 /* GLightbox Custom */
 .glightbox-clean .gslide-title {
     font-family: 'Montserrat', sans-serif;
@@ -271,6 +368,35 @@
 .glightbox-clean .gslide-desc {
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
+}
+
+/* GLightbox Responsive Fix */
+.glightbox-container .gslide,
+.glightbox-container .gslide-inner-content,
+.glightbox-container .ginlined-content {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: auto !important;
+}
+
+.glightbox-container .gslide-image img {
+    max-width: 100% !important;
+    max-height: 85vh !important;
+    object-fit: contain !important;
+}
+
+.glightbox-container .gslide-video,
+.glightbox-container .gvideo-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+.glightbox-container .gslide-video iframe,
+.glightbox-container .gvideo-wrapper iframe {
+    width: 100% !important;
+    aspect-ratio: 16 / 9;
+    height: auto !important;
 }
 
 
@@ -312,4 +438,78 @@
     .gallery-title { font-size: 13px; }
     .gallery-date { font-size: 10px; }
     .gallery-badge { font-size: 9px; padding: 4px 9px; top: 10px; right: 10px; }
+
+    .gallery-play-overlay i {
+        width: 46px;
+        height: 46px;
+        font-size: 16px;
+    }
+
+    .gallery-thumb-empty { font-size: 32px; }
+
+    /* GLightbox mobile */
+    .glightbox-container .gslide {
+        padding: 0 10px;
+    }
+
+    .glightbox-container .gslide-image img {
+        max-height: 70vh !important;
+    }
+
+    .glightbox-clean .gslide-description {
+        padding: 12px !important;
+    }
+
+    .glightbox-clean .gslide-title {
+        font-size: 15px !important;
+    }
+
+    .glightbox-clean .gslide-desc {
+        font-size: 12px !important;
+    }
+
+    .glightbox-clean .gclose,
+    .glightbox-clean .gnext,
+    .glightbox-clean .gprev {
+        transform: scale(.75);
+    }
+}
+
+@media (max-width: 480px) {
+    .page-hero { padding: 60px 0 40px; }
+    .page-hero-title { font-size: 22px; }
+
+    .gallery-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .filter-btn {
+        padding: 7px 14px;
+        font-size: 10px;
+        letter-spacing: .5px;
+    }
+
+    .gallery-title { font-size: 12px; }
+    .gallery-date { font-size: 9px; }
+}
+
+
+/* Aksesibilitas: Reduksi Animasi */
+@media (prefers-reduced-motion: reduce) {
+    .gallery-img,
+    .gallery-overlay,
+    .gallery-info,
+    .gallery-play-overlay i,
+    .filter-btn {
+        transition: none !important;
+    }
+
+    .gallery-link:hover .gallery-img {
+        transform: none;
+    }
+
+    .gallery-link:hover .gallery-play-overlay i {
+        transform: none;
+    }
 }

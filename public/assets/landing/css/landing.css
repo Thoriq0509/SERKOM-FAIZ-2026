@@ -9,7 +9,7 @@ body {
     background: #ffffff;
     margin: 0;
     line-height: 1.6;
-    overflow-x: hidden;
+    overflow-x: clip;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -26,14 +26,26 @@ img { max-width: 100%; display: block; }
 
 main {
     flex: 1 0 auto;
+    padding-top: 76px; /* jarak dari navbar fixed */
+}
+
+/* Hero carousel: negate padding main biar nempel navbar */
+main > .hero-carousel:first-child {
+    margin-top: -76px;
 }
 
 
-/* Navbar */
+/* Navbar — pakai FIXED biar selalu nempel */
 .navbar-custom {
     background-color: #1f2f46;
     padding: 12px 0;
-    transition: box-shadow .3s ease, padding .3s ease;
+    transition: box-shadow .3s ease, padding .3s ease, background-color .3s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1030;
 }
 
 .navbar-custom.scrolled {
@@ -126,6 +138,14 @@ main {
 
 /* Navbar tablet & mobile */
 @media (max-width: 991.98px) {
+    main {
+        padding-top: 68px;
+    }
+
+    main > .hero-carousel:first-child {
+        margin-top: -68px;
+    }
+
     .navbar-custom .navbar-nav {
         padding-top: 10px;
     }
@@ -133,6 +153,14 @@ main {
     .navbar-custom .nav-link {
         padding: 10px 14px !important;
         border-radius: 8px;
+    }
+
+    .navbar-custom .navbar-collapse {
+        background: #1f2f46;
+        margin-top: 12px;
+        padding: 12px;
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, .2);
     }
 }
 
@@ -163,7 +191,6 @@ main {
     flex-shrink: 0;
 }
 
-/* Brand footer */
 .footer-brand {
     display: flex;
     align-items: center;
@@ -199,7 +226,6 @@ main {
     max-width: 340px;
 }
 
-/* Sosial media */
 .footer-social {
     display: flex;
     gap: 10px;
@@ -225,7 +251,6 @@ main {
     box-shadow: 0 8px 16px rgba(59, 130, 246, .4);
 }
 
-/* Judul kolom footer */
 .footer-title {
     color: #fff;
     font-family: 'Montserrat', sans-serif;
@@ -249,7 +274,6 @@ main {
     border-radius: 2px;
 }
 
-/* Kontak */
 .footer-contact {
     list-style: none;
     padding: 0;
@@ -277,7 +301,6 @@ main {
     flex-shrink: 0;
 }
 
-/* Tautan */
 .footer-links {
     list-style: none;
     padding: 0;
@@ -301,7 +324,6 @@ main {
     padding-left: 5px;
 }
 
-/* Copyright */
 .footer-bottom {
     text-align: center;
     padding: 22px 0;
@@ -318,7 +340,6 @@ main {
     font-weight: 700;
 }
 
-/* Footer tablet */
 @media (max-width: 991.98px) {
     .landing-footer {
         padding: 50px 0 0;
@@ -330,7 +351,6 @@ main {
     }
 }
 
-/* Footer mobile */
 @media (max-width: 767.98px) {
     .landing-footer {
         padding: 40px 0 0;

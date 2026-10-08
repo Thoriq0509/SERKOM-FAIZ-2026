@@ -31,15 +31,15 @@
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 <aside class="sidebar" id="sidebar">
-    <a href="{{ route('dashboard') }}" class="brand-box">
+    <a href="{{ route('admin.dashboard') }}" class="brand-box">
         <span>SISTEM MANAJEMEN</span>
     </a>
 
     <div class="nav-section-title">Navigasi Utama</div>
     <ul class="sidebar-menu">
         <li>
-            <a href="{{ route('dashboard') }}"
-               class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+            <a href="{{ route('admin.dashboard') }}"
+               class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                 <i class="fas fa-gauge-high"></i>
                 <span>Dashboard</span>
             </a>
@@ -85,8 +85,8 @@
 
         @if($role === 'Admin')
             <li>
-                <a href="{{ route('admin.guru') }}"
-                   class="{{ request()->routeIs('admin.guru*') ? 'active' : '' }}">
+                <a href="{{ route('admin.guru.index') }}"
+                   class="{{ request()->routeIs('admin.guru.*') ? 'active' : '' }}">
                     <i class="fas fa-chalkboard"></i>
                     <span>Kelola Guru</span>
                 </a>
@@ -95,8 +95,8 @@
 
         @if($role === 'Admin')
             <li>
-                <a href="{{ route('admin.siswa') }}"
-                   class="{{ request()->routeIs('admin.siswa*') ? 'active' : '' }}">
+                <a href="{{ route('admin.siswa.index') }}"
+                   class="{{ request()->routeIs('admin.siswa.*') ? 'active' : '' }}">
                     <i class="fas fa-user-graduate"></i>
                     <span>Kelola Siswa</span>
                 </a>
@@ -198,7 +198,7 @@
             <nav class="breadcrumb-clean" aria-label="breadcrumb">
                 <ol>
                     <li>
-                        <a href="{{ route('dashboard') }}">
+                        <a href="{{ route('admin.dashboard') }}">
                             <i class="fas fa-house"></i>
                             <span>Dashboard</span>
                         </a>
