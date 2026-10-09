@@ -11,8 +11,14 @@
 
     <title>Dashboard Admin - {{ $schoolProfile->nama_sekolah ?? 'Sistem Sekolah' }}</title>
 
-    <link rel="icon" type="image/png"
-          href="{{ $schoolProfile?->logo ? asset('storage/'.$schoolProfile->logo) : asset('assets/admin/img/smatn.png') }}">
+    {{-- Favicon dari database --}}
+    @if (!empty($schoolProfile?->logo))
+        <link rel="icon" type="image/png" href="{{ asset('storage/' . $schoolProfile->logo) }}">
+        <link rel="apple-touch-icon" href="{{ asset('storage/' . $schoolProfile->logo) }}">
+    @else
+        <link rel="icon" type="image/png" href="{{ asset('assets/admin/img/smatn.png') }}">
+        <link rel="apple-touch-icon" href="{{ asset('assets/admin/img/smatn.png') }}">
+    @endif
 
     {{-- CSS Admin --}}
     <link rel="stylesheet" href="{{ asset('assets/admin/css/bootstrap.min.css') }}">

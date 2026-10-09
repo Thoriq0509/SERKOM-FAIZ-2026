@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Sekolah')</title>
 
+    {{-- Favicon dari database --}}
+    @if (!empty($schoolProfile?->logo))
+        <link rel="icon" type="image/png" href="{{ asset('storage/' . $schoolProfile->logo) }}">
+        <link rel="apple-touch-icon" href="{{ asset('storage/' . $schoolProfile->logo) }}">
+    @else
+        <link rel="icon" type="image/png" href="{{ asset('assets/admin/img/smatn.png') }}">
+        <link rel="apple-touch-icon" href="{{ asset('assets/admin/img/smatn.png') }}">
+    @endif
+
     <link rel="stylesheet" href="{{ asset('assets/landing/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/landing/aos-library/aos.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/landing/css/landing.css') }}">
