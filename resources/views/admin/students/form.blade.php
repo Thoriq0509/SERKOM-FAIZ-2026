@@ -5,7 +5,7 @@
 @endpush
 
 @section('breadcrumb')
-    <li><a href="{{ route('admin.siswa') }}">Data Siswa</a></li>
+    <li><a href="{{ route('admin.siswa.index') }}">Data Siswa</a></li>
     <li>{{ $student->exists ? 'Edit Data Siswa' : 'Tambah Data Siswa' }}</li>
 @endsection
 
@@ -35,7 +35,7 @@
             </p>
         </div>
 
-        <a href="{{ route('admin.siswa') }}" class="btn btn-back">
+        <a href="{{ route('admin.siswa.index') }}" class="btn btn-back">
             <i class="fas fa-arrow-left me-2"></i>Kembali
         </a>
     </div>
@@ -184,7 +184,7 @@
 
                 <!-- Action bar -->
                 <div class="action-bar">
-                    <a href="{{ route('admin.siswa') }}" class="btn btn-cancel">
+                    <a href="{{ route('admin.siswa.index') }}" class="btn btn-cancel">
                         <i class="fas fa-times me-2"></i>Batal
                     </a>
                     <button type="submit" class="btn btn-save">
