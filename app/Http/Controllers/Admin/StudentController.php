@@ -44,7 +44,7 @@ class StudentController extends Controller
         Student::create($validated);
 
         return redirect()
-            ->route('admin.siswa')
+            ->route('admin.siswa.index')
             ->with('success', 'Data siswa berhasil ditambahkan.');
     }
 
@@ -83,7 +83,7 @@ class StudentController extends Controller
         $student->update($validated);
 
         return redirect()
-            ->route('admin.siswa')
+            ->route('admin.siswa.index')
             ->with('success', 'Data siswa berhasil diperbarui.');
     }
 
@@ -97,7 +97,7 @@ class StudentController extends Controller
         $student->delete();
 
         return redirect()
-            ->route('admin.siswa')
+            ->route('admin.siswa.index')
             ->with('success', 'Data siswa berhasil dihapus.');
     }
 

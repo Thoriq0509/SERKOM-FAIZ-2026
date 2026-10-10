@@ -13,7 +13,7 @@
 @endpush
 
 @section('breadcrumb')
-    <li><a href="{{ route('admin.guru') }}">Data Guru</a></li>
+    <li><a href="{{ route('admin.guru.index') }}">Data Guru</a></li>
     <li>{{ $isEdit ? 'Edit Guru' : 'Tambah Guru' }}</li>
 @endsection
 
@@ -34,7 +34,7 @@
             </p>
         </div>
 
-        <a href="{{ route('admin.guru') }}" class="btn btn-back">
+        <a href="{{ route('admin.guru.index') }}" class="btn btn-back">
             <i class="fas fa-arrow-left me-2"></i>Kembali
         </a>
     </div>
@@ -189,7 +189,7 @@
                 </div>
 
                 <div class="action-bar">
-                    <a href="{{ route('admin.guru') }}" class="btn btn-cancel">
+                    <a href="{{ route('admin.guru.index') }}" class="btn btn-cancel">
                         <i class="fas fa-times me-2"></i>Batal
                     </a>
                     <button type="submit" class="btn btn-save">

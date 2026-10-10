@@ -52,7 +52,7 @@ class TeacherController extends Controller
         $teacher->save();
 
         return redirect()
-            ->route('admin.guru')
+            ->route('admin.guru.index')
             ->with('success', 'Data guru berhasil ditambahkan.');
     }
 
@@ -116,7 +116,7 @@ class TeacherController extends Controller
         $teacher->save();
 
         return redirect()
-            ->route('admin.guru')
+            ->route('admin.guru.index')
             ->with('success', 'Data guru berhasil diperbarui.');
     }
 
@@ -139,7 +139,7 @@ class TeacherController extends Controller
         $teacher->delete();
 
         return redirect()
-            ->route('admin.guru')
+            ->route('admin.guru.index')
             ->with('success', 'Data guru berhasil dihapus.');
     }
 
@@ -163,7 +163,7 @@ class TeacherController extends Controller
     private function backWithError(string $message)
     {
         return redirect()
-            ->route('admin.guru')
+            ->route('admin.guru.index')
             ->with('error', $message);
     }
 

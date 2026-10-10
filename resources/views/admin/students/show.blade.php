@@ -5,7 +5,7 @@
 @endpush
 
 @section('breadcrumb')
-    <li><a href="{{ route('admin.siswa') }}">Data Siswa</a></li>
+    <li><a href="{{ route('admin.siswa.index') }}">Data Siswa</a></li>
     <li>Detail Siswa</li>
 @endsection
 
@@ -24,7 +24,7 @@
             <p class="page-subtitle">Informasi lengkap mengenai peserta didik.</p>
         </div>
 
-        <a href="{{ route('admin.siswa') }}" class="btn btn-back">
+        <a href="{{ route('admin.siswa.index') }}" class="btn btn-back">
             <i class="fas fa-arrow-left me-2"></i>Kembali
         </a>
     </div>
@@ -111,7 +111,7 @@
 
             <!-- Action bar -->
             <div class="action-bar">
-                <a href="{{ route('admin.siswa') }}" class="btn btn-cancel">
+                <a href="{{ route('admin.siswa.index') }}" class="btn btn-cancel">
                     <i class="fas fa-arrow-left me-2"></i>Kembali
                 </a>
 
