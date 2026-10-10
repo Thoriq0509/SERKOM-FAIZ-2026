@@ -100,6 +100,52 @@
 }
 
 
+/* Section umum (tambahan) */
+.section-block {
+    padding: 80px 0;
+}
+
+.section-alt {
+    background: #f8fafc;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-label {
+    display: inline-block;
+    color: #3b82f6;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+}
+
+.section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 34px;
+    font-weight: 800;
+    color: #1f2f46;
+    margin: 0 0 12px;
+    letter-spacing: -.5px;
+    text-transform: uppercase;
+}
+
+.section-desc {
+    color: #6b7280;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+
 /* Halaman Profil — Info Card */
 .info-card {
     background: #fff;
@@ -145,6 +191,121 @@
     font-weight: 600;
     color: #1f2f46;
     line-height: 1.5;
+}
+
+
+/* Media Sosial Card */
+.social-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 22px 24px;
+    background: #fff;
+    border: 1px solid #eef1f6;
+    border-radius: 16px;
+    text-decoration: none;
+    color: #1f2f46;
+    transition: all .3s ease;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+}
+
+.social-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(31, 47, 70, .12);
+    color: #1f2f46;
+}
+
+.social-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 4px;
+    transition: width .3s ease;
+}
+
+.social-card:hover::before {
+    width: 8px;
+}
+
+/* Facebook */
+.social-card.facebook::before {
+    background: #1877f2;
+}
+
+.social-card.facebook .social-icon {
+    background: #1877f2;
+}
+
+/* Instagram */
+.social-card.instagram::before {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+}
+
+.social-card.instagram .social-icon {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+}
+
+/* WhatsApp */
+.social-card.whatsapp::before {
+    background: #25d366;
+}
+
+.social-card.whatsapp .social-icon {
+    background: #25d366;
+}
+
+.social-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 24px;
+    flex-shrink: 0;
+    transition: transform .3s ease;
+}
+
+.social-card:hover .social-icon {
+    transform: scale(1.08) rotate(-4deg);
+}
+
+.social-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.social-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: #1f2f46;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 4px;
+}
+
+.social-value {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #6b7280;
+}
+
+.social-arrow {
+    color: #cbd5e1;
+    font-size: 16px;
+    transition: all .3s ease;
+}
+
+.social-card:hover .social-arrow {
+    color: #3b82f6;
+    transform: translateX(4px);
 }
 
 
@@ -214,7 +375,7 @@
 }
 
 
-/* Halaman Sejarah — Hero Gambar */
+/* Halaman Sejarah / Profil — Hero Gambar */
 .sejarah-hero {
     position: relative;
     width: 100%;
@@ -293,6 +454,9 @@
     .profile-hero { padding: 80px 0 60px; }
     .profile-hero-title { font-size: 34px; }
 
+    .section-block { padding: 60px 0; }
+    .section-title { font-size: 28px; }
+
     .sejarah-hero { height: 320px; }
     .sejarah-hero-title { padding: 0 40px; }
     .sejarah-hero-title h1 { font-size: 42px; }
@@ -303,9 +467,18 @@
     .profile-hero-title { font-size: 26px; }
     .profile-hero-desc { font-size: 13.5px; }
 
+    .section-block { padding: 50px 0; }
+    .section-title { font-size: 22px; }
+    .section-header { margin-bottom: 35px; }
+
     .info-card { padding: 20px 18px; }
     .info-icon { width: 40px; height: 40px; font-size: 15px; margin-bottom: 14px; }
     .info-value { font-size: 13.5px; }
+
+    .social-card { padding: 18px 20px; gap: 14px; }
+    .social-icon { width: 48px; height: 48px; font-size: 20px; border-radius: 12px; }
+    .social-label { font-size: 14px; }
+    .social-value { font-size: 12px; }
 
     .vm-heading { font-size: 22px; }
     .vm-list li { padding-left: 44px; font-size: 13.5px; }
