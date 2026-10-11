@@ -1,58 +1,226 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistem Manajemen Profil Sekolah
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi profil sekolah berbasis web yang dibangun menggunakan framework Laravel 13. Aplikasi ini menyajikan informasi sekolah secara publik (profil, guru, siswa, ekstrakurikuler, berita, dan galeri) serta dilengkapi dengan dashboard admin untuk pengelolaan konten.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Daftar Isi
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- [Fitur](#fitur)
+- [Teknologi](#teknologi)
+- [Persyaratan Sistem](#persyaratan-sistem)
+- [Instalasi](#instalasi)
+- [Akun Default](#akun-default)
+- [Struktur Folder](#struktur-folder)
+- [Hak Akses Pengguna](#hak-akses-pengguna)
+- [Author](#author)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Fitur
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Publik (Tanpa Login)
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Beranda dengan hero carousel dan sambutan Kepala Sekolah
+- Profil sekolah, sejarah, visi, dan misi
+- Daftar guru beserta detail
+- Daftar siswa
+- Daftar ekstrakurikuler beserta detail
+- Berita sekolah beserta detail
+- Galeri foto dan video (mendukung link YouTube)
+- Tautan media sosial sekolah (Facebook, Instagram, WhatsApp)
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### Dashboard Admin & Operator
 
-## Agentic Development
+- Login dan logout dengan sistem autentikasi
+- Dashboard dengan statistik data
+- Kelola profil sekolah (nama, NPSN, alamat, kontak, visi, misi, sambutan, media sosial)
+- Kelola data pengelola (khusus Admin)
+- Kelola data guru (khusus Admin)
+- Kelola data siswa (khusus Admin)
+- Kelola ekstrakurikuler
+- Kelola berita (dengan slug otomatis)
+- Kelola galeri foto dan video
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+---
+
+## Teknologi
+
+- **Backend:** Laravel 13 (PHP 8.x)
+- **Database:** MySQL / MariaDB
+- **Frontend:** Bootstrap 5, HTML, CSS, JavaScript
+- **Template Admin:** Admin Dashboard Kit (dikustomisasi)
+- **Library Tambahan:** Font Awesome, AOS, GLightbox, DataTables
+- **Font:** Montserrat
+- **Version Control:** Git
+
+---
+
+## Persyaratan Sistem
+
+- PHP >= 8.1
+- Composer
+- MySQL / MariaDB
+- Node.js & NPM (opsional)
+- Web server (Apache / Nginx / `php artisan serve`)
+
+---
+
+## Instalasi
+
+### 1. Clone Repository
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/username/profil-sekolah.git
+cd profil-sekolah
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Install Dependency
 
-## Contributing
+```bash
+composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Copy File Environment
 
-## Code of Conduct
+```bash
+cp .env.example .env
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 4. Generate Application Key
 
-## Security Vulnerabilities
+```bash
+php artisan key:generate
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 5. Konfigurasi Database
 
-## License
+Edit file `.env` dan sesuaikan konfigurasi database:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=db_school_profile
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+### 6. Jalankan Migration & Seeder
+
+```bash
+php artisan migrate --seed
+```
+
+### 7. Buat Symlink Storage
+
+```bash
+php artisan storage:link
+```
+
+### 8. Jalankan Server
+
+```bash
+php artisan serve
+```
+
+### 9. Buka di Browser
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+## Akun Default
+
+| Role     | Username | Password |
+|----------|----------|----------|
+| Admin    | admin    | password |
+| Operator | operator | password |
+
+> **Catatan:** Segera ganti password setelah login pertama kali demi keamanan.
+
+---
+
+## Struktur Folder
+
+```
+profil-sekolah/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── AuthController.php
+│   │   │   ├── LandingPageController.php
+│   │   │   └── Admin/
+│   │   │       ├── DashboardController.php
+│   │   │       ├── UserController.php
+│   │   │       ├── TeacherController.php
+│   │   │       ├── StudentController.php
+│   │   │       ├── SchoolProfileController.php
+│   │   │       ├── NewsController.php
+│   │   │       ├── ExtracurricularController.php
+│   │   │       └── GalleryController.php
+│   │   └── Middleware/
+│   │       └── RoleMiddleware.php
+│   └── Models/
+│       ├── User.php
+│       ├── SchoolProfile.php
+│       ├── Teacher.php
+│       ├── Student.php
+│       ├── News.php
+│       ├── Gallery.php
+│       └── Extracurricular.php
+├── database/
+│   ├── migrations/
+│   └── seeders/
+├── resources/
+│   └── views/
+│       ├── landing/
+│       ├── admin/
+│       ├── auth/
+│       └── layouts/
+├── routes/
+│   └── web.php
+├── public/
+│   └── assets/
+│       ├── admin/
+│       ├── landing/
+│       ├── datatables/
+│       └── fontawesome/
+└── README.md
+```
+
+---
+
+## Hak Akses Pengguna
+
+| Fitur                    | Publik | Operator | Admin |
+|--------------------------|:------:|:--------:|:-----:|
+| Melihat halaman publik   |   ✅   |    ✅    |  ✅   |
+| Login / Logout           |   ❌   |    ✅    |  ✅   |
+| Melihat Dashboard        |   ❌   |    ✅    |  ✅   |
+| Kelola Profil Sekolah    |   ❌   |    ✅    |  ✅   |
+| Kelola Ekstrakurikuler   |   ❌   |    ✅    |  ✅   |
+| Kelola Berita            |   ❌   |    ✅    |  ✅   |
+| Kelola Galeri            |   ❌   |    ✅    |  ✅   |
+| Kelola Data Pengelola    |   ❌   |    ❌    |  ✅   |
+| Kelola Data Guru         |   ❌   |    ❌    |  ✅   |
+| Kelola Data Siswa        |   ❌   |    ❌    |  ✅   |
+
+---
+
+## Author
+
+**Faiz At Thoriq**
+
+- Sekolah: SMK YPC Tasikmalaya
+- Jurusan: Pengembangan Perangkat Lunak dan Gim (PPLG)
+- Konsentrasi Keahlian: Rekayasa Perangkat Lunak (RPL)
+- Tahun Ajaran: 2026/2027
+
+---
+
+## Lisensi
+
+Project ini dibuat untuk keperluan tugas sekolah (Uji Sertifikasi Kompetensi / LSP). Dilarang memperjualbelikan tanpa izin pembuat.
