@@ -29,8 +29,12 @@ main {
     padding-top: 76px; /* jarak dari navbar fixed */
 }
 
-/* Hero carousel: negate padding main biar nempel navbar */
-main > .hero-carousel:first-child {
+/* Semua hero yang jadi child pertama <main> nempel navbar */
+main > .hero-carousel:first-child,
+main > .page-hero:first-child,
+main > .profile-hero:first-child,
+main > .sejarah-hero:first-child,
+main > .news-hero:first-child {
     margin-top: -76px;
 }
 
@@ -142,7 +146,11 @@ main > .hero-carousel:first-child {
         padding-top: 68px;
     }
 
-    main > .hero-carousel:first-child {
+    main > .hero-carousel:first-child,
+    main > .page-hero:first-child,
+    main > .profile-hero:first-child,
+    main > .sejarah-hero:first-child,
+    main > .news-hero:first-child {
         margin-top: -68px;
     }
 

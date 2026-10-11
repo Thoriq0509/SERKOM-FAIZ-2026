@@ -15,11 +15,7 @@ use App\Http\Controllers\Admin\ExtracurricularController;
 use App\Http\Controllers\Admin\GalleryController;
 
 
-/*
-|--------------------------------------------------------------------------
-| PUBLIC — Landing Page
-|--------------------------------------------------------------------------
-*/
+/* PUBLIC — Landing Page */
 
 Route::controller(LandingPageController::class)->group(function () {
 
@@ -50,11 +46,7 @@ Route::controller(LandingPageController::class)->group(function () {
 });
 
 
-/*
-|--------------------------------------------------------------------------
-| GUEST — Login
-|--------------------------------------------------------------------------
-*/
+/* GUEST — Login */
 
 Route::middleware('guest')->group(function () {
     Route::get ('/login', [AuthController::class, 'index'])->name('login');
@@ -62,11 +54,7 @@ Route::middleware('guest')->group(function () {
 });
 
 
-/*
-|--------------------------------------------------------------------------
-| AUTH — Area Admin
-|--------------------------------------------------------------------------
-*/
+/* AUTH — Area Admin */
 
 Route::middleware('auth')->group(function () {
 
