@@ -6,12 +6,11 @@
 
     @php
         $role = Auth::user()->role ?? null;
-        $schoolProfile = \App\Models\SchoolProfile::first();
     @endphp
 
     <title>Dashboard Admin - {{ $schoolProfile->nama_sekolah ?? 'Sistem Sekolah' }}</title>
 
-    {{-- Favicon dari database --}}
+    {{-- Favicon --}}
     @if (!empty($schoolProfile?->logo))
         <link rel="icon" type="image/png" href="{{ asset('storage/' . $schoolProfile->logo) }}">
         <link rel="apple-touch-icon" href="{{ asset('storage/' . $schoolProfile->logo) }}">
@@ -36,6 +35,7 @@
 
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
+{{-- ==================== SIDEBAR ==================== --}}
 <aside class="sidebar" id="sidebar">
     <a href="{{ route('admin.dashboard') }}" class="brand-box">
         <span>SISTEM MANAJEMEN</span>
@@ -55,14 +55,16 @@
     <div class="nav-section-title">Manajemen Data</div>
     <ul class="sidebar-menu">
 
+        {{-- Profil Sekolah --}}
         <li>
-            <a href="{{ route('admin.school_profile') }}"
-               class="{{ request()->routeIs('admin.school_profile*') ? 'active' : '' }}">
+            <a href="{{ route('admin.school_profile.index') }}"
+               class="{{ request()->routeIs('admin.school_profile.*') ? 'active' : '' }}">
                 <i class="fas fa-school"></i>
                 <span>Profil Sekolah</span>
             </a>
         </li>
 
+        {{-- Data Pengelola (Admin only) --}}
         @if($role === 'Admin')
             <li>
                 <a href="{{ route('admin.users.index') }}"
@@ -73,6 +75,7 @@
             </li>
         @endif
 
+        {{-- Kelola Berita --}}
         <li>
             <a href="{{ route('admin.news.index') }}"
                class="{{ request()->routeIs('admin.news.*') ? 'active' : '' }}">
@@ -81,6 +84,7 @@
             </a>
         </li>
 
+        {{-- Kelola Ekstrakurikuler --}}
         <li>
             <a href="{{ route('admin.extracurricular.index') }}"
                class="{{ request()->routeIs('admin.extracurricular.*') ? 'active' : '' }}">
@@ -89,6 +93,7 @@
             </a>
         </li>
 
+        {{-- Kelola Guru (Admin only) --}}
         @if($role === 'Admin')
             <li>
                 <a href="{{ route('admin.guru.index') }}"
@@ -99,6 +104,7 @@
             </li>
         @endif
 
+        {{-- Kelola Siswa (Admin only) --}}
         @if($role === 'Admin')
             <li>
                 <a href="{{ route('admin.siswa.index') }}"
@@ -109,6 +115,7 @@
             </li>
         @endif
 
+        {{-- Kelola Galeri --}}
         <li>
             <a href="{{ route('admin.gallery.index') }}"
                class="{{ request()->routeIs('admin.gallery.*') ? 'active' : '' }}">
@@ -120,8 +127,10 @@
     </ul>
 </aside>
 
+{{-- ==================== MAIN WRAPPER ==================== --}}
 <div class="main-wrapper">
 
+    {{-- Top Navbar --}}
     <header class="top-navbar">
 
         <div class="d-flex align-items-center gap-2 gap-md-3 flex-grow-1 min-w-0">
@@ -144,7 +153,7 @@
             </div>
         </div>
 
-        {{-- Hanya dropdown profil admin --}}
+        {{-- Dropdown Admin --}}
         <div class="dropdown" id="adminDropdownWrapper">
             <button class="admin-profile-btn"
                     type="button"
@@ -185,7 +194,7 @@
                 <li><hr class="dropdown-divider"></li>
 
                 <li>
-                    <form action="{{ route('logout') }}" method="POST" class="m-0">
+                    <form action="{{ route('auth.logout') }}" method="POST" class="m-0">
                         @csrf
                         <button type="submit" class="admin-dropdown-item text-danger">
                             <i class="fas fa-right-from-bracket"></i>
@@ -198,6 +207,7 @@
 
     </header>
 
+    {{-- Konten --}}
     <main class="content-area">
 
         @hasSection('breadcrumb')
@@ -217,20 +227,25 @@
         @yield('content')
     </main>
 
+    {{-- Footer --}}
     <footer class="footer-box">
-        &copy; {{ date('Y') }} {{ $schoolProfile->nama_sekolah ?? 'Sistem Manajemen Sekolah' }}. Hak cipta dilindungi.
+        &copy; {{ date('Y') }}
+        {{ $schoolProfile->nama_sekolah ?? 'Sistem Manajemen Sekolah' }}.
+        Hak cipta dilindungi.
     </footer>
 
 </div>
 
-{{-- JS: jQuery + DataTables --}}
+{{-- ==================== SCRIPTS ==================== --}}
 <script src="{{ asset('assets/datatables/js/jquery-3.7.1.min.js') }}"></script>
 <script src="{{ asset('assets/datatables/js/datatables.min.js') }}"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    // Sidebar toggle
+    /* =========================================================
+       Sidebar Toggle
+    ========================================================= */
     const sidebarToggle  = document.getElementById("sidebarToggle");
     const sidebarOverlay = document.getElementById("sidebarOverlay");
     const sidebar        = document.getElementById("sidebar");
@@ -263,10 +278,12 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Admin dropdown
-    const adminBtn   = document.getElementById("adminDropdown");
-    const adminMenu  = document.getElementById("adminDropdownMenu");
-    const adminWrap  = document.getElementById("adminDropdownWrapper");
+    /* =========================================================
+       Admin Dropdown
+    ========================================================= */
+    const adminBtn  = document.getElementById("adminDropdown");
+    const adminMenu = document.getElementById("adminDropdownMenu");
+    const adminWrap = document.getElementById("adminDropdownWrapper");
 
     function positionDropdown() {
         if (!adminBtn || !adminMenu) return;
@@ -339,7 +356,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }, true);
     }
 
-    // Auto-dismiss alert 3 detik
+    /* =========================================================
+       Auto-dismiss alert 3 detik
+    ========================================================= */
     document.querySelectorAll("[data-alert]").forEach(function (box) {
         setTimeout(function () {
             box.style.transition = "opacity .4s ease, transform .4s ease";
@@ -353,7 +372,9 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 <script>
-    // Auto-init semua tabel yang punya atribut data-datatable
+    /* =========================================================
+       Auto-init DataTable
+    ========================================================= */
     $(function () {
         $('table[data-datatable]').each(function () {
             if (!$.fn.DataTable.isDataTable(this)) {

@@ -21,14 +21,56 @@
     <link rel="stylesheet" href="{{ asset('assets/fontawesome/css/all.min.css') }}">
 
     @stack('styles')
+
+    <style>
+        /* ====== Navbar Login Button ====== */
+        .btn-login-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 22px;
+            background: linear-gradient(135deg, #0d6efd, #0a58ca);
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+            color: #fff !important;
+        }
+
+        .btn-login-nav:hover {
+            background: linear-gradient(135deg, #0a58ca, #084298);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(13, 110, 253, 0.45);
+            color: #fff !important;
+        }
+
+        .btn-login-nav i {
+            font-size: 13px;
+        }
+
+        /* ====== Navbar saat scrolled ====== */
+        .navbar-custom.scrolled {
+            background-color: #fff !important;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        @media (max-width: 991.98px) {
+            .btn-login-nav {
+                margin-top: 12px;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
 
-    {{-- Navbar --}}
+    {{-- ==================== NAVBAR ==================== --}}
     <nav class="navbar navbar-expand-lg navbar-custom" id="mainNavbar">
         <div class="container">
 
-            {{-- Brand: logo + divider + nama sekolah --}}
+            {{-- Brand --}}
             <a class="navbar-brand navbar-brand-custom" href="{{ route('landing.dashboard') }}">
                 @if ($schoolProfile && $schoolProfile->logo)
                     <img src="{{ asset('storage/' . $schoolProfile->logo) }}"
@@ -101,7 +143,7 @@
                         </ul>
                     </li>
 
-                    {{-- Menu lain --}}
+                    {{-- Menu lainnya --}}
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('landing.teachers*') ? 'active' : '' }}"
                            href="{{ route('landing.teachers') }}">Guru</a>
@@ -118,6 +160,19 @@
                         <a class="nav-link {{ request()->routeIs('landing.gallery') ? 'active' : '' }}"
                            href="{{ route('landing.gallery') }}">Galeri</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('landing.ujikom') ? 'active' : '' }}"
+                           href="{{ route('landing.ujikom') }}">Ujikom</a>
+                    </li>
+
+                    {{-- Button Login --}}
+                    <li class="nav-item ms-lg-3">
+                        <a class="btn-login-nav {{ request()->routeIs('auth.login') ? 'active' : '' }}"
+                           href="{{ route('auth.login') }}">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login
+                        </a>
+                    </li>
 
                 </ul>
             </div>
@@ -125,12 +180,12 @@
         </div>
     </nav>
 
-    {{-- Konten halaman --}}
+    {{-- ==================== KONTEN ==================== --}}
     <main>
         @yield('content')
     </main>
 
-    {{-- Footer --}}
+    {{-- ==================== FOOTER ==================== --}}
     <footer class="landing-footer">
         <div class="container">
             <div class="row g-4">
@@ -155,7 +210,6 @@
                     </p>
 
                     <div class="footer-social">
-
                         @if (!empty($schoolProfile?->facebook))
                             <a href="{{ $schoolProfile->facebook }}"
                                target="_blank"
@@ -182,7 +236,6 @@
                                 <i class="fab fa-whatsapp"></i>
                             </a>
                         @endif
-
                     </div>
                 </div>
 
@@ -237,6 +290,7 @@
         </div>
     </footer>
 
+    {{-- ==================== SCRIPTS ==================== --}}
     <script src="{{ asset('assets/landing/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/landing/aos-library/aos.js') }}"></script>
     <script>
@@ -247,7 +301,6 @@
         });
     </script>
 
-    {{-- Navbar scroll effect --}}
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const navbar = document.getElementById("mainNavbar");

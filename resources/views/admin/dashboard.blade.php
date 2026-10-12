@@ -99,7 +99,7 @@
             <div class="row g-3">
 
                 <div class="col-6 col-md-4 col-xl-2">
-                    <a href="{{ route('admin.school_profile') }}" class="quick-access-item">
+                    <a href="{{ route('admin.school_profile.index') }}" class="quick-access-item">
                         <i class="fas fa-school"></i>
                         <span>Profil Sekolah</span>
                     </a>

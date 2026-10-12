@@ -15,7 +15,11 @@ use App\Http\Controllers\Admin\ExtracurricularController;
 use App\Http\Controllers\Admin\GalleryController;
 
 
-/* PUBLIC — Landing Page */
+/*
+|--------------------------------------------------------------------------
+| PUBLIC — Landing Page
+|--------------------------------------------------------------------------
+*/
 
 Route::controller(LandingPageController::class)->group(function () {
 
@@ -30,7 +34,8 @@ Route::controller(LandingPageController::class)->group(function () {
     Route::get('/teachers/{teacher:slug}', 'teacherShow')->name('landing.teachers.show');
 
     // Students
-    Route::get('/students', 'students')->name('landing.students');
+    Route::get('/students',                'students')   ->name('landing.students');
+    Route::get('/students/{student:nipd}', 'studentShow')->name('landing.students.show');
 
     // Extracurricular
     Route::get('/extracurricular',                        'extracurricular')    ->name('landing.extracurricular');
@@ -43,22 +48,36 @@ Route::controller(LandingPageController::class)->group(function () {
     // Gallery
     Route::get('/gallery', 'gallery')->name('landing.gallery');
 
+    // route ke ujikom buat ngitung rata rata nilai siswa
+    Route::get('/ujikom', 'ujikom')->name('landing.ujikom');
+
 });
 
 
-/* GUEST — Login */
+/*
+|--------------------------------------------------------------------------
+| GUEST — Login  (nama route pakai prefix "auth.")
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware('guest')->group(function () {
-    Route::get ('/login', [AuthController::class, 'index'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('login.proses');
+
+    Route::get ('/login', [AuthController::class, 'index'])->name('auth.login');
+    Route::post('/login', [AuthController::class, 'login'])->name('auth.login.proses');
+
 });
 
 
-/* AUTH — Area Admin */
+/*
+|--------------------------------------------------------------------------
+| AUTH — Area Admin
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware('auth')->group(function () {
 
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    // Logout
+    Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
     Route::prefix('admin')->name('admin.')->group(function () {
 
@@ -71,15 +90,15 @@ Route::middleware('auth')->group(function () {
 
             Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-            // Profil Sekolah
-            Route::prefix('profil')->name('school_profile')->group(function () {
-                Route::get   ('/',       [SchoolProfileController::class, 'index'])  ->name('');
-                Route::get   ('/edit',   [SchoolProfileController::class, 'edit'])   ->name('.edit');
-                Route::put   ('/update', [SchoolProfileController::class, 'update']) ->name('.update');
-                Route::delete('/delete', [SchoolProfileController::class, 'destroy'])->name('.destroy');
+            /* Profil Sekolah */
+            Route::prefix('profil')->name('school_profile.')->group(function () {
+                Route::get   ('/',       [SchoolProfileController::class, 'index'])  ->name('index');
+                Route::get   ('/edit',   [SchoolProfileController::class, 'edit'])   ->name('edit');
+                Route::put   ('/update', [SchoolProfileController::class, 'update']) ->name('update');
+                Route::delete('/delete', [SchoolProfileController::class, 'destroy'])->name('destroy');
             });
 
-            // News
+            /* News */
             Route::prefix('news')->name('news.')->group(function () {
                 Route::get   ('/',          [NewsController::class, 'index'])  ->name('index');
                 Route::get   ('/create',    [NewsController::class, 'create']) ->name('create');
@@ -90,7 +109,7 @@ Route::middleware('auth')->group(function () {
                 Route::delete('/{id}',      [NewsController::class, 'destroy'])->name('destroy');
             });
 
-            // Extracurricular
+            /* Extracurricular */
             Route::prefix('extracurricular')->name('extracurricular.')->group(function () {
                 Route::get   ('/',          [ExtracurricularController::class, 'index'])  ->name('index');
                 Route::get   ('/create',    [ExtracurricularController::class, 'create']) ->name('create');
@@ -101,7 +120,7 @@ Route::middleware('auth')->group(function () {
                 Route::delete('/{id}',      [ExtracurricularController::class, 'destroy'])->name('destroy');
             });
 
-            // Gallery
+            /* Gallery */
             Route::prefix('gallery')->name('gallery.')->group(function () {
                 Route::get   ('/',          [GalleryController::class, 'index'])  ->name('index');
                 Route::get   ('/create',    [GalleryController::class, 'create']) ->name('create');
@@ -111,17 +130,17 @@ Route::middleware('auth')->group(function () {
                 Route::put   ('/{id}',      [GalleryController::class, 'update']) ->name('update');
                 Route::delete('/{id}',      [GalleryController::class, 'destroy'])->name('destroy');
             });
-
         });
+
 
         /*
         |------------------------------------------------------------------
-        | Admin only
+        | Admin Only
         |------------------------------------------------------------------
         */
         Route::middleware('role:Admin')->group(function () {
 
-            // Users
+            /* Users */
             Route::prefix('users')->name('users.')->group(function () {
                 Route::get   ('/',          [UserController::class, 'index'])  ->name('index');
                 Route::get   ('/create',    [UserController::class, 'addEdit'])->name('create');
@@ -132,7 +151,7 @@ Route::middleware('auth')->group(function () {
                 Route::delete('/{id}',      [UserController::class, 'destroy'])->name('destroy');
             });
 
-            // Guru
+            /* Guru */
             Route::prefix('guru')->name('guru.')->group(function () {
                 Route::get   ('/',          [TeacherController::class, 'index'])  ->name('index');
                 Route::get   ('/create',    [TeacherController::class, 'create']) ->name('create');
@@ -143,7 +162,7 @@ Route::middleware('auth')->group(function () {
                 Route::delete('/{id}',      [TeacherController::class, 'destroy'])->name('destroy');
             });
 
-            // Siswa
+            /* Siswa */
             Route::prefix('siswa')->name('siswa.')->group(function () {
                 Route::get   ('/',          [StudentController::class, 'index'])  ->name('index');
                 Route::get   ('/create',    [StudentController::class, 'create']) ->name('create');
@@ -153,8 +172,6 @@ Route::middleware('auth')->group(function () {
                 Route::put   ('/{id}',      [StudentController::class, 'update']) ->name('update');
                 Route::delete('/{id}',      [StudentController::class, 'destroy'])->name('destroy');
             });
-
         });
-
     });
 });

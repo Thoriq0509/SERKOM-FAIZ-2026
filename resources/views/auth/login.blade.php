@@ -3,9 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Login - Sistem Manajemen Sekolah</title>
 
-    <link rel="icon" type="image/png" href="{{ asset('assets/admin/img/smatn.png') }}">
+    {{-- Favicon --}}
+    @if (!empty($schoolProfile?->logo))
+        <link rel="icon" type="image/png" href="{{ asset('storage/' . $schoolProfile->logo) }}">
+    @else
+        <link rel="icon" type="image/png" href="{{ asset('assets/admin/img/smatn.png') }}">
+    @endif
+
     <link rel="stylesheet" href="{{ asset('assets/admin/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/css/login.css') }}">
@@ -17,17 +24,37 @@
     <div class="login-card">
         <div class="login-body">
 
-            <!-- Logo -->
+            {{-- Logo --}}
             <div class="school-logo">
-                <img src="{{ asset('assets/admin/img/smatn.png') }}" alt="Logo Sekolah">
+                @if (!empty($schoolProfile?->logo))
+                    <img src="{{ asset('storage/' . $schoolProfile->logo) }}"
+                         alt="Logo {{ $schoolProfile->nama_sekolah ?? 'Sekolah' }}">
+                @else
+                    <img src="{{ asset('assets/admin/img/smatn.png') }}" alt="Logo Sekolah">
+                @endif
             </div>
 
-            <!-- Judul -->
+            {{-- Judul --}}
             <div class="school-title">Sistem Manajemen</div>
-            <div class="school-title">SMA TARUNA NUSANTARA</div>
+            <div class="school-title">
+                {{ $schoolProfile->nama_sekolah ?? 'SMA TARUNA NUSANTARA' }}
+            </div>
             <div class="school-subtitle">Silakan login untuk melanjutkan</div>
 
-            <!-- Alert error login -->
+            {{-- Alert sukses (misal dari redirect) --}}
+            @if (session('success'))
+                <div class="login-alert login-alert-success" role="alert" data-alert>
+                    <i class="fas fa-check-circle"></i>
+                    <div class="alert-body">
+                        {{ session('success') }}
+                    </div>
+                    <button type="button" class="alert-close" data-alert-close aria-label="Tutup">
+                        <i class="fas fa-xmark"></i>
+                    </button>
+                </div>
+            @endif
+
+            {{-- Alert error dari session --}}
             @if (session('error'))
                 <div class="login-alert" role="alert" data-alert>
                     <i class="fas fa-exclamation-circle"></i>
@@ -40,7 +67,7 @@
                 </div>
             @endif
 
-            <!-- Alert validasi -->
+            {{-- Alert validasi --}}
             @if ($errors->any())
                 <div class="login-alert" role="alert" data-alert>
                     <i class="fas fa-exclamation-triangle"></i>
@@ -58,11 +85,11 @@
                 </div>
             @endif
 
-            <!-- Form login -->
-            <form action="{{ route('login.proses') }}" method="POST">
+            {{-- Form login --}}
+            <form action="{{ route('auth.login.proses') }}" method="POST" autocomplete="on">
                 @csrf
 
-                <!-- Username -->
+                {{-- Username --}}
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>
                     <div class="input-group">
@@ -77,9 +104,12 @@
                                required
                                autofocus>
                     </div>
+                    @error('username')
+                        <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
 
-                <!-- Password -->
+                {{-- Password --}}
                 <div class="mb-4">
                     <label for="passwordField" class="form-label">Password</label>
                     <div class="input-group">
@@ -91,23 +121,31 @@
                                placeholder="Masukkan password..."
                                autocomplete="current-password"
                                required>
-                        <span class="input-group-text" id="togglePassword" title="Tampilkan password">
+                        <span class="input-group-text password-toggle"
+                              id="togglePassword"
+                              role="button"
+                              tabindex="0"
+                              title="Tampilkan password">
                             <i class="fas fa-eye" id="eyeIcon"></i>
                         </span>
                     </div>
+                    @error('password')
+                        <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
 
-                <!-- Tombol -->
+                {{-- Tombol --}}
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-login">
+                    <button type="submit" class="btn btn-login" id="btnLogin">
                         <i class="fas fa-right-to-bracket me-2"></i>MASUK KE DASHBOARD
                     </button>
                 </div>
             </form>
 
-            <!-- Footer -->
+            {{-- Footer --}}
             <div class="login-footer">
-                &copy; {{ date('Y') }} Sistem Manajemen Sekolah
+                &copy; {{ date('Y') }}
+                <strong>{{ $schoolProfile->nama_sekolah ?? 'Sistem Manajemen Sekolah' }}</strong>
             </div>
 
         </div>
@@ -119,23 +157,36 @@
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    // Toggle password
+    /* =========================================================
+       Toggle Password (klik + keyboard Enter/Space)
+    ========================================================= */
     const togglePassword = document.getElementById("togglePassword");
     const passwordField  = document.getElementById("passwordField");
     const eyeIcon        = document.getElementById("eyeIcon");
 
     if (togglePassword && passwordField && eyeIcon) {
-        togglePassword.addEventListener("click", function () {
+
+        function toggleVisibility() {
             const isPassword = passwordField.getAttribute("type") === "password";
 
             passwordField.setAttribute("type", isPassword ? "text" : "password");
             eyeIcon.classList.toggle("fa-eye", !isPassword);
             eyeIcon.classList.toggle("fa-eye-slash", isPassword);
             togglePassword.setAttribute("title", isPassword ? "Sembunyikan password" : "Tampilkan password");
+        }
+
+        togglePassword.addEventListener("click", toggleVisibility);
+        togglePassword.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                toggleVisibility();
+            }
         });
     }
 
-    // Tutup alert manual
+    /* =========================================================
+       Tutup Alert manual
+    ========================================================= */
     document.querySelectorAll("[data-alert-close]").forEach(function (btn) {
         btn.addEventListener("click", function (e) {
             e.preventDefault();
@@ -146,6 +197,30 @@ document.addEventListener("DOMContentLoaded", function () {
             setTimeout(() => box.remove(), 200);
         });
     });
+
+    /* =========================================================
+       Auto-hilangkan alert setelah 6 detik
+    ========================================================= */
+    document.querySelectorAll("[data-alert]").forEach(function (box) {
+        setTimeout(function () {
+            box.style.transition = "opacity .3s ease";
+            box.style.opacity = "0";
+            setTimeout(() => box.remove(), 300);
+        }, 6000);
+    });
+
+    /* =========================================================
+       Loading state saat submit
+    ========================================================= */
+    const form     = document.querySelector("form");
+    const btnLogin = document.getElementById("btnLogin");
+
+    if (form && btnLogin) {
+        form.addEventListener("submit", function () {
+            btnLogin.disabled = true;
+            btnLogin.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>MEMPROSES...';
+        });
+    }
 
 });
 </script>

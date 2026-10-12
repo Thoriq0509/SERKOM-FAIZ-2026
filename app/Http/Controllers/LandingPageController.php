@@ -102,4 +102,9 @@ class LandingPageController extends Controller
 
         return view('landing.gallery_page.gallery', compact('galleries'));
     }
+
+    public function ujikom()
+    {
+        return view('landing.ujikom_page.ujikom');
+    }
 }
