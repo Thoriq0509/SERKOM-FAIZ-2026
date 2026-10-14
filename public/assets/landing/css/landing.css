@@ -29,7 +29,7 @@ main {
     padding-top: 76px; /* jarak dari navbar fixed */
 }
 
-/* Semua hero yang jadi child pertama <main> nempel navbar */
+/* Hero pertama nempel navbar */
 main > .hero-carousel:first-child,
 main > .page-hero:first-child,
 main > .profile-hero:first-child,
@@ -39,7 +39,7 @@ main > .news-hero:first-child {
 }
 
 
-/* Navbar — pakai FIXED biar selalu nempel */
+/* Navbar — fixed biar selalu nempel */
 .navbar-custom {
     background-color: #1f2f46;
     padding: 12px 0;
@@ -52,9 +52,11 @@ main > .news-hero:first-child {
     z-index: 1030;
 }
 
+/* Navbar saat scrolled */
 .navbar-custom.scrolled {
     padding: 8px 0;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, .15);
+    background-color: #fff !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* Brand: logo + nama */
@@ -110,6 +112,32 @@ main > .news-hero:first-child {
 .navbar-custom .nav-link.active {
     color: #fff;
     background: rgba(255, 255, 255, .15);
+}
+
+/* Tombol login navbar */
+.btn-login-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 22px;
+    background: linear-gradient(135deg, #0d6efd, #0a58ca);
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+    color: #fff !important;
+}
+
+.btn-login-nav:hover {
+    background: linear-gradient(135deg, #0a58ca, #084298);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(13, 110, 253, 0.45);
+    color: #fff !important;
+}
+
+.btn-login-nav i {
+    font-size: 13px;
 }
 
 /* Toggler */
@@ -169,6 +197,13 @@ main > .news-hero:first-child {
         padding: 12px;
         border-radius: 10px;
         box-shadow: 0 8px 20px rgba(0, 0, 0, .2);
+    }
+
+    /* Tombol login full width di mobile */
+    .btn-login-nav {
+        margin-top: 12px;
+        width: 100%;
+        justify-content: center;
     }
 }
 

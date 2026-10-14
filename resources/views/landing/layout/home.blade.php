@@ -21,52 +21,10 @@
     <link rel="stylesheet" href="{{ asset('assets/fontawesome/css/all.min.css') }}">
 
     @stack('styles')
-
-    <style>
-        /* ====== Navbar Login Button ====== */
-        .btn-login-nav {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 9px 22px;
-            background: linear-gradient(135deg, #0d6efd, #0a58ca);
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 14px;
-            text-decoration: none;
-            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
-            color: #fff !important;
-        }
-
-        .btn-login-nav:hover {
-            background: linear-gradient(135deg, #0a58ca, #084298);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(13, 110, 253, 0.45);
-            color: #fff !important;
-        }
-
-        .btn-login-nav i {
-            font-size: 13px;
-        }
-
-        /* ====== Navbar saat scrolled ====== */
-        .navbar-custom.scrolled {
-            background-color: #fff !important;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        @media (max-width: 991.98px) {
-            .btn-login-nav {
-                margin-top: 12px;
-                width: 100%;
-                justify-content: center;
-            }
-        }
-    </style>
 </head>
 <body>
 
-    {{-- ==================== NAVBAR ==================== --}}
+    {{-- Navbar --}}
     <nav class="navbar navbar-expand-lg navbar-custom" id="mainNavbar">
         <div class="container">
 
@@ -180,16 +138,17 @@
         </div>
     </nav>
 
-    {{-- ==================== KONTEN ==================== --}}
+    {{-- Konten --}}
     <main>
         @yield('content')
     </main>
 
-    {{-- ==================== FOOTER ==================== --}}
+    {{-- Footer --}}
     <footer class="landing-footer">
         <div class="container">
             <div class="row g-4">
 
+                {{-- Brand & Sosial --}}
                 <div class="col-lg-4 col-md-6">
                     <div class="footer-brand">
                         @if ($schoolProfile && $schoolProfile->logo)
@@ -239,6 +198,7 @@
                     </div>
                 </div>
 
+                {{-- Kontak --}}
                 <div class="col-lg-4 col-md-6">
                     <h6 class="footer-title">Kontak Kami</h6>
                     <ul class="footer-contact">
@@ -257,6 +217,7 @@
                     </ul>
                 </div>
 
+                {{-- Tautan Cepat --}}
                 <div class="col-lg-4 col-md-12">
                     <h6 class="footer-title">Tautan Cepat</h6>
                     <div class="row">
@@ -290,7 +251,7 @@
         </div>
     </footer>
 
-    {{-- ==================== SCRIPTS ==================== --}}
+    {{-- Scripts --}}
     <script src="{{ asset('assets/landing/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/landing/aos-library/aos.js') }}"></script>
     <script>
